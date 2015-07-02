@@ -3,10 +3,11 @@
 
 @title{ Memo}
 
-@;table-of-contents[]
+@table-of-contents[]
 
 @; ------------------------------------------------------------------------
-@include-section["overview.scrbl"]
+@;include-section["overview.scrbl"]
+@include-section["var.scrbl"]
 
 @index-section[]
 
