@@ -3,6 +3,11 @@
 
 @title{Clojure Memo}
 
+@itemlist[
+  @item{작성자: 김영태}
+  @item|{e-mail: philos99@gmail.com}|
+]
+
 @table-of-contents[]
 
 @; ------------------------------------------------------------------------
