@@ -2,7 +2,7 @@
 @(require scribble/manual)
 @(require "../my-utils.rkt")
 
-@title[#:tag "recursion"]{Recursion}
+@title[#:tag "recursion"]{[Clojure] Recursion}
 
 @section[#:tag "tail-recursion"]{Tail Recursion(꼬리 재귀)}
 
@@ -25,21 +25,21 @@ GNU gcc 컴파일러도 있다.
 함수를 구현해 보면 다음과 같다.
 
 @coding|{
-(defn factorial-1
+(defn fact-1
   [n]
   (if (< n 2)
       1                                 ; (1)
-      (*' n (factorial-1 (dec n))) ))
+      (*' n (fact-1 (dec n))) ))
       ;--                                 (2)
-                        ;-------          (3)
-           ;----------------------        (4)
-      ;------------------------------     (5)
+                    ;-------              (3)
+           ;-----------------             (4)
+      ;-------------------------          (5)
 
-(factorial-1 5)
+(fact-1 5)
 ; => 120
 
-(factorial-1 10000)
-; =>  [Thrown class java.lang.StackOverflowError]
+(fact-1 10000)
+; => [Thrown class java.lang.StackOverflowError]
 }|
 
 @itemlist[
@@ -57,37 +57,37 @@ Clojure의 전반적인 실행 속도를 끌어올리기 위한 조치의 일환
 
 ]
 
-그런데 위에서 정의한 @tt{factorial-1} 함수는, 꼬리 재귀 함수가 아니다. 흔히들 꼬리
+그런데 위에서 정의한 @tt{fact-1} 함수는, 꼬리 재귀 함수가 아니다. 흔히들 꼬리
 부위라고 하면, 위의 코드 중에, (3) 또는 (4) 부분을 꼬리라고 생각하기 쉬운데, 함수의 말단
 부분에 위치해 있다고 해서 그 부분을 꼬리라고 하지는 않는다는 점에 주의해야 한다. 꼬리
-재귀에서, @tt{`꼬리'}의 가장 정확한 개념은 @tt{`함수가 최종적으로 리턴값을 반환하는 곳'}을
+재귀에서, @tt{'꼬리'}의 가장 정확한 개념은 @tt{'함수가 최종적으로 리턴값을 반환하는 곳'}을
 일컫는다. 정확히 말하자면, 위의 코드에서 꼬리 부분은 (1)과 (5)의 두 부분이다. 이 두 부분
 모두 이 함수가 최종적으로 리턴값을 반환하는 곳이기 때문이다. 이 두 자리 중 어느 한 곳에,
-@tt{factorial-1} 함수를 다시 호출하는 코드가 있어야, 꼬리 재귀 함수의 조건을 충족시키게
-된다.따라서 예상한 대로, 10000과 같은 큰 수를 인수로 주고 함수를 실행하니,
-StackOverflowError가 발생하였다.
+@tt{fact-1} 함수를 다시 호출하는 코드가 있어야, 꼬리 재귀 함수의 조건을 충족시키게
+된다. 위의 코드는 꼬리 재귀함수의 형태가 아니어서, 10000과 같은 큰 수를 인수로 주고 함수를
+실행하니, StackOverflowError가 발생하였다.
 
 그러면 위의 코드를 꼬리 재귀의 형태로 바꾸어 보자.
 
 @coding|{
-(defn factorial-2
-  ([n] (factorial-2 n 1))   ; 인수의 개수가 한 개일 때 호출
-  ([n acc]                  ; 인수의 개수가 두 개일 때 호출
+(defn fact-2
+  ([n] (fact-2 n 1))   ; 인수의 개수가 한 개일 때 호출
+  ([n acc]             ; 인수의 개수가 두 개일 때 호출
     (if (< n 2)
         acc
-        (factorial-2 (dec n) (*' n acc)) )))
-       ;--------------------------------       (1)
+        (fact-2 (dec n) (*' n acc)) )))
+       ;---------------------------      (1)
 
-(factorial-2 5)
+(fact-2 5)       ; (2)
 ; => 120
 
-(factorial-2 10000)
+(fact-2 10000)   ; (3)
 ; =>   [Thrown class java.lang.StackOverflowError]
 }|
 
 @itemlist[
 
-  @item{라인 9에서 @tt{factorial-2}의 인수가 하나이므로, 라인 2의 함수를 호출하다. 그런데
+  @item{(2)에서 @tt{fact-2}의 인수가 하나이므로, 라인 2의 함수를 호출하다. 그런데
 라인 2에서는, 인수가 2개인 함수, 라인 3을 다시 호출한다. 이때 인수 @tt{acc}(accumulator)의
 값이 1로 초기화된 상태로 라인 3을 호출하게 된다. Clojure에서는 인수의 개수에 따라 각각
 다르게 함수를 정의할 수 있다. 이것은 C++/Java에서의 function overloading과 유사하지만,
@@ -96,34 +96,34 @@ StackOverflowError가 발생하였다.
 
 ]
 
-위의 코드에서는, (1)로 표시된 꼬리의 위치에 @tt{factorial-2} 함수가 다시 위치해 있으므로,
+위의 코드에서는, (1)로 표시된 꼬리의 위치에 @tt{fact-2} 함수가 다시 위치해 있으므로,
 이 함수는 꼬리 재귀 함수의 조건을 충족시킨 코드이다. 꼬리 재귀 함수 이해의 핵심은, 계산
-중에 발생하는 모든 상태(state) 값을 @tt{`함수의 인수 형태'}로 건네줌으로써, 재귀 함수
+중에 발생하는 모든 상태(state) 값을 @tt{'함수의 인수 형태'}로 건네줌으로써, 재귀 함수
 내부에 어떠한 상태(state) 값도 지니지 않게 하는 데 있다. 위의 코드에서는, 재귀 호출
-때마다의 계산 결과(상태 값 @tt{n}과 @tt{acc}) 값을, @tt{factorial-2}의 인수로 다시 전달하고
+때마다의 계산 결과(상태 값 @tt{n}과 @tt{acc}) 값을, @tt{fact-2}의 인수로 다시 전달하고
 있음에 주목해야 한다.
 
-그런데 라인 12의 실행 결과를 보면, 여전히 StackOverflowError가 발생하고 있다. 만약 위의
-코드가 Common Lisp이나 Scheme 언어로 작성되었다면, 이 언어들의 컴파일러들은 (1)의 부분이
-TCO를 적용할 수 있는 부분임을 알아채고, 이 함수를 stack을 소모하지 않는 함수로
-@tt{`자동으로'} 변환하는 작업을 수행해 주므로, StackOverflowError가 발생하지 않는다. 하지만
-Clojure에서는 프로그래머가 @tt{`수동으로'} 꼬리 재귀를 하는 부분이라는 것을 컴파일러에게
-@tt{`명시적으로'} 알려 주어야 하는데, special-form인 @tt{recur}가 이 역을 맡는다.
+그런데 (3)의 실행 결과를 보면, 여전히 StackOverflowError가 발생하고 있다. 만약 위의 코드가
+Common Lisp이나 Scheme 언어로 작성되었다면, 이 언어들의 컴파일러들은 (1)의 부분이 TCO를
+적용할 수 있는 부분임을 알아채고, 이 함수를 stack을 소모하지 않는 함수로 @tt{'자동으로'}
+변환하는 작업을 수행해 주므로, StackOverflowError가 발생하지 않는다. 하지만 Clojure에서는
+프로그래머가 @tt{'수동으로'} 꼬리 재귀를 하는 부분이라는 것을 컴파일러에게
+@tt{'명시적으로'} 알려 주어야 하는데, special-form인 @tt{recur}가 이 역을 맡는다.
 
 그래서 다음과 같이 코드를 수정해야 StackOverflowError가 발생하지 않는다.
 
 @coding|{
-(defn factorial
-  ([n] (factorial n 1))
+(defn fact-3
+  ([n] (fact-3 n 1))
   ([n acc]
    (if (< n 2)
        acc
        (recur (dec n) (*' n acc)) )))
 
-(factorial 5)
+(fact-3 5)
 ; => 120
 
-(factorial 10000)
+(fact-3 10000)
 ;; => 28462596809170545189064132......
 }|
 
@@ -149,35 +149,35 @@ Common Lisp이나 Scheme의 경우에는, 꼬리 재귀 함수 최적화 기법�
 (defn my-even?-1 [n]
   (if (zero? n)
     true
-    (my-odd?-1 (dec (Math/abs n))) ))
+    (my-odd?-1 (dec (Math/abs n))) ))    ; (1)
 
 (defn my-odd?-1 [n]
   (if (zero? n)
     false
-    (my-even?-1 (dec (Math/abs n))) ))
+    (my-even?-1 (dec (Math/abs n))) ))   ; (2)
 
 (my-even?-1 10)   ;=> true
 (my-odd?-1  10)   ;=> false
 
 (my-odd?-1 10000)
-; =>   [Thrown class java.lang.StackOverflowError]
+; => [Thrown class java.lang.StackOverflowError]
 }|
 
 인수의 값을 크게 높이자, 예외 없이 StackOverflowError가 발생하였다. 이 문제를 해결하려면,
-Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의 라인 6과 11을, 아래의
-라인 6과 11처럼 익명 함수(anonymous function)의 형태로 변경해 준 후에, @tt{trampoline} 함수를
+Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의 (1)과 (2)를, 아래의
+(3)과 (4)처럼 익명 함수(anonymous function)의 형태로 변경해 준 후에, @tt{trampoline} 함수를
 통해 호출해 주면 된다. 다시 말해, @tt{trampoline} 함수는 mutual tail recursion 호출을
 구현하기 위해 Clojure에 도입된 함수다.
 
-여기서 가장 중요한 점은, 위의 라인 6의 경우에 @tt{(my-odd?-1 ...)} 코드는, 이미 정의되어
-있는 기존의 함수 @tt{my-odd?-1}을, 단지 반복해서 호출하는 것임에 반해, 아래의 라인 6의
-@tt{#(my-odd?-2 ...)} 코드는, 실행될 때마다 매번 @tt{`새로 생성'}된 익명 함수 객체를
+여기서 가장 중요한 점은, 위의 (1)의 경우에 @tt{(my-odd?-1 ...)} 코드는, 이미 정의되어
+있는 기존의 함수 @tt{my-odd?-1}을, 단지 반복해서 호출하는 것임에 반해, 아래의 (3)의
+@tt{#(my-odd?-2 ...)} 코드는, 실행될 때마다 매번 @tt{'새로 생성'}된 익명 함수 객체를
 리턴값으로 반환하는 데 있다. 리습 계열 언어에서는 이와같이 코드 실행 중에 새로운 함수를
 동적으로 생성할 수 있는데, 이 차이점을 정확하게 이해하지 못하면, 아래의 코드를 이해하는데
 지장이 있을 것이다.
 
 이 새로 생성된 함수 객체 안에, 이전 단계에서 처리한 state(상태 값)를 저장한 후에, 이 객체를
-@tt{`다음 단계에 실행될 함수'}의 @tt{`인수'} 형태로 넘기게 되므로, stack을 사용하지 않게
+@tt{`\'다음 단계에 실행될 함수'}의 @tt{'인수'} 형태로 넘기게 되므로, stack을 사용하지 않게
 만든다.
 
 @coding|{
@@ -186,12 +186,12 @@ Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의
 (defn my-even?-2 [n]
   (if (zero? n)
     true
-    #(my-odd?-2 (dec (Math/abs n))) ))
+    #(my-odd?-2 (dec (Math/abs n))) ))    ; (3)
 
 (defn my-odd?-2 [n]
   (if (zero? n)
     false
-    #(my-even?-2 (dec (Math/abs n))) ))
+    #(my-even?-2 (dec (Math/abs n))) ))   : (4)
 
 (trampoline my-even?-2 10000)   ;=> true
 (trampoline my-odd?-2  10000)   ;=> false
@@ -222,12 +222,15 @@ Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의
 (my-odd?  10000)   ;=> false
 }|
 
-StackOverflowError가 발생하지 않음을 확인할 수 있다.
+StackOverflowError가 발생하지 않음을 확인할 수 있다. 결론적으로 말하면, 지역 함수 간의
+상호 재귀 호출의 경우에는 letfn 함수를 이용하고, 전역 함수 간의 상호 재귀 호출은
+trampoline을 이용하라는 것이다. 아울러 두 경우 모두 꼬리 재귀 방식으로 구현되므로
+StackOverflowError가 일어날 걱정을 하지 않아도 된다.
 
 
 @section{재귀 방식의 분류}
 
-@subsection{accumulator passing style}
+@subsection{Accumulator passing style}
 
 재귀 함수의 인자에, 함수가 계산한 '결과 값'을 전달하는 방식이다.
 
@@ -246,10 +249,10 @@ StackOverflowError가 발생하지 않음을 확인할 수 있다.
 ; => 2824229407960347874293421578024535518477494926091224850578...
 }|
 
-@subsection{continuation passing style}
+@subsection{Continuation passing style}
 
-재귀 함수의 인자에, 함수 객체(함수 객체 내부에 상태를 내장한 상태로) 자체를 전달하는
-방식이다.
+재귀 함수의 인자에, 함수 '객체(함수 객체 내부에 상태를 내장한 상태로) 자체'를 전달하는
+방식으로 Scheme 같은 언어에서 많이 쓰이는 방식이다.
 
 @coding|{
 (defn fact-cps 
