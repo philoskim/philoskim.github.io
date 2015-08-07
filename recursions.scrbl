@@ -2,9 +2,9 @@
 @(require scribble/manual)
 @(require "../my-utils.rkt")
 
-@title[#:tag "recursion"]{Recursion}
+@title[#:tag "recursions"]{Recursions}
 
-@section[#:tag "tail-recursion"]{Tail Recursion(꼬리 재귀)}
+@section[#:tag "tail-recursion"]{Tail recursion(꼬리 재귀)}
 
 재귀(recursion)라는 개념은, C, C++ 혹은 Java 같은 일반 프로그래밍 언어에도 존재하지만,
 실제적으로는 잘 쓰이지 않는데, 그 이유는 재귀 함수의 반복적인 호출이 stack overflow를
@@ -138,7 +138,7 @@ Hickey는, 프로그래머가 special-form인 @tt{recur}를 통해 직접 '수�
 코드를 일일이 논리적으로 분석해 보아야만 한다.
 
 
-@section[#:tag "mutual-tail-recursion-and-trampoline"]{Mutual Tail Recursion(상호 꼬리 재귀)과 trampoline 함수}
+@section[#:tag "mutual-tail-recursion-and-trampoline"]{Mutual tail recursion(상호 꼬리 재귀)과 trampoline 함수}
 
 프로그램을 짜다 보면 함수 A가 함수 B를 호출하고, 함수 B가 다시 함수 A를 호출해야 하는
 경우가 발생하기도 한다. 이런 경우를 Mutual Recursion(상호 재귀)라고 하는데, 다음의 코드가

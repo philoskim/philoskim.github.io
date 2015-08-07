@@ -13,7 +13,7 @@
 @; ------------------------------------------------------------------------
 @;include-section["overview.scrbl"]
 @include-section["var.scrbl"]
-@include-section["recursion.scrbl"]
+@include-section["recursions.scrbl"]
 
 @index-section[]
 
