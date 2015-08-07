@@ -10,7 +10,7 @@
     padding: 0;
 }
 
-@media all {html {font-size: 15px;}}
+@media all {html {font-size: 13px;}}
 @media all and (max-width:940px){html {font-size: 14px;}}
 @media all and (max-width:850px){html {font-size: 13px;}}
 @media all and (max-width:830px){html {font-size: 12px;}}

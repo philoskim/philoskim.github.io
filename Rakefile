@@ -8,8 +8,9 @@ task :html do
     sh "copy ..\\scribble.css #{doc_name}\\scribble.css"
     sh "copy ..\\scribble-original.css #{doc_name}\\scribble-original.css"
   else
-    sh "cp -f ../scribble.css doc/scribble.css"
-    sh "cp -f ../scribble-original.css doc/scribble-original.css"
+    sh "cp -f ../scribble.css #{doc_name}/scribble.css"
+    sh "cp -f ../scribble-original.css #{doc_name}/scribble-original.css"
+    sh "cp -f ../manual-style.css #{doc_name}/manual-style.css"
   end
 end
 
