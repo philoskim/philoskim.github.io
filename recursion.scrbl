@@ -246,8 +246,8 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
 (fact-aps 10)
 ; => 120
 
-(fact-aps 100000N)
-; => 2824229407960347874293421578024535518477494926091224850578...
+(fact-aps 10000N)
+; => 28462596809170545189064132......
 }|
 
 @subsection{Continuation passing style}
@@ -302,8 +302,7 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
 
 위의 cps 방식의 구현 예제도 Scheme 같은 tail call optimization을 자동으로 지원하는
 언어에서는 스택오버플로 에러가 발생하지 않는다. 그러데 JVM에서는 tail call optimization을
-지원하지 않아서 스택오버플로 에러가 발생한 것이다. 그래서 클로저에서 독자적으로 지원하는
-tail call optimization을 사용해야 하는데, 명시적으로 recur를 호출해 주어야만 한다.
+지원하지 않아서 스택오버플로 에러가 발생한 것이다.
 
 아래에 trampoline 함수를 사용해 factorial을 구하는 함수를 작성해 보았다.
 
@@ -322,10 +321,9 @@ tail call optimization을 사용해야 하는데, 명시적으로 recur를 호�
 ; => 28462596809170545189064132......
 }|
 
-스택오버클로 에러가 발생하지 않고 제대로 결과를 반환합니디.
+스택오버클로 에러가 발생하지 않고 제대로 결과를 반환한디.
 
-그 이유가 궁금해서 clojure.core의 trampoline 함수 코드(불필요한 부분은 생략)를
-살펴보았습니다.
+그 이유가 궁금해서 clojure.core의 trampoline 함수 코드(불필요한 부분은 생략)를 살펴보았다.
 
 @coding|{
 (defn trampoline
