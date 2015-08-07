@@ -243,7 +243,7 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
      acc
      (recur (dec n) (* n acc)))))
 
-(fact-aps 10)
+(fact-aps 5)
 ; => 120
 
 (fact-aps 10000N)
@@ -263,7 +263,7 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
      (cont 1)
      (recur (dec n) (fn [x] (cont (* n x)))))))
 
-(fact-cps 10)
+(fact-cps 5)
 ; => 120
 
 (fact-cps 10000N)
@@ -314,8 +314,8 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
      acc
      #(fact-tramp (dec n) (* n acc)))))
 
-(trampoline fact-tramp 10)
-; => 3628800
+(trampoline fact-tramp 5)
+; => 120
 
 (trampoline fact-tramp 10000N)
 ; => 28462596809170545189064132......
