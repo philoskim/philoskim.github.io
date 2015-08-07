@@ -2,7 +2,7 @@
 @(require scribble/manual)
 @(require "../my-utils.rkt")
 
-@title[#:tag "recursion"]{[Clojure] Recursion}
+@title[#:tag "recursion"]{Recursion}
 
 @section[#:tag "tail-recursion"]{Tail Recursion(꼬리 재귀)}
 
