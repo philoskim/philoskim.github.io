@@ -1,0 +1,63 @@
+<!DOCTYPE HTML> 
+<html> 
+  <head> 
+    <title>API Search</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="api-search.js" defer="defer"></script>
+    <style type="text/css">
+      div { display:block;
+            margin-bottom:10px; }
+      #home { float:right; }
+    </style>
+  </head> 
+
+  <body id="main">
+    <div id="search" align="center">
+      <label style="font-size:10pt">Enter API to search:</label>
+      <input type="text" id="entry" autofocus size="30" />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+
+    <div id="api" align="center">
+      <button id="clojure" style="background: #ffe87c;">clojure</button>
+      <!-- <button id="cljs">cljs</button> -->
+      <button id="clhs">clhs</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="w3c" style="background: #ffe87c;">w3c</button>
+      <button id="webapi">web api</button>
+      <button id="jquery">jquery</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="java" style="background: #ffe87c;">java</button>
+      <button id="javaex" style="background: #ffe87c;">java ex</button>
+      <button id="antlr" style="background: #ffe87c;">antlr</button>
+      <button id="itext" style="background: #ffe87c;">itext</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="d" style="background: #ffe87c;">d</button>
+      <br />
+
+      <button id="lua" style="background: #ffe87c;">lua</button>
+      <button id="luajit" style="background: #ffe87c;">luajit</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="context">context</button>
+      <button id="contextapi">context api</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="emacs" style="background: #ffe87c;">emacs</button>
+      <button id="emacswiki" style="background: #ffe87c;">emacs wiki</button>
+      &nbsp;&nbsp;&nbsp;
+
+      <button id="google" style="background: #ffe87c;">google</button>
+    </div>
+
+    <iframe id="iframe" type="text/html" frameborder="1" 
+            width="100%" height="700" scrolling="yes">
+    </iframe>
+
+    <a id="anchor" hidden="hidden" href=""></a>
+  </body> 
+</html> 
+
