@@ -22,11 +22,11 @@
 타입을 확인해 보면 PersistentArrayMap으로 출력된다.
 
 @coding|{
-(type vec1))
+(type (into (array-map) vec1))
 ; => clojure.lang.PersistentArrayMap
 }|
 
-하지만 입력되는 요소의 개수가 9개를 넘어서자 마자, 입력된 순서가 유지되지 않게 된다.
+하지만 입력되는 요소의 개수가 8개를 넘어서자 마자, 입력된 순서가 유지되지 않게 된다.
 
 @coding|{
 (def vec2
@@ -39,7 +39,7 @@
 타입을 확인해 보면 PersistentHashMap으로 변해 있다.
 
 @coding|{
-(type vec2)
+(type (into (array-map) vec2))
 ; => clojure.lang.PersistentHashMap
 }|
 
