@@ -6,7 +6,7 @@
 @itemlist[
   @item{작성자: 김영태}
   @item|{e-mail: philos99@gmail.com}|
-  @item{facebook: @url{facebook.com/philos.kim}}
+  @item{facebook: @url{https://www.facebook.com/philos.kim}}
 ]
 
 @table-of-contents[]
