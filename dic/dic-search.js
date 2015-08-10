@@ -69,7 +69,8 @@ $(document).ready(function() {
     ngram      : ["http://books.google.com/ngrams/graph?content={0}&year_start=1500"
                   + "&year_end=2000&corpus=0&smoothing=0", "plus", true],
     regex      : ["http://www.visca.com/regexdict/", "plus", true],
-
+    name       : ["http://www.pronouncenames.com/search?name={0}", "space", false],
+   
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
    };
 
@@ -112,35 +113,35 @@ $(document).ready(function() {
   function handleKeydown(e)
   {
     if (e.keyCode == 13)   // 13 == Enter Key
-		{
-      setCookie('search-word', $(this).val(), 1);
+    {
+      setCookie('search-words', $(this).val(), 1);
       $("#cambridge").click();
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
-		{
+    {
       $(this).val( getCookie('search-words') );
     }
-		else
-		{
-			if ( $(this).val() == getCookie('search-words') )
-			{
-				  $(this).val("");
-		  }
-		}
+    else (e.keyCode == 40)  // 40 == DownArrow Key
+    {
+	if ( $(this).val() == getCookie('search-words') )
+	{
+	  $(this).val("");
+        }
+    }
   }
 
 
-  function handleChange(e)
-	{
-		 if ( $(this).val() == getCookie('search-words') )
-				  $(this).val(e.keyCode);
-	}
+    // function handleChange(e)
+    // {
+    // 	if ( $(this).val() == getCookie('search-words') )
+    // 	    $(this).val(e.keyCode);
+    // }
 
-	function handleLoad(e)
-	{
-		 $("#entry").focus();
-		 $("#entry").val( getCookie('search-words') );
-	}
+    function handleLoad(e)
+    {
+	$("#entry").focus();
+	$("#entry").val( getCookie('search-words') );
+    }
 
   $("button").click(handleClick);
   $("#entry").keydown(handleKeydown);
