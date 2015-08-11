@@ -29,12 +29,12 @@ GNU gcc 컴파일러도 있다.
 (defn fact-1
   [n]
   (if (< n 2)
-    1                                 ; (1)
-    (*' n (fact-1 (dec n))) ))
-    ;--                                 (2)
-                  ;-------              (3)
-         ;-----------------             (4)
-    ;-------------------------          (5)
+    1                            ; (1)
+    (*' n (fact-1 (dec n)) )))
+    ;--                            (2)
+                 ;-------          (3)
+         ;----------------         (4)
+    ;-------------------------     (5)
 
 (fact-1 5)
 ; => 120
@@ -193,8 +193,8 @@ Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의
     false
     #(my-even?-2 (dec (Math/abs n))) ))   : (4)
 
-(trampoline my-even?-2 10000)   ;=> true
-(trampoline my-odd?-2  10000)   ;=> false
+(trampoline my-even?-2 10000)   ; => true
+(trampoline my-odd?-2  10000)   ; => false
 }|
 
 그런데 @tt{my-even?-2} 또는 @tt{my-odd?-2} 함수를 호출할 때마다, @tt{trampoline} 함수를
@@ -218,8 +218,8 @@ Mutual Tail Recursion 함수를 작성해야 하는데, Clojure에서는, 위의
 (defn my-odd? [n]
   (not (my-even? n)))
 
-(my-even? 10000)   ;=> true
-(my-odd?  10000)   ;=> false
+(my-even? 10000)   ; => true
+(my-odd?  10000)   ; => false
 }|
 
 StackOverflowError가 발생하지 않음을 확인할 수 있다. 결론적으로 말하면, 지역 함수 간의
@@ -260,7 +260,7 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
   ([n cont]
    (if (zero? n)
      (cont 1)
-     (recur (dec n) (fn [x] (cont (* n x)))))))
+     (recur (dec n) (fn [x] (cont (* n x)))) )))
 
 (fact-cps 5)
 ; => 120
@@ -311,7 +311,7 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
   ([n acc]
    (if (zero? n)
      acc
-     #(fact-tramp (dec n) (* n acc)))))
+     #(fact-tramp (dec n) (* n acc)) )))
 
 (trampoline fact-tramp 5)
 ; => 120
@@ -327,12 +327,12 @@ StackOverflowError가 일어날 걱정을 하지 않아도 된다.
 @coding|{
 (defn trampoline
   ([f]
-     (let [ret (f)]   ; (1)
-       (if (fn? ret)
+   (let [ret (f)]   ; (1)
+     (if (fn? ret)
          (recur ret)  ; (2)
          ret)))
   ([f & args]
-     (trampoline #(apply f args))))
+   (trampoline #(apply f args)) ))
 }|
 
 비결은 (1) 부분에 있었다. 함수 안에서 함수를 호출하면 스택에 쌓여 나가지만, 함수 호출을
