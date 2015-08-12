@@ -78,17 +78,17 @@ handler-3' &#51060;&#46972;&#44256; &#54364;&#49884;&#54620; &#54632;&#49688; &#
 &#51064;&#51088;&#47196; &#46308;&#50612;&#44032;&#44172; &#46108;&#45796;.</p><p><pre class="codeblock">(reset! counter 0)
 
  ;; handler-3
-((fn [req]   ; (2)
+((fn [req] ; (2)
               ;; request 1&#52264; &#48320;&#44221;
    (let [req' (assoc req :handler-3-req (inc-counter))
          _    (println "handler-3 req:" req')
                ;; handler-2
-         res  ((fn [req]   ; (4)
+         res  ((fn [req] ; (4)
                             ;; request 2&#52264; &#48320;&#44221;
                  (let [req' (assoc req :handler-2-req (inc-counter))
                        _    (println "handler-2 req:" req')
                              ;; handler-1
-                       res  ((fn [req]   ; (6)
+                       res  ((fn [req] ; (6)
                                           ;; request 3&#52264; &#48320;&#44221;
                                (let [req' (assoc req :handler-1-req
                                                  (inc-counter))
@@ -98,17 +98,17 @@ handler-3' &#51060;&#46972;&#44256; &#54364;&#49884;&#54620; &#54632;&#49688; &#
                                                  (inc-counter))
                                      _    (println "handler-1 res:" res)]
                                  res))
-                               req')   ; (5)
+                               req') ; (5)
                             ;; response 2&#52264; &#48320;&#44221;
                        res' (assoc res :handler-2-res (inc-counter))
                        _    (println "handler-2 res:" res')]
                    res'))
-               req')   ; (3)
+               req') ; (3)
                ;; response 3&#52264; &#48320;&#44221;
           res' (assoc res :handler-3-res (inc-counter))
           _   (println "handler-3 res:" res')]
      res'))
- {})   ; (1)
+ {}) ; (1)
 ; &gt;&gt; handler-3 req: {:handler-1-req 1}
 ; &gt;&gt; handler-2 req: {:handler-1-req 1, :handler-3-req 2}
 ; &gt;&gt; handler-1 req: {:handler-1-req 1, :handler-3-req 2, :handler-2-req 3}
