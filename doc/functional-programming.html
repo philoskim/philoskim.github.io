@@ -84,27 +84,27 @@ handler-3' &#51060;&#46972;&#44256; &#54364;&#49884;&#54620; &#54632;&#49688; &#
          _    (println "handler-3 req:" req')
                ;; handler-2
          res  ((fn [req]   ; (4)
-                   ;; request 2&#52264; &#48320;&#44221;
-                (let [req' (assoc req :handler-2-req (inc-counter))
-                      _    (println "handler-2 req:" req')
-                            ;; handler-1
-                      res  ((fn [req]   ; (6)
-                                         ;; request 3&#52264; &#48320;&#44221;
-                              (let [req' (assoc req :handler-1-req
-                                                (inc-counter))
-                                     _   (println "handler-1 req:" req')
-                                         ;; response 1&#52264; &#48320;&#44221;
-                                    res  (assoc req' :handler-1-res
-                                                (inc-counter))
-                                    _    (println "handler-1 res:" res)]
-                                res))
-                              req')   ; (5)
-                            ;; response 2&#52264; &#48320;&#44221;
-                      res' (assoc res :handler-2-res (inc-counter))
-                      _    (println "handler-2 res:" res')]
-                  res'))
+                           ;; request 2&#52264; &#48320;&#44221;
+                 (let [req' (assoc req :handler-2-req (inc-counter))
+                       _    (println "handler-2 req:" req')
+                             ;; handler-1
+                       res  ((fn [req]   ; (6)
+                                          ;; request 3&#52264; &#48320;&#44221;
+                               (let [req' (assoc req :handler-1-req
+                                                 (inc-counter))
+                                      _   (println "handler-1 req:" req')
+                                          ;; response 1&#52264; &#48320;&#44221;
+                                     res  (assoc req' :handler-1-res
+                                                 (inc-counter))
+                                     _    (println "handler-1 res:" res)]
+                                 res))
+                               req')   ; (5)
+                             ;; response 2&#52264; &#48320;&#44221;
+                       res' (assoc res :handler-2-res (inc-counter))
+                       _    (println "handler-2 res:" res')]
+                   res'))
                req')   ; (3)
-              ;; response 3&#52264; &#48320;&#44221;
+               ;; response 3&#52264; &#48320;&#44221;
           res' (assoc res :handler-3-res (inc-counter))
           _   (println "handler-3 res:" res')]
      res'))
