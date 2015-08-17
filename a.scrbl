@@ -1,7 +1,8 @@
-#lang scribble/doc
-@(require scribble/manual)
+#lang scribble/manual
 @(require "../my-utils.rkt" "memo.rkt")
 
 @title[#:tag ""]{}
+
+
 
 
