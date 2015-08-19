@@ -79,14 +79,20 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
 @itemlist[#:style 'ordered
   @item{함수 객체를 변수에 대입할 수 있다.
     @coding|{
-    (def temp +)
+    (def my-add (fn [a b]
+                  (+ a b)))
+
+    (my-add 10 20)   ; => 30
+
+
+    (def saved +)
     (def + *)
 
     (+ 10 20)      ; => 200
     (* 10 20)      ; => 200
-    (temp 10 20)   ; => 30
+    (saved 10 20)   ; => 30
 
-    (def + temp)
+    (def + saved)
     (+ 10 20)      ; => 30
     }| }
     
