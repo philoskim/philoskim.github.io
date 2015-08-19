@@ -83,8 +83,9 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
                   (+ a b)))
 
     (my-add 10 20)   ; => 30
+    }|
 
-
+    @coding|{
     (def saved +)
     (def + *)
 
