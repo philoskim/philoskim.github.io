@@ -77,10 +77,54 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
 함수를 지원하는 언어는, '전통적인 의미'에서의 함수형 언어라고 부를 수 있다.
 
 @itemlist[#:style 'ordered
-  @item{함수 객체를 변수에 대입할 수 있다.}
-  @item{함수 객체를 함수의 인수로 전달할 수 있다.}
-  @item{함수 객체를 함수의 반환값으로 반환할 수 있다.}
-  @item{함수 객체를 동적으로 생성할 수 있다.}
+  @item{함수 객체를 변수에 대입할 수 있다.
+    @coding|{
+    (def temp +)
+    (def + *)
+
+    (+ 10 20)      ; => 200
+    (* 10 20)      ; => 200
+    (temp 10 20)   ; => 30
+
+    (def + temp)
+    (+ 10 20)      ; => 30
+    }| }
+    
+  @item{함수 객체를 함수의 인수로 전달할 수 있다.
+    @coding|{
+    (defn calc [op a b]
+      (op a b))
+
+    (calc + 10 20)   ; => 30
+    (calc * 10 20)   ; => 200
+  }| }
+  
+  @item{함수 객체를 함수의 반환값으로 반환할 수 있다.
+    @coding|{
+    (defn operator [op]
+      (if (= op :plus)
+        +
+        -))
+
+    ((operator :plus) 10 20)    ; => 30
+    ((operator :minus) 10 20)   ; => -10
+    }| }
+    
+  @item{함수 객체를 동적으로 생성할 수 있다.
+    @coding|{
+    (defn add-n [n]
+      (fn [a]
+        (+ a n)))
+
+    (def add-5 (add-n 5))
+    ; => #<Var@4340684b: #object[user$add_n$fn__12286 0x26a894a2]>
+
+    (def add-10 (add-n 10))
+    ; => #<Var@fc4d31e: #object[user$add_n$fn__12286 0x1a4b7c5d]>
+
+    (add-5 10)    ; => 15
+    (add-10 10)   ; => 20
+    }| }
 ]
 
 특히 위의 두 번째와 세 번째 조건을 충족시키는 함수를 고차 함수(higher-order function)라고
