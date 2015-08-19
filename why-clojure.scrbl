@@ -79,14 +79,14 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
 @itemlist[#:style 'ordered
   @item{함수 객체를 변수에 대입할 수 있다.
     @coding|{
-    (def my-add (fn [a b]
-                  (+ a b)))
+    (def double (fn [a]
+                  (* 2 a)))
 
-    (my-add 10 20)    ; => 30
+    (double 10)    ; => 20
 
-    (def my-add2 my-add)
+    (def double2 double)
     
-    (my-add2 30 40)   ; => 70
+    (double2 10)   ; => 20
     }| }
     
   @item{함수 객체를 함수의 인수로 전달할 수 있다.
@@ -101,9 +101,9 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
   @item{함수 객체를 함수의 반환값으로 반환할 수 있다.
     @coding|{
     (defn operator [op]
-      (if (= op :plus)
-        +
-        -))
+      (cond
+        (= op :plus)  +
+        (= op :minus) -))
 
     ((operator :plus) 10 20)    ; => 30
     ((operator :minus) 10 20)   ; => -10
@@ -111,18 +111,18 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
     
   @item{함수 객체를 동적으로 생성할 수 있다.
     @coding|{
-    (defn add-n [n]
+    (defn multiple [n]
       (fn [a]
-        (+ a n)))
+        (* n a)))
 
-    (def add-5 (add-n 5))
-    ; => #<Var@4340684b: #object[user$add_n$fn__12286 0x26a894a2]>
+    (def double (multiple 2))
+    ; => #<Var@4340684b: #object[user$multiple$fn__12286 0x26a894a2]>
 
-    (def add-10 (add-n 10))
-    ; => #<Var@fc4d31e: #object[user$add_n$fn__12286 0x1a4b7c5d]>
+    (def triple (multiple 3))
+    ; => #<Var@fc4d31e: #object[user$multiple$fn__12286 0x1a4b7c5d]>
 
-    (add-5 10)    ; => 15
-    (add-10 10)   ; => 20
+    (double 10)   ; => 20
+    (triple 10)   ; => 30
     }| }
 ]
 
