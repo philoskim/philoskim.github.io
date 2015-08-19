@@ -82,19 +82,11 @@ Common Lisp을 함수형 프로그래밍 언어로 알고 있는 것 같다. 이
     (def my-add (fn [a b]
                   (+ a b)))
 
-    (my-add 10 20)   ; => 30
-    }|
+    (my-add 10 20)    ; => 30
 
-    @coding|{
-    (def saved +)
-    (def + *)
-
-    (+ 10 20)      ; => 200
-    (* 10 20)      ; => 200
-    (saved 10 20)   ; => 30
-
-    (def + saved)
-    (+ 10 20)      ; => 30
+    (def my-add2 my-add)
+    
+    (my-add2 30 40)   ; => 70
     }| }
     
   @item{함수 객체를 함수의 인수로 전달할 수 있다.
