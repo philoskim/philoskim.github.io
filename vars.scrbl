@@ -58,7 +58,7 @@ root binding은 모든 쓰레드에서 접근 가능한 binding인 반면에, th
 @(future (+ c d))
 ; => 30
 
-;; 위의 두 가지 조건을 모두 만졳시키므로 thread-local binding이다.
+;; 위의 두 가지 조건을 모두 만족시키므로 thread-local binding이다.
 ;; + 함수가 참조하고 있는 c와 d의 삾은, 이 함수가 실행되고 있는
 ;; main thread에서만 접근 가능. 다른 쓰레드는 이 100과 200의 값을
 ;; 볼 수 없다.
@@ -66,7 +66,7 @@ root binding은 모든 쓰레드에서 접근 가능한 binding인 반면에, th
   (+ c d))
 ; => 300
 
-;; 위의 두 가지 조건을 모두 만졳시키므로 thread-local binding이다.
+;; 위의 두 가지 조건을 모두 만족시키므로 thread-local binding이다.
 ;; + 함수가 참조하고 있는 c와 d의 값은, 이 함수가 실행되고 있는
 ;; future에 의해 실행되는 별도의 쓰레드 안에서만 접근 가능하다.
 @(future
