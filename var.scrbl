@@ -4,6 +4,84 @@
 
 @title[#:tag "var"]{Vars}
 
+@section{Var와 Binding}
+
+다음은 var의 binding에 대한 설명이다.
+
+Clojure에서 def로 선언된 변수명이나 defn으로 선언된 함수명은 해당 namespace의 심볼
+테이블에 symbol이 var를 가리키는 형태(symbol --> var)로 등록되고 관리된다. 그리고 프로그램
+실행 중에 이와 관련된 정보를 참조할 수도 있다.
+
+그런데 var의 binding에는 크게 두 종류가 있다. 바로 root binding과 thread-local
+binding이 그것이다.
+
+root binding은 모든 쓰레드에서 접근 가능한 binding인 반면에, thread-local binding은
+이름에서 짐작할 수 있듯이 해당 쓰레드에서만 접근 가능합니다.
+
+다음의 예는 root binding의 예이다.
+
+@coding|{
+(def a 10)
+(def b 20)
+
+;; 이 함수가 실행되고 있는 main thread에서도 접근 가능  
+(+ a b)
+; => 30
+
+;; future에 의해 실행되는 별도의 쓰레드에서도 접근 가능 
+@(future (+ a b))
+; => 30
+}|
+
+
+이에 반해 thread-local binding을 이용하려면, 다음 두 가지 조건을 모두 충족시켜
+주어야 한다.
+
+@itemlist[#:style 'ordered
+  @item{def 선언시 ^:dynamic을 반드시 포함해 주어야 한다.}
+  @item{'binding 매크로 안'에서만 dynamic var를 참조해야 한다.}
+]
+
+
+@coding|{
+(def ^:dynamic c 10)
+(def ^:dynamic d 20)
+
+;; 이 때는 dynamic으로 선언되어 있어도 binding 매크로 안에서
+;; 참조가 이루어지고 있지는 않으므로 여전히 root binding이다. 
+(+ c d)
+; => 30
+
+;; future에 의해 실행되는 별도의 쓰레드에서 접근하지만
+;; binding 매크로 안에서 참조가 이루어지고 있지는 않으므로
+;; 여전히 root binding이다. 
+@(future (+ c d))
+; => 30
+
+;; 위의 두 가지 조건을 모두 만졳시키므로 thread-local binding이다.
+;; + 함수가 참조하고 있는 c와 d의 삾은, 이 함수가 실행되고 있는
+;; main thread에서만 접근 가능. 다른 쓰레드는 이 100과 200의 값을
+;; 볼 수 없다.
+(binding [c 100 d 200]
+  (+ c d))
+; => 300
+
+;; 위의 두 가지 조건을 모두 만졳시키므로 thread-local binding이다.
+;; + 함수가 참조하고 있는 c와 d의 값은, 이 함수가 실행되고 있는
+;; future에 의해 실행되는 별도의 쓰레드 안에서만 접근 가능하다.
+@(future
+   (binding [c 300 d 400]
+     (+ c d)))
+; => 700
+
+;; thread-local binding에서 binding된 값들은
+;; root binding의 값에는 영향을 미치지 못한다.
+(+ c d)
+; => 30
+}|
+
+
+
 @section{Symbol의 평가와 Var의 평가}
 
 Clojure에서는 top-level symbol(즉, def로 정의되는 심볼)이, Common Lisp에서와는 달리,

@@ -255,3 +255,23 @@ Transaction Memeory) 기능 때문이다.
 나와서, 극소수의 전문가가 아니면 유지/보수/개선이 정상적으로 이루어지기는 어려울 것이다.
 
 
+@section{Clojure의 발음과 의미}
+
+
+Rich Hickey는 Clojure의 발음과 의미에 대한 질문을 받고, 다음과 같이 대답했다.
+
+@shellblock|{
+Clojure is pronounced exactly like closure, where the s/j has the zh sound as in azure, pleasure etc.
+
+The name was chosen to be unique. I wanted to involve c (c#), l (lisp) and j(java).
+
+Once I came up with Clojure, given the pun on closure, the available domains and vast emptiness of the googlespace, it was an easy decision.
+}|
+
+발음은 closure와 같다고 하니, 영어 발음을 우리말로 가장 가깝게 옮기면 '클로우줘' 정도
+되겠는데, 우리나라 사람들은 그냥 편의상 '클로저'라고 많이 읽는다. 저도 Clojure
+발음이 영어 발음과 반드시 일치해야 한다고는 생각하지 않아서 그냥 클로저라고 발음하는 것에
+동의하는 쪽이다.
+
+그리고 의미는 C#, Lisp, Java의 첫 글자를 따 온 것이고, 구글 검색에 쉽게 검색되도록 하기
+위해, 그리고 closure와 발음이 같은 일종의 말장안으로 CLoJure라고 지었다고 한다.
