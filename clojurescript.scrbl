@@ -1,7 +1,7 @@
 #lang scribble/manual
 @(require "../my-utils.rkt" "memo.rkt")
 
-@title[#:tag "clojurescript"]{ClojureScript}
+@title[#:tag "clojurescript"]{ClojureScript 소개}
 
 ClojureScript는 Clojure의 자바스크립트 버전이다. Clojure라는 언어를 자바스크립트 엔진상에
 그대로 구현해 놓은 것이다(dot NET 상에서 구현한 Clojure CLR이라는 언어도 있다). 그래서

@@ -48,15 +48,14 @@
 @table-of-contents[]
 
 @; ------------------------------------------------------------------------
-@;include-section["overview.scrbl"]
 @include-section["why-clojure.scrbl"]
-@include-section["var.scrbl"]
 @include-section["../clojure/recursions.scrbl"]
-@include-section["../clojure/functional-programming.scrbl"]
+@include-section["../clojure/functional-patterns.scrbl"]
+@include-section["vars.scrbl"]
 @include-section["../clojure/testing.scrbl"]
+@include-section["tips.scrbl"]
 @include-section["core-async.scrbl"]
 @include-section["clojurescript.scrbl"]
-@include-section["tips.scrbl"]
 
 @index-section[]
 
