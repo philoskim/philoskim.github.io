@@ -52,7 +52,8 @@ A --> B --> C --> D --> E --> F
 
 @coding|{
 (ns async.test
-  (:refer-clojure :exclude [map reduce into partition partition-by take merge])
+  (:refer-clojure :exclude [map reduce into partition
+                            partition-by take merge])
   (:require [clojure.core.async :refer :all])
 
 (defn async-sample
