@@ -125,7 +125,8 @@ seq 자료형일 것이다. sequential(순차적인) 자료형은 이름 자체�
 
 ;; 매크로가 함수의 인자 자리에 오면 컴파일 에러가 발생햔다.
 (map my-inc [1 2 3 4 5])
-; >> CompilerException java.lang.RuntimeException: Can't take value of a macro:
+; >> CompilerException java.lang.RuntimeException:
+;      Can't take value of a macro:
 
 ;; 일반 함수는 물론 에러가 발생하지 않는다.
 (map inc [1 2 3 4 5])
