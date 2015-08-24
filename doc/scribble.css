@@ -64,6 +64,11 @@ h5 {
   background: #E0E0E0;
 }
 
+/* subsubsection */
+h6 {
+  font-size: 11pt;
+  background: #FCF6CF;
+}
 
 h2 { /* per-page main title */
   margin-top: 0;
