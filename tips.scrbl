@@ -70,7 +70,7 @@
 coll?, sequential?, seq? 간의 차이를 먼저 도표를 통해 설명하면 다음과 같다.
 
 @descblock|{
-          coll?   sequential?   seq?
+'         coll?   sequential?   seq?
 ---------------------------------------
 list       O          O          O
 vector     O          O          X
