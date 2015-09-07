@@ -22,7 +22,6 @@ var buttonInfos =
                   false, false],
     webapi     : ["https://developer.mozilla.org/en-US/search?q={0}", false, false],
     jquery     : ["http://api.jquery.com/?ns0=1&s={0}", false, true],
-    d3         : ["https://www.google.co.kr/#hl=ko&q={0}+site:github.com/mbostock/d3/wiki/API-Reference", false, false],
 
     java       : ["https://www.google.co.kr/#hl=ko&q={0}+site:docs.oracle.com/javase/7/docs/api/",
                   false, false],
