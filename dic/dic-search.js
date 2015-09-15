@@ -69,7 +69,7 @@ $(document).ready(function() {
     ngram      : ["http://books.google.com/ngrams/graph?content={0}&year_start=1500"
                   + "&year_end=2000&corpus=0&smoothing=0", "plus", true],
     regex      : ["http://www.visca.com/regexdict/", "plus", true],
-    name       : ["http://www.pronouncenames.com/search?name={0}", "space", false],
+    name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
    
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
    };
