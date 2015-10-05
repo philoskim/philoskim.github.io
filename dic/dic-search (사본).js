@@ -13,9 +13,8 @@ function setCookie(cname, cvalue, exdays)
 {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+d.toString();
-    document.cookie = cname + "=" + cvalue + "; " + expires + ";";
-    console.log(document.cookie);
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
 }
 
 function getCookie(cname)
@@ -23,12 +22,10 @@ function getCookie(cname)
     var name = cname + "=";
     var ca = document.cookie.split(';');
     for(var i=0; i<ca.length; i++)
-    {
+		{
         var c = ca[i];
-        while (c.charAt(0)==' ')
-	  c = c.substring(1);
-        if (c.indexOf(name) != -1)
-	  return c.substring(name.length,c.length);
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
     }
     return "";
 }
@@ -79,7 +76,7 @@ $(document).ready(function() {
 
   function handleClick(e)
   {
-    var inputValue = $("#words").val();
+    var inputValue = $("#entry").val();
     var spaceInput =  inputValue;
     var plusInput = inputValue.split(" ").join("+");
     var minusInput = inputValue.split(" ").join("-");
@@ -95,8 +92,7 @@ $(document).ready(function() {
 
     var url = value[0].format(input);
 
-      setCookie('search-words', inputValue, 1);
-      console.log(document.cookie);
+    setCookie('search-words', inputValue, 1);
 
     if (value[2])   // iframe에 담길 수 있으면
     {
@@ -106,34 +102,51 @@ $(document).ready(function() {
     {
       window.location.href = url;
     }
-
-    $("#words").focus();
+		$("#entry").focus();
   } 
+
+  function handleFocus(e)
+	{
+    $(this).val("");
+  }
 
   function handleKeydown(e)
   {
     if (e.keyCode == 13)   // 13 == Enter Key
     {
+      setCookie('search-words', $(this).val(), 1);
       $("#cambridge").click();
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
       $(this).val( getCookie('search-words') );
     }
-    else if (e.keyCode == 40)  // 40 == DownArrow Key
+    else (e.keyCode == 40)  // 40 == DownArrow Key
     {
-       $(this).val("");
+	if ( $(this).val() == getCookie('search-words') )
+	{
+	  $(this).val("");
+        }
     }
   }
 
-  function handleLoad(e)
-  {
-    $("#words").focus();
-    $("#words").val( getCookie('search-words') );
-  }
+
+    // function handleChange(e)
+    // {
+    // 	if ( $(this).val() == getCookie('search-words') )
+    // 	    $(this).val(e.keyCode);
+    // }
+
+    function handleLoad(e)
+    {
+	$("#entry").focus();
+	$("#entry").val( getCookie('search-words') );
+    }
 
   $("button").click(handleClick);
-  $("#words").keydown(handleKeydown);
+  $("#entry").keydown(handleKeydown);
+//  $("#entry").focusin(handleFocus);
+	//$("#ettry").change(handleChange); 
 
   window.onload = handleLoad;	
 });
