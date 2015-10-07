@@ -119,7 +119,7 @@ $(document).ready(function() {
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
         $(this).focus();
-        $(this).val( getCookie('search-words') );
+        $(this).val( getCookie('search-words') + "aa" );
     }
     else if (e.keyCode == 40)  // 40 == DownArrow Key
     {
