@@ -77,7 +77,7 @@ $(document).ready(function() {
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
    };
 
-  function handleClick(e)
+  function handleButtonClick(e)
   {
     var inputValue = $("#words").val();
     var spaceInput =  inputValue;
@@ -96,7 +96,7 @@ $(document).ready(function() {
     var url = value[0].format(input);
 
       setCookie('search-words', inputValue, 1);
-      console.log(document.cookie);
+      //console.log(document.cookie);
 
     if (value[2])   // iframe에 담길 수 있으면
     {
@@ -132,8 +132,9 @@ $(document).ready(function() {
     $("#words").val( getCookie('search-words') );
   }
 
-  $("button").click(handleClick);
+  $("button").click(handleButtonClick);
   $("#words").keydown(handleKeydown);
+  $("#words").click(function (e) {$(this).val("");} );    
 
   window.onload = handleLoad;	
 });
