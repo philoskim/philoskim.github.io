@@ -121,7 +121,7 @@ $(document).ready(function() {
         // var words = getCookie('search-words') + "ee";
         // $(this).val('').val(words);
         //         $(this).focus();
-        $(this).val(getCookie('search-words') + "ee");
+        $(this).val(getCookie('search-words') + "ff");
     }
     else if (e.keyCode == 40)  // 40 == DownArrow Key
     {
