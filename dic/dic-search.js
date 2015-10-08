@@ -118,8 +118,9 @@ $(document).ready(function() {
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
-        $("#words").focus();
-        $("#words").val( getCookie('search-words') + "bb" );
+        $(this).focus();
+        var words = getCookie('search-words' + "cc");
+        $(this).val(words);
     }
     else if (e.keyCode == 40)  // 40 == DownArrow Key
     {
