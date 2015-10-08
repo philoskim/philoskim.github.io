@@ -118,9 +118,10 @@ $(document).ready(function() {
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
-        var words = getCookie('search-words') + "ee";
-        $(this).val('').val(words);
-                $(this).focus();
+        // var words = getCookie('search-words') + "ee";
+        // $(this).val('').val(words);
+        //         $(this).focus();
+        $(this).val(getCookie('search-words') + "ee");
     }
     else if (e.keyCode == 40)  // 40 == DownArrow Key
     {
