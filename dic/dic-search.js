@@ -120,8 +120,8 @@ $(document).ready(function() {
     {
       $(this).val(getCookie('search-words'));
     }
-    else if (e.keyCode == 40)  // 40 == DownArrow Key
-    {
+    else if (e.keyCode == 40 || e.keyCode == 27)  // 40 == DownArrow Key
+    {                                             // 27 == Esc Key
        $(this).val("");
     }
   }
