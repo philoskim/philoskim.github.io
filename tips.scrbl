@@ -148,3 +148,18 @@ seq 자료형일 것이다. sequential(순차적인) 자료형은 이름 자체�
 매크로명이 오면 잘못된 것이다 라고 정리해 두면 좋다. 위에서 #(my-inc ...)의 경우에도
 매크로명을 함수명이 올 자리로 위치 이동한 것으로 이해하면, 왜 #(my-inc ...)로 감싸야
 하는지 쉽게 그 이유를 알 수 있을 것이다.
+
+
+@section{STM-aware agents}
+
+예를 들어, 다음과 같은 STM 코드가 있고 retry가 여러 번 일어났다고 할 때, send 함수도 여러
+번 실행될 것이라고 생각하기 쉽다. 하지만, 실제로는 agent는 STM-aware하게 설계되어 있어서
+transaction이 성공한 작후 딱 한 번만 실행된다.
+
+@coding|{
+(dosync
+  // transactional stuff
+  (send some-agent #(function-with-side-effects params))
+  // more transactional stuff
+  )
+}|
