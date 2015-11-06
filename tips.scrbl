@@ -154,7 +154,7 @@ seq 자료형일 것이다. sequential(순차적인) 자료형은 이름 자체�
 
 예를 들어, 다음과 같은 STM 코드가 있고 retry가 여러 번 일어났다고 할 때, send 함수도 여러
 번 실행될 것이라고 생각하기 쉽다. 하지만, 실제로는 agent는 STM-aware하게 설계되어 있어서
-transaction이 성공한 작후 딱 한 번만 실행된다.
+transaction이 성공한 직후 딱 한 번만 실행된다.
 
 @coding|{
 (dosync
