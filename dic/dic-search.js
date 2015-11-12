@@ -40,20 +40,6 @@ $(document).ready(function() {
   { guide      : ["guide.html", "space", true],
     home       : ["http://www.english4u.kr/", "space", false],
 
-    cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
-    webster    : ["http://www.merriam-webster.com/dictionary/{0}", "space", true],
-    vocabulary : ["http://www.vocabulary.com/dictionary/{0}", "space", true],
-    yourdic    : ["http://www.yourdictionary.com/{0}", "minus", true],
-
-    etymology  : ["http://www.etymonline.com/index.php?allowed_in_frame=0"
-                  + "&search={0}&searchmode=none", "plus", false],
-    wiktionary : ["http://en.wiktionary.org/wiki/{0}", "space", true],
-    dictionary : ["http://dictionary.reference.com/browse/{0}", "plus", true],
-    free       : ["http://www.thefreedictionary.com/{0}", "plus", true],
-    thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
-    collins    : ["http://dictionary.reverso.net/english-cobuild/{0}", "space", true],
-    onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true],
-
     naver      : ["http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query={0}",
                   "space", false],
     daum       : ["http://dic.daum.net/search.do?q={0}", "space", true],
@@ -75,6 +61,20 @@ $(document).ready(function() {
     name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
    
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
+
+    cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
+    webster    : ["http://www.merriam-webster.com/dictionary/{0}", "space", true],
+    vocabulary : ["http://www.vocabulary.com/dictionary/{0}", "space", true],
+    yourdic    : ["http://www.yourdictionary.com/{0}", "minus", true],
+
+    etymology  : ["http://www.etymonline.com/index.php?allowed_in_frame=0"
+                  + "&search={0}&searchmode=none", "plus", false],
+    wiktionary : ["http://en.wiktionary.org/wiki/{0}", "space", true],
+    dictionary : ["http://dictionary.reference.com/browse/{0}", "plus", true],
+    free       : ["http://www.thefreedictionary.com/{0}", "plus", true],
+    thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
+    collins    : ["http://dictionary.reverso.net/english-cobuild/{0}", "space", true],
+    onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true]
    };
 
   function handleButtonClick(e)
