@@ -16,7 +16,7 @@ Clojure에서 def로 선언된 변수명이나 defn으로 선언된 함수명은
 binding이 그것이다.
 
 root binding은 모든 쓰레드에서 접근 가능한 binding인 반면에, thread-local binding은
-이름에서 짐작할 수 있듯이 해당 쓰레드에서만 접근 가능합니다.
+이름에서 짐작할 수 있듯이 해당 쓰레드에서만 접근 가능하다.
 
 다음의 예는 root binding의 예이다.
 

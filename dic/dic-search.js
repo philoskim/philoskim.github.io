@@ -114,7 +114,7 @@ $(document).ready(function() {
   {
     if (e.keyCode == 13)   // 13 == Enter Key
     {
-      $("#cambridge").click();
+      $("#naver").click();
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
