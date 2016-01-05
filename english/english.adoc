@@ -1,0 +1,269 @@
+= 영어 원서 독해를 위한 영어 강의
+:doctype: book
+//:stem: latexmath
+:linkcss:
+:icons: font
+:imagesdir: ./img
+:sectnums:
+:docinfo1:
+:toc: left
+:toclevels: 3
+
+:leveloffset: 1
+
+[cols="4,8"]
+[width="60"]
+|===
+
+| 강의 진행자 | 김영태
+
+| e-mail | philos99@gmail.com
+
+| facebook | https://www.facebook.com/philos.kim
+
+|===
+
+++++
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71895499-1', 'auto');
+  ga('send', 'pageview');
+</script>
+++++
+
+== 영어 강의를 공개하며
+
+주위를 둘러보면 영어로 인해 고통을 받는 분들이 의외로 많습니다. 특히 영어의 장벽으로 인해
+자신이 갖고 있는 재능을 제대로 꽃피우지 못하는 분들을 주변에서 볼 때마다 내심 많이
+안타까웠습니다. 그래서 그동안 제가 익힌 영어 해석에 대한 knowhow를 언젠가는 세상에 공개해
+공유해야겠다는 생각을 일찍부터 갖고 있었는데, 이번에 저에게 영어를 배우고 싶다는 분들의
+요청이 있어 그분들을 대상으로 한 강의를 (그분들의 양해하에) 이렇게 공개하게 되었습니다.
+
+"TOEIC이나 TEPS 관련 영어 책은 옆구리에 끼고 다니면서, 영어 원서를 강의 교재로
+사용하겠다고 하면 학생들이 썰물 빠져 나가듯이 수강 신청을 취소한다."고 예전에 어느
+대학교의 교수님이 하시던 한탄 섞인 말씀이 떠오릅니다. 왜 이런 현상이 일어나고 있는
+것일까요? 그것은 영어를 시험 점수 높이기를 목적으로 공부했기 때문입니다. 저의 경험에
+의하면, TOEIC 점수가 잘 나온다는 사람들도 영어 원서를 해석해 보라고 시키면, 이건 독해를
+하는 것인지 소설을 쓰고 있는 것인지 분간하기 힘든 경우가 많았습니다. 영어 원서의 지문
+수준은 TOEIC/TEPS/TOEFL의 독해 지문들보다 난이도가 높은 경우가 많습니다. 게다가 아주
+정확하게 해석하지 않으면 책의 내용을 제대로 이해할 수 없습니다. 정확하게 해석하지 못해도
+전체적인 흐름만 보고 답만 골라내면 되는 영어 시험과는 그 성격이 많이 다릅니다. 게다가
+TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일한 데 반해, 영어 원서의 경우는
+문체도 훨씬 다앙합니다.
+
+이 강의에서 앞으로 배울 내용들이 각종 영어 시험 대비에도 물론 많은 도움이 되겠지만, 이
+강의는 시험 점수 올리기에 목표를 두지 않고, 영어 문장을 분석하는 능력의 향상을 목표로
+합니다. 요즘은 특히 회화 위주의 영어 교육이 주를 이루고 있어 간단한 대화 능력은 향상된
+반면, 영어 교육을 받은 사람들의 전반적인 영어 독해 능력은 예전에 비해 많이 떨어진 것이
+사실입니다.
+
+그래서 저의 강의의 초점은 영어 원서 독해 실력 향상에 맞추어질 것이고 주로 문답식으로
+강의를 진행합니다. 제가 일방적으로 강의를 진행할 때도 있겠지만, 대부분은 강의 참가자들이
+먼저 해석을 하게 되고, 잘못된 해석이 나올 때 제가 그 이유를 설명하며 교정해 나가는
+방식으로 진행합니다. 강의 중에 시행착오를 직접 체험하는 방식으로 수업하는 것이 학습 효과가
+가장 높기 때문입니다. 또한, 수학 문제를 풀 때처럼 영어 문장을 엄밀하게 체계적으로
+분석하는 과정에서, 영어의 이해에 문법이 대단히 중요한 역할을 한다는 사실을 깨닫게 될
+것입니다.
+
+얄팍한 방법으로 영어를 공부하려 하지 마시고, 저의 강의를 통해 정공법으로 영어 실력을
+향상시켜 나가시기를 기대합니다.
+
+
+== 강의 교재
+
+* english-grammar-fundamental.pdf +
+  이 교재는 시중의 일반 영어 문법서에는 나오지 않는 내용을 중심으로 제가 따로 만든
+  자료입니다. 이 파일을 다운로드 받으려면 다음의 절차를 따릅니다.
+[arabic]
+.. 다음의 링크를 클릭한 후, 마우스 오른쪽 버튼을 누릅니다. +
+   link:textbook/english-grammar-fundamental.pdf[english-grammar-fundamental.pdf]
+.. '다른 이름으로 링크 저장' 메뉴를 클릭합니다.
+
+
+* http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788986451009&orderClick=LEA&Kc=[성문
+  종합 영어] +
+  이 책은 문법서로 잘 알려져 있지만, 문법 부분은 단순한 나열식 위주의 설명이어서 이 책을
+  여러 번 본다고 해서 영어 실력 향상에 큰 도움이 되지는 않는다는 것이 저의
+  판단입니다. 그럼에도 불구하고 이 책을 교재로 선택한 이유는, 실려 있는 예문들이 독해
+  훈련시키기에 적당한 난이도를 가지고 있기 때문입니다. 예전에 신문에서 이 책의 원 저자인
+  송성문 선생의 인터뷰 기사를 우연히 본 적이 있는데, 송성문 선생도 '이 책은 문법서가
+  아니라 독해집이다'라고 말씀하시더군요. 저도 그 말씀이 정확한 표현이라고 생각합니다. 이
+  교재의 예문을 사용하기는 합니다만, 예문 해석시 설명 방식은 많이 다를 것입니다. 시중에서
+  쉽게 구입할 수 있으니 원하시는 분은 구입하시기 바랍니다
+
+
+== 강의의 특징
+
+* 제가 고등학교 때 개념 없이 영어 공부하느라 고생했던 기억을 떠올리면 지금도
+  끔찍합니다. 그때 만약 지금의 저처럼 영어를 논리적/개념적으로 가르쳐주는 분이 있었다면
+  훨씬 수월하게 영어를 배울 수 있었을 텐데 하는 아쉬움이 이 강의를 대중에 공개하게 된
+  근본적인 이유입니다. 그래서 이 강의는 영어 공부는 열심히 했는데, 그 결과가 기대에
+  못미치는 사람들에게 특히 도움이 될 것입니다.
+
+* 강의 진행시 '성문 종합 영어'의 원래 목차 순서와는 다른 순서로 진행하는 점 참고하시기
+  바랍니다. 수학에서 인수분해를 다룬 후에야 함수를 제대로 설명할 수 있듯이, 영어를
+  개념적으로 설명해 나가려면 가르치는 순서가 중요합니다. 예를 들어, 가정법을 설명하려면,
+  조동사에 대한 강의가 선행되어야 하고, 조동사를 제대로 설명하려면 동사의 시제에 대한
+  강의가 선행되어야 합니다. 따라서 이 강의를 들으시는 분들은 아래에 나열된 강의 목록에
+  나온 순서대로 강의를 차례대로 들으시는 것이 좋습니다.
+
+
+== 동영상 영어 강의 목록
+
+* 동영상 원본은 YouTube에 올라가 있고, 이곳은 YouTube에 제가 올린 동영상 강의를 찾아보기
+  쉽도록, 강의한 순서대로 해당 링크만 걸어 놓습니다.
+
+* 유튜브 동영상 화면의 '설정' 버튼을 누른 후, '품질'을 720p로 선택하시면 깨끗한 화면으로 볼
+  수 있습니다.
+
+* 강의 중 이용하는 영어 사전 사이트는 http://philoskim.github.io/dic[]입니다.
+
+=== 시범 강의
+
+* https://www.youtube.com/watch?v=ZeS2QzVDjXs[독해력 테스트] (17:06)
+
+
+=== 영어 문법의 기초
+
+* https://www.youtube.com/watch?v=c3oC5rF9m4o[문법 개념 강의] (56:06)
+
+
+=== 동사의 형식
+
+[cols="33,33,33"]
+|===
+
+| 1) https://www.youtube.com/watch?v=3dP3b1BxIqo[문법 개념 강의 1] (42:30)
+| 2) https://www.youtube.com/watch?v=VRiLvLIa1TA[문법 개념 강의 2] (55:02)
+| 3) https://www.youtube.com/watch?v=mDLcp1rBSvE[문법 문제 풀이] (1:03:16)
+
+| 4) https://www.youtube.com/watch?v=sAcp2kYwdkw[독해 1] (57:40)
+| 5) https://www.youtube.com/watch?v=rfe_IB_qWVk[독해 2] (1:03:16)
+| 6) https://www.youtube.com/watch?v=fcmolJrMp_4[독해 3] (42:48)
+ 
+| 7) https://www.youtube.com/watch?v=s6W6lS2k1-k[독해 4] (1:14:12)
+| 8) https://www.youtube.com/watch?v=ddvDzZuU7ME[독해 5] (45:41)
+|
+
+|===
+
+
+=== 동사의 시제
+
+[cols="3*"]
+|===
+
+| 1) https://www.youtube.com/watch?v=G1WUK-el7m0[문법 개념 강의] (1:02:34)
+| 2) https://www.youtube.com/watch?v=7NnazlT8wUc[독해 1] (50:40) 
+| 3) https://www.youtube.com/watch?v=bXHW7_UwtcQ[독해 2] (1:08:51) 
+
+| 4) https://www.youtube.com/watch?v=rqyRNEAGBFo[독해 3] (52:25)
+| 5) https://www.youtube.com/watch?v=kKIKj_1AZrs[독해 4] (58:43)
+|
+
+|===
+
+
+=== 부정사
+
+[cols="3*"]
+|===
+
+| 1) https://www.youtube.com/watch?v=S5Ks_rCUAmI[문법 개념 설명 1] (51:52) 
+| 2) https://www.youtube.com/watch?v=p90go5L2Po0[문법 개념 설명 2] (35:37) 
+| 3) https://www.youtube.com/watch?v=Oyl5LndFqCg[문법 문제 풀이 1] (40:48) 
+
+| 4) https://www.youtube.com/watch?v=s0WVQrv3X6o[문법 문제 풀이 2] (47:36) 
+| 5) https://www.youtube.com/watch?v=ZGW-0kEZVb8[문법 문제 풀이 3] (49:29) 
+| 6) https://www.youtube.com/watch?v=UNnQ-X_U5sA[문법 문제 풀이 4] (59:24) 
+
+| 7) https://www.youtube.com/watch?v=kh5cRHG7dis[독해 1] (45:58) 
+| 8) https://www.youtube.com/watch?v=lN_CpOwoMOM[독해 2] (57:30) 
+| 9) https://www.youtube.com/watch?v=9olvwABDSSE[독해 3] (50:14) 
+
+| 10) https://www.youtube.com/watch?v=B53M9TDDG-k[독해 4] (46:27) 
+| 11) https://www.youtube.com/watch?v=fyL8Iw_wrDY[독해 5] (1:09:33) 
+| 
+
+|===
+
+
+=== 동명사
+
+[cols="3*"]
+|===
+
+| 1) https://www.youtube.com/watch?v=fP52baNBlWI[문법 개념 설명 1] (45:03) 
+| 2) https://www.youtube.com/watch?v=c_qDClJLb_o[문법 개념 설명 2] (43:55) 
+| 3) https://www.youtube.com/watch?v=MIPQ7WuC-hE[문법 문제 풀이 1] (46:38) 
+
+| 4) https://www.youtube.com/watch?v=ZbkXVM8_Ovg[문법 문제 풀이 2] (40:03) 
+| 5) https://www.youtube.com/watch?v=Kl3EFuALtrE[문법 문제 풀이 3] (40:56) 
+| 6) https://www.youtube.com/watch?v=vp0RQbfsUDA[문법 문제 풀이 4] (55:00) 
+
+| 7) https://www.youtube.com/watch?v=34C5OBq_T-M[독해 1] (59:18) 
+| 8) https://www.youtube.com/watch?v=dyXHFAgbgtY[독해 2] (1:02:45) 
+| 9) https://www.youtube.com/watch?v=JC442ErHHA8[독해 3] (51:59) 
+
+|===
+
+
+=== 분사
+
+[cols="3*"]
+|===
+
+| 1) https://www.youtube.com/watch?v=1ID2P4Z0OZA[문법 개념 설명 1] (41:00) 
+| 2) https://www.youtube.com/watch?v=3lMif1GABE0[문법 개념 설명 2] (42:36) 
+| 3) https://www.youtube.com/watch?v=Q2k1Y6k9PV0[문법 문제 풀이 1] (1:08:48) 
+
+| 4) https://www.youtube.com/watch?v=1xs1S8NiW8Q[문법 문제 풀이 2] (1:05:13) 
+|
+|
+
+//| 5) https://www.youtube.com/watch?v=[문법 문제 풀이 3] (40:56) 
+//| 6) https://www.youtube.com/watch?v=[문법 문제 풀이 4] (55:00) 
+
+//| 7) https://www.youtube.com/watch?v=[독해 1] (59:18) 
+//| 8) https://www.youtube.com/watch?v=[독해 2] (1:02:45) 
+//| 9) https://www.youtube.com/watch?v=[독해 3] (51:59) 
+
+|===
+
+
+
+
+
+
+
+
+
+
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+
+
+
