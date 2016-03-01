@@ -230,14 +230,48 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 | 9) https://www.youtube.com/watch?v=RCj6vr_iyRE[문법 문제 풀이 7] (52:03) 
 
 | 10) https://www.youtube.com/watch?v=gBSOxK-IF_4[문법 문제 풀이 8] (1:02:05) 
-| 11) https://www.youtube.com/watch?v=J7Xj9giSsxs[독해 1] (47:42) 
+| 11) https://www.youtube.com/watch?v=J7Xj9giSsxs[독해 1] (47:42)  
+| 12) https://www.youtube.com/watch?v=H4sLxVhgImg[독해 2] (46:55) 
+
+| 13) https://www.youtube.com/watch?v=A3gA0PyviJ0[독해 3] (41:00) 
+| 14) https://www.youtube.com/watch?v=Ao9RrvpBY1I[독해 4] (47:00) 
 |
-  
-//| 7) https://www.youtube.com/watch?v=[독해 1] (59:18) 
-//| 8) https://www.youtube.com/watch?v=[독해 2] (1:02:45) 
-//| 9) https://www.youtube.com/watch?v=[독해 3] (51:59) 
 
 |===
+
+
+=== 조동사
+
+[cols="3*"]
+|===
+
+| 1) https://www.youtube.com/watch?v=J2J3NyvuwCY[문법 개념 설명 1] (1:02:53) 
+|
+|
+
+//| 2) https://www.youtube.com/watch?v=[문법 개념 설명 2] (42:36) 
+//| 3) https://www.youtube.com/watch?v=[문법 문제 풀이 1] (1:08:48) 
+
+//| 4) https://www.youtube.com/watch?v=[문법 문제 풀이 2] (1:05:13) 
+//| 5) https://www.youtube.com/watch?v=[문법 문제 풀이 3] (50:50)
+//| 6) https://www.youtube.com/watch?v=[문법 문제 풀이 4] (47:12)
+
+//| 7) https://www.youtube.com/watch?v=[문법 문제 풀이 5] (40:06) 
+//| 8) https://www.youtube.com/watch?v=[문법 문제 풀이 6] (52:00) 
+//| 9) https://www.youtube.com/watch?v=[문법 문제 풀이 7] (52:03) 
+
+//| 10) https://www.youtube.com/watch?v=[문법 문제 풀이 8] (1:02:05) 
+//| 11) https://www.youtube.com/watch?v=[독해 1] (47:42)  
+//| 12) https://www.youtube.com/watch?v=[독해 2] (46:55) 
+
+//| 13) https://www.youtube.com/watch?v=[독해 3] (41:00) 
+//| 14) https://www.youtube.com/watch?v=[독해 4] (47:00) 
+//|
+
+|===
+
+
+
 
 
 
