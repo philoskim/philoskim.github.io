@@ -246,15 +246,20 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 |===
 
 | 1) https://www.youtube.com/watch?v=J2J3NyvuwCY[문법 개념 설명 1] (1:02:53) 
-|
+| 2) https://www.youtube.com/watch?v=AfDSsLv0ees[문법 개념 설명 2] (1:00:19) 
+| 3) https://www.youtube.com/watch?v=uVIFTsrkDO4[문법 개념 설명 3] (47:20) 
+
+| 4) https://www.youtube.com/watch?v=BLHz4_bi448[문법 개념 설명 4] (56:06) 
+| 5) https://www.youtube.com/watch?v=ggz8z0VB3lY[문법 문제 풀이 1] (54:37)
 |
 
-//| 2) https://www.youtube.com/watch?v=[문법 개념 설명 2] (42:36) 
-//| 3) https://www.youtube.com/watch?v=[문법 문제 풀이 1] (1:08:48) 
-
-//| 4) https://www.youtube.com/watch?v=[문법 문제 풀이 2] (1:05:13) 
-//| 5) https://www.youtube.com/watch?v=[문법 문제 풀이 3] (50:50)
 //| 6) https://www.youtube.com/watch?v=[문법 문제 풀이 4] (47:12)
+
+  
+
+
+
+
 
 //| 7) https://www.youtube.com/watch?v=[문법 문제 풀이 5] (40:06) 
 //| 8) https://www.youtube.com/watch?v=[문법 문제 풀이 6] (52:00) 
