@@ -265,21 +265,40 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 | 13) https://www.youtube.com/watch?v=kMaRcWmX5FE[독해 7] (39:19) 
 |
 |
-  
-
-
-
-
-//| 12) https://www.youtube.com/watch?v=[독해 2] (46:55) 
-//| 13) https://www.youtube.com/watch?v=[독해 3] (41:00) 
-//| 14) https://www.youtube.com/watch?v=[독해 4] (47:00) 
-//|
- 
-
  
 |===
 
 
+=== 수동태
+
+[cols="3*"]
+|===
+
+| https://www.youtube.com/watch?v=10_U-vjk9YM[문법 개념 설명 1] (57:33) 
+| https://www.youtube.com/watch?v=5J3CMeJCDD8[문법 개념 설명 2] (56:10) 
+|
+  
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+//| https://www.youtube.com/watch?v=[] (:) 
+
+
+|===
+
+  
 
 
 
