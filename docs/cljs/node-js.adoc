@@ -226,8 +226,8 @@ cljs.user=>
 (println "source code modified!")   ; <1>
 ....
 
-그러면 ``npm out/appp.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 수정한
-소스 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수 있다.
+그러면 ``npm out/app.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 수정한 소스를
+저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수 있다.
   
 [listing]
 ----
@@ -290,7 +290,7 @@ Figwheel: loaded these files
 
 
 다음과 같이 실행해서 `package.json` 파일을 먼저 만든다. 이때 여러가지를 물어오는데
-적당하게 입력하도록 한다. 이때 입력한 내용은 `package.json` 파일이 만들어진 후, 수작업으로
+적당하게 입력하도록 한다. `package.json` 파일이 만들어진 후, 이때 입력한 내용은 수작업으로
 직접 고칠 수 있다.
 
 [listing]
@@ -298,7 +298,7 @@ Figwheel: loaded these files
 $ npm init
 ----
 
-이 상태에서 express 모듈을 다음과 같이 설치한다.
+이 상태에서 `express` 모듈을 다음과 같이 설치한다.
 
 [listing]
 ----
