@@ -136,6 +136,8 @@ Hello World!
 
 이번에는 Figwheel을 사용해 보자!
 
+다음의 두 라인을 `project.clj` 파일에 추가해 준다.
+  
 .project.clj
 [source]
 ....
@@ -187,8 +189,8 @@ Figwheel Controls:
 Prompt will show when Figwheel connects to your application
 ----
 
-이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 출력되는 것을
-확인할 수 있다.
+이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 추가로 출력되이
+있는 것을 볼 수 있다.
 
 [listing]
 ----
@@ -208,7 +210,7 @@ cljs.user=>
 ----
 
 이 상태에서 `src/node_demo/hello.cljs` 파일의 맨 마지막 부분에 다음과 같은 내용을 추가한
-후, 파일을 저장해 보라.
+후, 파일을 저장해 보자.
 
 .src/node_demo/hello.cljs
 [source]
@@ -226,8 +228,9 @@ cljs.user=>
 (println "source code modified!")   ; <1>
 ....
 
-그러면 ``npm out/app.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 수정한 소스를
-저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수 있다.
+그러면 ``npm out/app.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 즉, 수정한
+소스를 저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수
+있다.
   
 [listing]
 ----
@@ -243,7 +246,7 @@ Figwheel: loaded these files
   
 === Node.js 모듈 호출하기
 
-이번에는 Node.js 모듈을 호출하는 법을 알아 본다. 이 예에서는 `express` 모듈을 설치하고
+이번에는 Node.js 모듈을 호출하는 법을 알아 보자. 이 예에서는 `express` 모듈을 설치하고
 호출해 볼 것이다.
 
 위의 `project.clj` 파일을 다음과 같이 약간 수정해 준다.
@@ -289,9 +292,9 @@ Figwheel: loaded these files
 ....
 
 
-다음과 같이 실행해서 `package.json` 파일을 먼저 만든다. 이때 여러가지를 물어오는데
-적당하게 입력하도록 한다. `package.json` 파일이 만들어진 후, 이때 입력한 내용은 수작업으로
-직접 고칠 수 있다.
+그리고 다음과 같이 실행해서 `package.json` 파일을 먼저 만들어 준다. 이때 여러가지를
+물어오는데 적당하게 입력하도록 한다. 그러면 `package.json` 파일이 만들어지는데, 이때
+입력한 내용은 나중에 이 파일을 수정해서 고칠 수 있다.
 
 [listing]
 ----
