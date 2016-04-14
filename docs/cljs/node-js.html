@@ -23,7 +23,7 @@
 수 있다.</p>
 </div>
 <div class="paragraph">
-<p>다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.</p>
+<p>참고로, 다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.</p>
 </div>
 </div>
 </div>
@@ -33,7 +33,7 @@
 <div class="sect2">
 <h3 id="_node_js의_설치">1.1. Node.js의 설치</h3>
 <div class="paragraph">
-<p>다음은 Node.js를 설치하는 하나의 예이다.</p>
+<p>다음은 Node.js를 설치하는 한 예이다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -122,6 +122,15 @@ $ cd node-demo</pre>
                                    <span class="symbol">:pretty-print</span> <span class="predefined-constant">true</span>} }]})</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>:target :nodejs</code> 설정이 있으면, 클로저스트립트 컴파일러는 Node.js에 맞게 소스
+코드를 컴파일한다.</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p><code>hello.cljs</code> 파일을 다음과 같이 작성한다.</p>
 </div>
@@ -189,6 +198,16 @@ Hello World!</pre>
 </div>
 </div>
 <div class="paragraph">
+<p>Figwheel을 실행하기에 앞서 <code>ws</code> 모듈과 <code>source-map-support</code> (optional) 모듈을 미리 설치해
+준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ npm install ws
+$ npm install source-map-support</pre>
+</div>
+</div>
+<div class="paragraph">
 <p>다음과 같이 Figwheel을 실행해 준다.</p>
 </div>
 <div class="listingblock">
@@ -221,8 +240,8 @@ Prompt will show when Figwheel connects to your application</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 추가로 출력되이
-있는 것을 볼 수 있다.</p>
+<p>이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 추가로 출력되는
+것을 볼 수 있다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -234,7 +253,7 @@ Figwheel: socket connection established</pre>
 </div>
 <div class="paragraph">
 <p>그리고 위의 <code>lein figwheel</code> 실행 화면을 다시 보면, 다음과 같은 메시지와 프람프트가 함께
-보인다.</p>
+추가로 보일 것이다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -263,9 +282,7 @@ cljs.user=&gt;</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>그러면 <code>npm out/app.js</code>을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 즉, 수정한
-소스를 저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수
-있다.</p>
+<p>그러면 <code>npm out/app.js</code>을 실행한 화면에 다음과 같은 내용이 출력될 것이다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -276,6 +293,10 @@ Figwheel: loaded these dependencies
 Figwheel: loaded these files
 ("../node_demo/hello.js")</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>즉, 수정한 소스를 저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을
+확인할 수 있다.</p>
 </div>
 </div>
 <div class="sect2">
@@ -329,14 +350,16 @@ Figwheel: loaded these files
 </div>
 </div>
 <div class="paragraph">
-<p>그리고 다음과 같이 실행해서 <code>package.json</code> 파일을 먼저 만들어 준다. 이때 여러가지를
-물어오는데 적당하게 입력하도록 한다. 그러면 <code>package.json</code> 파일이 만들어지는데, 이때
-입력한 내용은 나중에 이 파일을 수정해서 고칠 수 있다.</p>
+<p>그리고 다음과 같이 실행해서 <code>package.json</code> 파일을 먼저 만들어 준다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>$ npm init</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>이때 여러가지를 물어오는데 적당하게 입력하도록 한다. 그러면 <code>package.json</code> 파일이
+만들어지는데, 이때 입력한 내용은 나중에 이 파일을 수정해서 고칠 수 있다.</p>
 </div>
 <div class="paragraph">
 <p>이 상태에서 <code>express</code> 모듈을 다음과 같이 설치한다.</p>
@@ -372,7 +395,7 @@ App Started at http://localhost:3000</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-14 19:28:43 KST
+Last updated 2016-04-14 19:50:50 KST
 </div>
 </div>
 </body>

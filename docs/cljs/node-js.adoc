@@ -12,14 +12,14 @@
 사이드 프로그램이나 데스크탑 프로그램(예: link:http://lighttable.com/[Light Table])을 만들
 수 있다.
 
-다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.
+참고로, 다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.
 
   
 == Node.js의 설치 및 설정
 
 === Node.js의 설치
 
-다음은 Node.js를 설치하는 하나의 예이다.
+다음은 Node.js를 설치하는 한 예이다.
 
 [listing]
 ----
@@ -45,6 +45,7 @@ $ node -v
 v5.10.1
 ----
 
+  
 === Global Modules 설치 경로 지정
 
 자신의 홈 디렉토리(`~/`)의 `.npmrc` 파일에 다음과 같이 global modules의 설치 경로를 지정해
@@ -97,7 +98,9 @@ $ cd node-demo
                                    :source-map true
                                    :pretty-print true} }]})
 ....
-
+<1> ``:target :nodejs`` 설정이 있으면, 클로저스트립트 컴파일러는 Node.js에 맞게 소스
+    코드를 컴파일한다.
+   
 `hello.cljs` 파일을 다음과 같이 작성한다.
   
 .src/node_demo/hello.cljs
@@ -132,6 +135,7 @@ $ node out/app.js
 Hello World!
 ----
 
+  
 === Figwheel 사용하기
 
 이번에는 Figwheel을 사용해 보자!
@@ -157,6 +161,15 @@ Hello World!
                                    :pretty-print true
                                    :target :nodejs} }]})
 ....
+
+Figwheel을 실행하기에 앞서 `ws` 모듈과 `source-map-support` (optional) 모듈을 미리 설치해
+준다.
+
+[listing]
+----
+$ npm install ws
+$ npm install source-map-support
+----
 
 다음과 같이 Figwheel을 실행해 준다.
 
@@ -189,8 +202,8 @@ Figwheel Controls:
 Prompt will show when Figwheel connects to your application
 ----
 
-이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 추가로 출력되이
-있는 것을 볼 수 있다.
+이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 추가로 출력되는
+것을 볼 수 있다.
 
 [listing]
 ----
@@ -201,7 +214,7 @@ Figwheel: socket connection established
 ----
 
 그리고 위의 `lein figwheel` 실행 화면을 다시 보면, 다음과 같은 메시지와 프람프트가 함께
-보인다.
+추가로 보일 것이다.
 
 [listing]
 ----
@@ -228,9 +241,7 @@ cljs.user=>
 (println "source code modified!")   ; <1>
 ....
 
-그러면 ``npm out/app.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 즉, 수정한
-소스를 저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수
-있다.
+그러면 ``npm out/app.js``을 실행한 화면에 다음과 같은 내용이 출력될 것이다.
   
 [listing]
 ----
@@ -242,8 +253,10 @@ Figwheel: loaded these files
 ("../node_demo/hello.js")
 ----
 
+즉, 수정한 소스를 저장하면 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을
+확인할 수 있다.
 
-  
+    
 === Node.js 모듈 호출하기
 
 이번에는 Node.js 모듈을 호출하는 법을 알아 보자. 이 예에서는 `express` 모듈을 설치하고
@@ -292,15 +305,16 @@ Figwheel: loaded these files
 ....
 
 
-그리고 다음과 같이 실행해서 `package.json` 파일을 먼저 만들어 준다. 이때 여러가지를
-물어오는데 적당하게 입력하도록 한다. 그러면 `package.json` 파일이 만들어지는데, 이때
-입력한 내용은 나중에 이 파일을 수정해서 고칠 수 있다.
+그리고 다음과 같이 실행해서 `package.json` 파일을 먼저 만들어 준다.
 
 [listing]
 ----
 $ npm init
 ----
 
+이때 여러가지를 물어오는데 적당하게 입력하도록 한다. 그러면 `package.json` 파일이
+만들어지는데, 이때 입력한 내용은 나중에 이 파일을 수정해서 고칠 수 있다.
+  
 이 상태에서 `express` 모듈을 다음과 같이 설치한다.
 
 [listing]
