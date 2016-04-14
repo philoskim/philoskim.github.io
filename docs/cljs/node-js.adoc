@@ -108,10 +108,10 @@ $ cd node-demo
 
 (node/enable-util-print!)
 
-(defn main []
+(defn -main []
   (println "Hello World!"))
 
-(set! *main-cli-fn* main)
+(set! *main-cli-fn* -main)
 ....
 
 다음과 같이 컴파일한다.
@@ -220,10 +220,10 @@ cljs.user=>
 
 (node/enable-util-print!)
 
-(defn main []
+(defn -main []
   (println "Hello World!"))
 
-(set! *main-cli-fn* main)
+(set! *main-cli-fn* -main)
 
 (println "source code modified!")   ; <1>
 ....

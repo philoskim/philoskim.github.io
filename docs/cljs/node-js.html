@@ -133,10 +133,10 @@ $ cd node-demo</pre>
 
 (node/enable-util-print!)
 
-(<span class="keyword">defn</span> <span class="function">main</span> []
+(<span class="keyword">defn</span> <span class="function">-main</span> []
   (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>))
 
-(set! *main-cli-fn* main)</code></pre>
+(set! *main-cli-fn* -main)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -254,10 +254,10 @@ cljs.user=&gt;</pre>
 
 (node/enable-util-print!)
 
-(<span class="keyword">defn</span> <span class="function">main</span> []
+(<span class="keyword">defn</span> <span class="function">-main</span> []
   (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>))
 
-(set! *main-cli-fn* main)
+(set! *main-cli-fn* -main)
 
 (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">source code modified!</span><span class="delimiter">&quot;</span></span>)   <span class="comment">; </span> <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
@@ -372,7 +372,7 @@ App Started at http://localhost:3000</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-14 19:20:20 KST
+Last updated 2016-04-14 19:28:43 KST
 </div>
 </div>
 </body>
