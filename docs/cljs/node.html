@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.4">
+<title>Node.js and ClojureScript</title>
+<link rel="stylesheet" href="..//my-asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="..//coderay-asciidoctor.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>Node.js and ClojureScript</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>클로저스크립트는 Node.js 프로그래밍을 지원한다. 이를 활용하면, 클로저스크립트로 서버
+사이드 프로그래밍이나 데스크탑 프로그래밍을 할 수 있다.</p>
+</div>
+<div class="paragraph">
+<p>다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_node_js의_설치_및_설정">1. Node.js의 설치 및 설정</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_node_js의_설치">1.1. Node.js의 설치</h3>
+<div class="paragraph">
+<p>다음은 Node.js를 설치하는 하나의 예이다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ wget https://nodejs.org/dist/v5.10.1/node-v5.10.1-linux-x64.tar.xz
+
+$ tar -xvf node-v5.10.1-linux-x64.tar.xz
+
+$ sudo mv node-v5.10.1-linux-x64 /usr/local/node</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Node.js를 설치한 경로를 다음과 같이 export한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ export NODE_HOME=/usr/local/node</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 실행해서 버전 넘버가 나오면, Node.js가 제대로 설치된 것이다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ node -v
+v5.10.1</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_global_modules_설치_경로_지정">1.2. Global Modules 설치 경로 지정</h3>
+<div class="paragraph">
+<p>자신의 홈 디렉토리(<code>~/</code>)의 <code>.npmrc</code> 파일에 다음과 같이 global modules의 설치 경로를 지정해
+줄 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="title">~/.npmrc</div>
+<div class="content">
+<pre>prefix=~/npm-global-modules</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음을 실행하면, global modules 설치 경로를 확인할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ npm root -g
+/home/philos/npm-global-modules/lib/node_modules</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_클로저스크립트_node_프로그래밍">2. 클로저스크립트 Node 프로그래밍</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_hello_world_출력하기">2.1. Hello World 출력하기</h3>
+<div class="paragraph">
+<p>다음과 같이 node-demo 프로젝트를 새로 만든다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lein new node-demo
+
+$ cd node-demo</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이때 새로 만들어진 <code>project.clj</code> 파일의 내용을 다음과 같이 수정해 준다.</p>
+</div>
+<div class="listingblock">
+<div class="title">project.clj</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(defproject node-demo <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+  <span class="symbol">:dependencies</span> [[org.clojure/clojure <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.0</span><span class="delimiter">&quot;</span></span>]
+                 [org.clojure/clojurescript <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.40</span><span class="delimiter">&quot;</span></span>]]
+  <span class="symbol">:plugins</span> [[lein-cljsbuild <span class="string"><span class="delimiter">&quot;</span><span class="content">1.1.1</span><span class="delimiter">&quot;</span></span>]]
+  <span class="symbol">:cljsbuild</span> {<span class="symbol">:builds</span> [{<span class="symbol">:id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>
+                        <span class="symbol">:source-paths</span> [<span class="string"><span class="delimiter">&quot;</span><span class="content">src</span><span class="delimiter">&quot;</span></span>]
+                        <span class="symbol">:compiler</span> {<span class="symbol">:target</span> <span class="symbol">:nodejs</span>   <span class="comment">; </span><i class="conum" data-value="1"></i><b>(1)</b>
+                                   <span class="symbol">:output-dir</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:output-to</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out/app.js</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:main</span> node-demo.hello
+                                   <span class="symbol">:optimizations</span> <span class="symbol">:none</span>
+                                   <span class="symbol">:source-map</span> <span class="predefined-constant">true</span>
+                                   <span class="symbol">:pretty-print</span> <span class="predefined-constant">true</span>} }]})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>hello.cljs</code> 파일을 다음과 같이 작성한다.</p>
+</div>
+<div class="listingblock">
+<div class="title">src/node_demo/hello.cljs</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">node-demo.hello</span>
+  (<span class="symbol">:require</span> [cljs.nodejs <span class="symbol">:as</span> node]))
+
+(node/enable-util-print!)
+
+(<span class="keyword">defn</span> <span class="function">main</span> []
+  (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>))
+
+(set! *main-cli-fn* main)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 컴파일한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lein cljsbuild once
+Compiling ClojureScript...
+Compiling "out/app.js" from ["src"]...
+Successfully compiled "out/app.js" in 1.717 seconds.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 실행하면, <code>Hello World!</code> 문자열이 출력된다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ node out/app.js
+Hello World!</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_figwheel_사용하기">2.2. Figwheel 사용하기</h3>
+<div class="paragraph">
+<p>이번에는 Figwheel을 사용해 보자!</p>
+</div>
+<div class="listingblock">
+<div class="title">project.clj</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(defproject node-demo <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+  <span class="symbol">:dependencies</span> [[org.clojure/clojure <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.0</span><span class="delimiter">&quot;</span></span>]
+                 [org.clojure/clojurescript <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.40</span><span class="delimiter">&quot;</span></span>]]
+  <span class="symbol">:plugins</span> [[lein-cljsbuild <span class="string"><span class="delimiter">&quot;</span><span class="content">1.1.1</span><span class="delimiter">&quot;</span></span>]
+            [lein-figwheel <span class="string"><span class="delimiter">&quot;</span><span class="content">0.5.1</span><span class="delimiter">&quot;</span></span>]]     <span class="comment">; </span><i class="conum" data-value="1"></i><b>(1)</b>
+  <span class="symbol">:cljsbuild</span> {<span class="symbol">:builds</span> [{<span class="symbol">:id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>
+                        <span class="symbol">:source-paths</span> [<span class="string"><span class="delimiter">&quot;</span><span class="content">src</span><span class="delimiter">&quot;</span></span>]
+                        <span class="symbol">:figwheel</span> <span class="predefined-constant">true</span>    <span class="comment">; </span><i class="conum" data-value="2"></i><b>(2)</b>
+                        <span class="symbol">:compiler</span> {<span class="symbol">:output-dir</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:output-to</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out/app.js</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:main</span> node-demo.hello
+                                   <span class="symbol">:optimizations</span> <span class="symbol">:none</span>
+                                   <span class="symbol">:source-map</span> <span class="predefined-constant">true</span>
+                                   <span class="symbol">:pretty-print</span> <span class="predefined-constant">true</span>
+                                   <span class="symbol">:target</span> <span class="symbol">:nodejs</span>} }]})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 Figwheel을 실행해 준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lein figwheel
+Figwheel: Validating the configuration found in project.clj
+
+Figwheel: Configuration Valid. Starting Figwheel ...
+Figwheel: Starting server at http://localhost:3449
+Figwheel: Watching build - dev
+Compiling "out/app.js" from ["src"]...
+Successfully compiled "out/app.js" in 7.675 seconds.
+Launching ClojureScript REPL for build: dev
+Figwheel Controls:
+          (stop-autobuild)                ;; stops Figwheel autobuilder
+          (start-autobuild [id ...])      ;; starts autobuilder focused on optional ids
+          (switch-to-build id ...)        ;; switches autobuilder to different build
+          (reset-autobuild)               ;; stops, cleans, and starts autobuilder
+          (reload-config)                 ;; reloads build config and resets autobuild
+          (build-once [id ...])           ;; builds source one time
+          (clean-builds [id ..])          ;; deletes compiled cljs target files
+          (print-config [id ...])         ;; prints out build configurations
+          (fig-status)                    ;; displays current state of system
+  Switch REPL build focus:
+          :cljs/quit                      ;; allows you to switch REPL to another build
+    Docs: (doc function-name-here)
+    Exit: Control+C or :cljs/quit
+ Results: Stored in vars *1, *2, *3, *e holds last exception object
+Prompt will show when Figwheel connects to your application</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이 상태에서 다음과 같이 실행해 주면, Figwheel 접속이 이루어졌다는 메시지가 출력되는 것을
+확인할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ node out/app.js
+Hello World!
+Figwheel: trying to open cljs reload socket
+Figwheel: socket connection established</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>그리고 위의 <code>lein figwheel</code> 실행 화면을 다시 보면, 다음과 같은 메시지와 프람프트가 함께
+보인다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>To quit, type: :cljs/quit
+cljs.user=&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이 상태에서 <code>src/node_demo/hello.cljs</code> 파일의 맨 마지막 부분에 다음과 같은 내용을 추가한
+후, 파일을 저장해 보라.</p>
+</div>
+<div class="listingblock">
+<div class="title">src/node_demo/hello.cljs</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">node-demo.hello</span>
+  (<span class="symbol">:require</span> [cljs.nodejs <span class="symbol">:as</span> node]))
+
+(node/enable-util-print!)
+
+(<span class="keyword">defn</span> <span class="function">main</span> []
+  (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello World!</span><span class="delimiter">&quot;</span></span>))
+
+(set! *main-cli-fn* main)
+
+(<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">source code modified!</span><span class="delimiter">&quot;</span></span>)   <span class="comment">; </span> <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>그러면 <code>npm out/appp.js</code>을 실행한 화면에 다음과 같은 내용이 출력될 것이다. 수정한
+소스 코드가 자동으로 컴파일 된 후, reloading되서 실행까지 되는 것을 확인할 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Figwheel: notified of file changes
+source code modified!   ; <i class="conum" data-value="1"></i><b>(1)</b>
+Figwheel: loaded these dependencies
+("../B7805F4.js")
+Figwheel: loaded these files
+("../node_demo/hello.js")</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_node_js_모듈_호출하기">2.3. Node.js 모듈 호출하기</h3>
+<div class="paragraph">
+<p>이번에는 Node.js 모듈을 호출하는 법을 알아 본다. 이 예에서는 <code>express</code> 모듈을 설치하고
+호출해 볼 것이다.</p>
+</div>
+<div class="paragraph">
+<p>위의 <code>project.clj</code> 파일을 다음과 같이 약간 수정해 준다.</p>
+</div>
+<div class="listingblock">
+<div class="title">project.clj</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(defproject node-demo <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1.0-SNAPSHOT</span><span class="delimiter">&quot;</span></span>
+  <span class="symbol">:dependencies</span> [[org.clojure/clojure <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.0</span><span class="delimiter">&quot;</span></span>]
+                 [org.clojure/clojurescript <span class="string"><span class="delimiter">&quot;</span><span class="content">1.8.40</span><span class="delimiter">&quot;</span></span>]]
+  <span class="symbol">:plugins</span> [[lein-cljsbuild <span class="string"><span class="delimiter">&quot;</span><span class="content">1.1.1</span><span class="delimiter">&quot;</span></span>]]
+  <span class="symbol">:cljsbuild</span> {<span class="symbol">:builds</span> [{<span class="symbol">:id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">dev</span><span class="delimiter">&quot;</span></span>
+                        <span class="symbol">:source-paths</span> [<span class="string"><span class="delimiter">&quot;</span><span class="content">src</span><span class="delimiter">&quot;</span></span>]
+                        <span class="symbol">:compiler</span> {<span class="symbol">:target</span> <span class="symbol">:nodejs</span>
+                                   <span class="symbol">:output-dir</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:output-to</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">out/app.js</span><span class="delimiter">&quot;</span></span>
+                                   <span class="symbol">:main</span> node-demo.express   <span class="comment">; </span><i class="conum" data-value="1"></i><b>(1)</b>
+                                   <span class="symbol">:optimizations</span> <span class="symbol">:none</span>
+                                   <span class="symbol">:source-map</span> <span class="predefined-constant">true</span>
+                                   <span class="symbol">:pretty-print</span> <span class="predefined-constant">true</span>} }]})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음은 express 모듈을 호출해 웹 서버를 시작하는 간단한 코드이다.</p>
+</div>
+<div class="listingblock">
+<div class="title">src/node_demo/express.cljs</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">node-demo.express</span>
+  (<span class="symbol">:require</span> [cljs.nodejs <span class="symbol">:as</span> node]))
+
+(<span class="keyword">def</span> <span class="function">express</span> (node/require <span class="string"><span class="delimiter">&quot;</span><span class="content">express</span><span class="delimiter">&quot;</span></span>))
+
+(<span class="keyword">def</span> <span class="function">app</span> (<span class="keyword">new</span> express))
+
+(<span class="keyword">defn</span> <span class="function">-main</span>
+  []
+  (<span class="keyword">.</span>listen app
+           <span class="integer">3000</span>
+           (<span class="keyword">fn</span> []
+             (js/console.log <span class="string"><span class="delimiter">&quot;</span><span class="content">App Started at http://localhost:3000</span><span class="delimiter">&quot;</span></span>))))
+
+(set! *main-cli-fn* -main)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 실행해서 <code>package.json</code> 파일을 먼저 만든다. 이때 여러가지를 물어오는데
+적당하게 입력하도록 한다. 이때 입력한 내용은 <code>package.json</code> 파일이 만들어진 후, 수작업으로
+직접 고칠 수 있다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ npm init</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이 상태에서 express 모듈을 다음과 같이 설치한다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ npm install --save express</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>이제 컴파일을 해보자.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lein cljsbuild once
+Compiling ClojureScript...
+Compiling "out/app.js" from ["src"]...
+Successfully compiled "out/app.js" in 1.538 seconds.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>다음과 같이 실행하면, localhost:3000에서 웹서버가 실행된다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ node out/app.js
+App Started at http://localhost:3000</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-04-14 17:40:05 KST
+</div>
+</div>
+</body>
+</html>

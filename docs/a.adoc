@@ -1,0 +1,9 @@
+=
+:source-language: clojure
+:source-highlighter: coderay
+:icons: font
+:linkcss:
+:stylesdir: ../
+:stylesheet: my-asciidoctor.css
+:sectnums:
+
