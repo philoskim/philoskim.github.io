@@ -8,9 +8,9 @@
 :stylesheet: ../my-asciidoctor.css
 :sectnums:
 
-클로저스크립트는 link:https://nodejs.org/en/[Node.js] 프로그래밍을 지원한다. 이를
-활용하면, 클로저스크립트로 서버 사이드 프로그램이나 데스크탑 프로그램(예:
-link:http://lighttable.com/[Light Table])을 만들 수 있다.
+클로저스크립트는 Node.js 프로그래밍을 지원한다. 이를 활용하면, 클로저스크립트로 서버
+사이드 프로그램이나 데스크탑 애플리케이션(예: link:http://lighttable.com/[Light Table])을
+개발할 수 있다.
 
 참고로, 다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.
 
@@ -19,7 +19,7 @@ link:http://lighttable.com/[Light Table])을 만들 수 있다.
 
 === Node.js의 설치
 
-다음은 Node.js를 설치하는 한 예이다.
+다음은 link:https://nodejs.org/en/[Node.js]를 설치하는 한 예이다.
 
 [listing]
 ----
