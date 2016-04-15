@@ -125,7 +125,7 @@ Dispatch) 그만큼 함수 호출 시간이 길어지게 된다.
   
 === `:static-fns true` 컴파일
 
-반면에 `:static-fns true` 옵션을 주고 컴파일된 코드은 다음과 같다.
+반면에 `:static-fns true` 옵션을 주고 컴파일된 코드는 다음과 같다.
 
 [listing]
 ----
