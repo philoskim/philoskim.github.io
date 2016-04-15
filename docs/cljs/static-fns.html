@@ -15,13 +15,32 @@
 <h1>ClojureScript <code>:static-fns</code> 컴파일러 옵션</h1>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>참고: <a href="http://blog.klipse.tech/clojurescript/2016/04/13/static-fns.html" class="bare">http://blog.klipse.tech/clojurescript/2016/04/13/static-fns.html</a></p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dynamic_dispatch_vs_static_dispatch">1. Dynamic Dispatch vs. Static Dispatch</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>클로저스크립트 컴파일시 <code>:static-fns</code> 옵션을 <code>true</code>로 주면, 함수 실행 속도가 상당히
-빨라진다. 단, 이 옵션은 release 버전을 컴파일할 때에만 <code>true</code>로 지정해 주는 것이
-좋다. 개발 버전에서는 <code>false</code>(default 값)를 사용하는 것이 바람직하다.</p>
+<p>여기서 Dynamic의 의미는 '동적&#8217;이라는 의미로 run-time을 의미하고, Static은 '정적&#8217;이라는
+의미로 compile-time을 의미한다. Dispatch는 어떤 함수를 호출할지를 결정하는 것을
+말한다. 따라서 Dymamic Dispatch는 run-time에 어떤 함수를 호출할지를 결정하는 것이고,
+Static Dispatch는 compile-time에 어떤 함수를 호출할지를 결정하는 것이다.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojurescript의_컴파일_옵션_code_static_fns_code">2. ClojureScript의 컴파일 옵션 <code>:static-fns</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>클로저스크립트 컴파일시 <code>:static-fns</code> 옵션을 <code>true</code>로 주면, Static Dispatch가 이루어져
+함수 실행 속도가 상당히 빨라진다. 단, 이 옵션은 release 버전을 컴파일할 때에만 <code>true</code>로
+지정해 주는 것이 좋다. 개발 버전에서는 개발의 편의를 위해 <code>false</code>(default 값)를 사용하는
+것이 바람직하다.</p>
 </div>
 <div class="paragraph">
 <p>이 옵션은 다음과 같은 형식으로 준다.</p>
@@ -57,8 +76,10 @@
 (foo <span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span>)</code></pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="__code_static_fns_false_code_컴파일">2.1. <code>:static-fns false</code> 컴파일</h3>
 <div class="paragraph">
-<p>이 코드가 <code>:static-fns false</code> 옵션을 주고 컴파일된 모습은 다음과 같다.</p>
+<p>이 코드가 <code>:static-fns false</code> 옵션을 주고 컴파일된 자바스크립트 코드는 다음과 같다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -113,12 +134,15 @@ cljs.user.foo.call(null,(1),(2),(3));</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>코드가 좀 장황하기는 하지만, 핵심적인 내용은 &lt;1&gt;이 호출되면, &lt;2&gt;를 경유해 &lt;3&gt;을 거쳐 &lt;4&gt;를
-호출하게 된다는 것이다. 이 작업이 run-time에 일어나므로 그만큼 함수 호출 시간이 길어지게
-된다.</p>
+<p>코드가 좀 장황하기는 하지만, 핵심적인 내용은 &lt;1&gt;의 함수가 호출되는 경우, &lt;2&gt;를 경유해
+&lt;3&gt;을 거쳐 &lt;4&gt;를 호출하게 된다는 것이다. 이 작업이 run-time에 일어나므로(Dynamic Dispatch)
+그만큼 함수 호출 시간이 길어지게 된다.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="__code_static_fns_true_code_컴파일">2.2. <code>:static-fns true</code> 컴파일</h3>
 <div class="paragraph">
-<p>반면에 <code>:static-fns true</code> 옵션을 주고 컴파일된 모습은 다음과 같다.</p>
+<p>반면에 <code>:static-fns true</code> 옵션을 주고 컴파일된 코드은 다음과 같다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -173,15 +197,19 @@ cljs.user.foo((1),(2),(3));</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>잘 살펴 보면, `:static-fns false`로 컴파일한 코드와 차이나는 부분은 &lt;1&gt; 부분
+<p>잘 살펴 보면, <code>:static-fns false</code> 옵션으로 컴파일한 코드와 실제로 차이나는 부분은 &lt;1&gt; 부분
 뿐이다. 이렇게 컴파일된 코드에서는 &lt;1&gt;이 호출되면 &lt;2&gt;와 &lt;3&gt;을 경유하지 않고 곧바로 &lt;4&gt;를
-호출하게 컴파일 된다. 함수 호출 시간이 그만큼 줄어들게 되므로 실행 속도의 향상을 얻을 수
-있다.</p>
+호출하게 컴파일 된다. 이렇게 compile-time에 어떤 함수를 호출할지늘 미리 결정할 수
+있으므로(Statci Dispatch), 함수 호출 시간이 그만큼 줄어들게 되어 실행 속도의 효과를 얻을
+수 있게 된다.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-15 21:51:15 KST
+Last updated 2016-04-15 22:29:31 KST
 </div>
 </div>
 </body>
