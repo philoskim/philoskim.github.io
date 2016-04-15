@@ -40,8 +40,11 @@ Static Dispatch는 compile-time에 어떤 함수를 호출할지를 결정하는
 <p>클로저스크립트 컴파일시 <code>:static-fns</code> 옵션을 <code>true</code>로 주면, Static Dispatch가 이루어져
 함수 실행 속도가 상당히 빨라진다. 단, 이 옵션은 release 버전을 컴파일할 때에만 <code>true</code>로
 지정해 주는 것이 좋다. 개발 버전에서는 개발의 편의를 위해 <code>false</code>(default 값)를 사용하는
-것이 바람직하다. 참고로, 클로저스크립트(예: org.clojure/clojurescript "1.8.40") 자체는
-<code>:static-fns</code> 옵션 지정 여부와 상관 없이, 항상 <code>:static-fns true</code>로 컴파일된다.</p>
+것이 바람직하다.</p>
+</div>
+<div class="paragraph">
+<p>참고로, 클로저스크립트(예: org.clojure/clojurescript "1.8.40") 자체는 <code>:static-fns</code> 옵션
+지정 여부와 상관 없이, 항상 <code>:static-fns true</code>로 컴파일된다.</p>
 </div>
 <div class="paragraph">
 <p>이 옵션은 다음과 같은 형식으로 준다.</p>
@@ -198,11 +201,11 @@ cljs.user.foo((1),(2),(3));   <i class="conum" data-value="5"></i><b>(5)</b></pr
 </div>
 </div>
 <div class="paragraph">
-<p>잘 살펴 보면, <code>:static-fns false</code> 옵션으로 컴파일한 코드와 실제로 차이나는 부분은 &lt;1&gt; 부분
-전후 뿐이다. 이렇게 컴파일된 코드에서는 &lt;1&gt;이 호출되면 &lt;2&gt;와 &lt;3&gt;을 경유하지 않고 곧바로 &lt;4&gt;를
-호출하게 컴파일 된다. 이렇게 compile-time에 어떤 함수를 호출할지를 미리 결정함으로써
-(Statci Dispatch), 함수 호출 시간이 그만큼 줄어들게 되어 실행 속도 향상의 효과를 얻을 수
-있게 된다.</p>
+<p>잘 살펴 보면, <code>:static-fns false</code> 옵션으로 컴파일한 코드와 실제로 차이나는 곳은 &lt;1&gt;을
+전후한 부분 뿐이다. 이렇게 컴파일된 코드에서는 &lt;1&gt;이 호출되면 &lt;2&gt;와 &lt;3&gt;을 경유하지 않고
+곧바로 &lt;4&gt;를 호출하게 컴파일 된다. 이렇게 compile-time에 어떤 함수를 호출할지를 미리
+결정(Static Dispatch)함으로써, 함수 호출 시간이 그만큼 줄어들게 되어 실행 속도 향상의
+효과를 얻을 수 있게 된다.</p>
 </div>
 <div class="paragraph">
 <p>참고로, &lt;5&gt;는 세 개의 인수를 갖는 함수는 정의되어 있지 않으므로, &lt;2&gt;의 경로를 거치는
@@ -214,7 +217,7 @@ Dynamic Dispatch를 수행하게 되어, 결국 &lt;6&gt;에서 예외를 발생
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-15 23:28:50 KST
+Last updated 2016-04-15 23:34:43 KST
 </div>
 </div>
 </body>
