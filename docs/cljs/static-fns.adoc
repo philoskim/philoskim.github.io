@@ -12,13 +12,13 @@
 
 == Dynamic Dispatch vs. Static Dispatch
 
-여기서 Dynamic의 의미는 '동적'이라는 의미로 run-time을 의미하고, Static은 '정적'이라는
-의미로 compile-time을 의미한다. Dispatch는 어떤 함수를 호출할지를 결정하는 것을
-말한다. 따라서 Dymamic Dispatch는 run-time에 어떤 함수를 호출할지를 결정하는 것이고,
+여기서 Dynamic의 의미는 '동적'이라는 의미로 run-time을 말하고, Static은 '정적'이라는
+의미로 compile-time을 말한다. Dispatch는 어떤 함수를 호출할지를 결정하는 것을
+의미한다. 따라서 Dymamic Dispatch는 run-time에 어떤 함수를 호출할지를 결정하는 것이고,
 Static Dispatch는 compile-time에 어떤 함수를 호출할지를 결정하는 것이다.
 
   
-== ClojureScript의 컴파일 옵션 `:static-fns`
+== ClojureScript 컴파일 옵션 `:static-fns`
   
 클로저스크립트 컴파일시 `:static-fns` 옵션을 ``true``로 주면, Static Dispatch가 이루어져
 함수 실행 속도가 상당히 빨라진다. 단, 이 옵션은 release 버전을 컴파일할 때에만 ``true``로
