@@ -5,14 +5,14 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.4">
-<title>ClojureScript :static-fns 컴파일러 옵션</title>
+<title>ClojureScript :static-fns 컴파일 옵션</title>
 <link rel="stylesheet" href="../my-asciidoctor.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="..//coderay-asciidoctor.css">
 </head>
 <body class="article">
 <div id="header">
-<h1>ClojureScript <code>:static-fns</code> 컴파일러 옵션</h1>
+<h1>ClojureScript <code>:static-fns</code> 컴파일 옵션</h1>
 </div>
 <div id="content">
 <div id="preamble">
@@ -172,7 +172,7 @@ cljs.user.foo.call(null,(1),(2),(3));</pre>
     case (2):
       return cljs.user.foo.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
       break;
-    default:
+    default:   <i class="conum" data-value="6"></i><b>(6)</b>
       throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22.length)].join('')));
   }
 }
@@ -181,7 +181,7 @@ cljs.user.foo.cljs$core$IFn$_invoke$arity$0 = (function (){
   return "foo";
 }
                                               );
-cljs.user.foo.cljs$core$IFn$_invoke$arity$1 = (function (x){   <i class="conum" data-value="3"></i><b>(3)</b>
+cljs.user.foo.cljs$core$IFn$_invoke$arity$1 = (function (x){   <i class="conum" data-value="4"></i><b>(4)</b>
   return x;
 }
                                               );
@@ -205,7 +205,7 @@ cljs.user.foo((1),(2),(3));   <i class="conum" data-value="5"></i><b>(5)</b></pr
 </div>
 <div class="paragraph">
 <p>참고로, &lt;5&gt;는 세 개의 인수를 갖는 함수는 정의되어 있지 않으므로, &lt;2&gt;의 경로를 거치는
-Dynamic Dispatch를 수행하게 된다.</p>
+Dynamic Dispatch를 수행하게 되어, 결국 &lt;6&gt;에서 예외를 발생시키게 된다.</p>
 </div>
 </div>
 </div>
@@ -213,7 +213,7 @@ Dynamic Dispatch를 수행하게 된다.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-15 22:50:09 KST
+Last updated 2016-04-15 22:55:59 KST
 </div>
 </div>
 </body>
