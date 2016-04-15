@@ -11,6 +11,8 @@
 [sidebar]
 ****
 * link:node-js.html[Node.js and ClojureScript]
+* link:static-fns.html[ClojureScript `:static-fns` 컴파일러 옵션]
+  
 ****
 
 

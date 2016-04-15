@@ -1,2 +1,2 @@
-asciidoctor -a stylesheet=my-asciidoctor.css **/*.adoc
+asciidoctor -a stylesheet=../my-asciidoctor.css **/*.adoc
 

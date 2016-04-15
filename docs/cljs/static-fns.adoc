@@ -1,0 +1,166 @@
+= ClojureScript `:static-fns` 컴파일러 옵션
+:source-language: clojure
+:source-highlighter: coderay
+:icons: font
+:linkcss:
+:stylesdir: ../
+:stylesheet: ../my-asciidoctor.css
+:sectnums:
+
+참고: http://blog.klipse.tech/clojurescript/2016/04/13/static-fns.html[]
+  
+클로저스크립트 컴파일시 `:static-fns` 옵션을 ``true``로 주면, 함수 실행 속도가 상당히
+빨라진다. 단, 이 옵션은 release 버전을 컴파일할 때에만 ``true``로 지정해 주는 것이
+좋다. 개발 버전에서는 `false`(default 값)를 사용하는 것이 바람직하다.
+
+이 옵션은 다음과 같은 형식으로 준다.
+
+.project.clj
+[source]
+....
+(defproject foo ......
+  :cljsbuild {:builds [{:id "release"
+                        :source-paths ["src/cljs"]
+                        :compiler {:output-to "resources/public/js/main.js"
+                                   :output-dir "resources/public/js/out"
+                                   :asset-path "js/out"
+                                   :main "foo.core"
+                                   :optimizations :advanced
+                                   :static-fns true   ;; <1>
+                                   :pretty-print falue}}]})
+....
+
+
+예를 들어, 다음과 같은 코드가 있다고 하자.
+
+[source]
+....
+(defn foo 
+  ([] "foo")
+  ([x] x)
+  ([x y] y))
+
+(foo)
+(foo 1)
+(foo 1 2)
+(foo 1 2 3)
+....
+
+이 코드가 `:static-fns fasle` 옵션을 주고 컴파일된 모습은 다음과 같다.
+
+[listing]
+....
+cljs.user.foo = (function cljs$user$foo(var_args){   // <2>
+  var args22 = [];
+  var len__27274__auto___25 = arguments.length;
+  var i__27275__auto___26 = (0);
+  while(true){
+    if((i__27275__auto___26 < len__27274__auto___25)){
+      args22.push((arguments[i__27275__auto___26]));
+      var G__27 = (i__27275__auto___26 + (1));
+      i__27275__auto___26 = G__27;
+      continue;
+    }
+    else {
+    }
+    break;
+  }
+  var G__24 = args22.length;
+  switch (G__24) {
+    case (0):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$0();
+      break;
+    case (1):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));   // <3>
+      break;
+    case (2):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
+      break;
+    default:
+      throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22.length)].join('')));
+  }
+}
+                );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$0 = (function (){
+  return "foo";
+}
+                                              );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$1 = (function (x){   // <4>
+  return x;
+}
+                                              );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$2 = (function (x,y){
+  return y;
+}
+                                              );
+cljs.user.foo.cljs$lang$maxFixedArity = (2);
+cljs.user.foo.call(null);
+cljs.user.foo.call(null,(1));      // <1>
+cljs.user.foo.call(null,(1),(2));
+cljs.user.foo.call(null,(1),(2),(3));
+....
+
+코드가 좀 장황하기는 하지만, 핵심적인 내용은 <1>이 호출되면, <2>를 경유해 <3>을 거쳐 <4>를
+호출하게 된다는 것이다. 이 작업이 run-time에 일어나므로 그만큼 함수 호출 시간이 길어지게
+된다.
+
+반면에 `:static-fns true` 옵션을 주고 컴파일된 모습은 다음과 같다.
+
+[listing]
+----
+cljs.user.foo = (function cljs$user$foo(var_args){   // <2>
+  var args22 = [];
+  var len__27274__auto___25 = arguments.length;
+  var i__27275__auto___26 = (0);
+  while(true){
+    if((i__27275__auto___26 < len__27274__auto___25)){
+      args22.push((arguments[i__27275__auto___26]));
+      var G__27 = (i__27275__auto___26 + (1));
+      i__27275__auto___26 = G__27;
+      continue;
+    }
+    else {
+    }
+    break;
+  }
+  var G__24 = args22.length;
+  switch (G__24) {
+    case (0):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$0();
+      break;
+    case (1):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$1((arguments[(0)]));   // <3>
+      break;
+    case (2):
+      return cljs.user.foo.cljs$core$IFn$_invoke$arity$2((arguments[(0)]),(arguments[(1)]));
+      break;
+    default:
+      throw (new Error([cljs.core.str("Invalid arity: "),cljs.core.str(args22.length)].join('')));
+  }
+}
+                );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$0 = (function (){
+  return "foo";
+}
+                                              );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$1 = (function (x){   // <3>
+  return x;
+}
+                                              );
+cljs.user.foo.cljs$core$IFn$_invoke$arity$2 = (function (x,y){
+  return y;
+}
+                                              );
+cljs.user.foo.cljs$lang$maxFixedArity = (2);
+cljs.user.foo.cljs$core$IFn$_invoke$arity$0();
+cljs.user.foo.cljs$core$IFn$_invoke$arity$1((1));   // <1>
+cljs.user.foo.cljs$core$IFn$_invoke$arity$2((1),(2));
+cljs.user.foo((1),(2),(3));
+----
+
+잘 살펴 보면, `:static-fns false`로 컴파일한 코드와 차이나는 부분은 <1> 부분뿐이다. 이
+렇게 컴파일된 코드에서는 <1>이 호출되면 <2>와 <3>을 경유하지 않고 곧바로 <4>를 호출하게
+컴파일 된다. 함수 호출 시간이 그만큼 줄어들게 되므로 실행 속도의 향상을 얻을 수 있다.
+
+
+  

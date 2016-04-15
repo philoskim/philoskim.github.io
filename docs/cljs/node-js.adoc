@@ -5,7 +5,7 @@
 :icons: font
 :linkcss:
 :stylesdir: ../
-:stylesheet: my-asciidoctor.css
+:stylesheet: ../my-asciidoctor.css
 :sectnums:
 
 클로저스크립트는 Node.js 프로그래밍을 지원한다. 이를 활용하면, 클로저스크립트로 서버
