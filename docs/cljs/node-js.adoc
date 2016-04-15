@@ -8,9 +8,9 @@
 :stylesheet: ../my-asciidoctor.css
 :sectnums:
 
-클로저스크립트는 Node.js 프로그래밍을 지원한다. 이를 활용하면, 클로저스크립트로 서버
-사이드 프로그램이나 데스크탑 프로그램(예: link:http://lighttable.com/[Light Table])을 만들
-수 있다.
+클로저스크립트는 link:https://nodejs.org/en/[Node.js] 프로그래밍을 지원한다. 이를
+활용하면, 클로저스크립트로 서버 사이드 프로그램이나 데스크탑 프로그램(예:
+link:http://lighttable.com/[Light Table])을 만들 수 있다.
 
 참고로, 다음의 예제들은 Linux Ubuntu 15.04 버전에서 설치하고 실행했다.
 
@@ -138,7 +138,7 @@ Hello World!
   
 === Figwheel 사용하기
 
-이번에는 Figwheel을 사용해 보자!
+이번에는 link:https://github.com/bhauman/lein-figwheel[Figwheel]을 사용해 보자!
 
 다음의 두 라인을 `project.clj` 파일에 추가해 준다.
   
