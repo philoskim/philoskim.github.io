@@ -170,14 +170,17 @@ cljs.user.foo.cljs$lang$maxFixedArity = (2);
 cljs.user.foo.cljs$core$IFn$_invoke$arity$0();
 cljs.user.foo.cljs$core$IFn$_invoke$arity$1((1));   // <1>
 cljs.user.foo.cljs$core$IFn$_invoke$arity$2((1),(2));
-cljs.user.foo((1),(2),(3));
+cljs.user.foo((1),(2),(3));   // <5>   
 ----
 
 잘 살펴 보면, `:static-fns false` 옵션으로 컴파일한 코드와 실제로 차이나는 부분은 <1> 부분
-뿐이다. 이렇게 컴파일된 코드에서는 <1>이 호출되면 <2>와 <3>을 경유하지 않고 곧바로 <4>를
+전후 뿐이다. 이렇게 컴파일된 코드에서는 <1>이 호출되면 <2>와 <3>을 경유하지 않고 곧바로 <4>를
 호출하게 컴파일 된다. 이렇게 compile-time에 어떤 함수를 호출할지를 미리 결정함으로써
 (Statci Dispatch), 함수 호출 시간이 그만큼 줄어들게 되어 실행 속도 향상의 효과를 얻을 수
 있게 된다.
+
+참고로, <5>는 세 개의 인수를 갖는 함수는 정의되어 있지 않으므로, <2>의 경로를 거치는
+Dynamic Dispatch를 수행하게 된다.
 
 
   
