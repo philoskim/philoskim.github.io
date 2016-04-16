@@ -1,0 +1,37 @@
+= ClojureScript Memo
+:source-language: clojure
+:source-highlighter: coderay
+:icons: font
+:linkcss:
+:stylesdir: ../
+:stylesheet: ../my-asciidoctor.css
+:sectnums:
+
+== CompIler Options
+  
+=== `:parallel-build true`
+
+CPU의 모든 코어를 사용해서 소스를 병렬로 컴파일한다.
+
+  
+== REPL options
+
+=== `:repl-options {:repl-verbose true}`
+  
+이 옵션이 ``true``이면 클로저스크립트 Browser REPL에서 코드를 실행할 때마다,
+자바스크립트로 컴파일된 코드를 함께 출력해준다.
+
+[source]
+....
+cljs.user=> (defn sq [x] (* x x))
+cljs.user.sq = (function cljs$user$sq(x){
+return (x * x);
+})
+#'cljs.user/sq
+
+cljs.user=> (ns hello.core)
+goog.provide('hello.core');
+goog.require('cljs.core');
+....
+
+
