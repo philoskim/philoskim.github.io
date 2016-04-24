@@ -301,11 +301,19 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 
 | 4) https://www.youtube.com/watch?v=L4ejqdKMxkM[문법 문제 풀이 1] (35:17) 
 | 5) https://www.youtube.com/watch?v=1dJ-wikD6Z8[문법 문제 풀이 2] (56:59) 
-|
+| 6) https://www.youtube.com/watch?v=psWS2Z9nIrk[독해 1] (51:42) 
 
+| 7) https://www.youtube.com/watch?v=RvrIyxVmwHc[독해 2] (57:09)
+|
+| 
+
+//| https://www.youtube.com/watch?v=[] (:)
+//| https://www.youtube.com/watch?v=[] (:)
+//| https://www.youtube.com/watch?v=[] (:)
 //| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
+
+
+
 
 
 |===
