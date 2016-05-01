@@ -308,18 +308,35 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 | 9) https://www.youtube.com/watch?v=avN0ntif8jU[독해 4] (42:07)
 
 | 10) https://www.youtube.com/watch?v=qoWxFGdkiE8[독해 5] (44:22)
-|
+| 11) https://www.youtube.com/watch?v=5XOkb5Z10GQ[독해 6] (1:12:51)
 | 
 
-//| https://www.youtube.com/watch?v=[] (:) 
+|===
 
 
+=== 일치와 화법
 
+[cols="3*"]
+|===
 
+| 1) https://www.youtube.com/watch?v=LhfUHejzZyo[문법 개념 설명 1] (43:37)
+|
+|
 
+//| 2) https://www.youtube.com/watch?v=[문법 개념 설명 2] (45:54) 
+//| 3) https://www.youtube.com/watch?v=[문법 개념 설명 3] (41:54) 
 
+//| 4) https://www.youtube.com/watch?v=[문법 문제 풀이 1] (35:17) 
+//| 5) https://www.youtube.com/watch?v=[문법 문제 풀이 2] (56:59) 
+//| 6) https://www.youtube.com/watch?v=[독해 1] (51:42) 
 
+//| 7) https://www.youtube.com/watch?v=[독해 2] (57:09)
+//| 8) https://www.youtube.com/watch?v=[독해 3] (41:51)
+//| 9) https://www.youtube.com/watch?v=[독해 4] (42:07)
 
+//| 10) https://www.youtube.com/watch?v=[독해 5] (44:22)
+//| 11) https://www.youtube.com/watch?v=[독해 6] (1:12:51)
+//| 
 
 |===
 
