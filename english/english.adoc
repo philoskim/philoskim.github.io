@@ -320,14 +320,13 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 |===
 
 | 1) https://www.youtube.com/watch?v=LhfUHejzZyo[문법 개념 설명 1] (43:37)
-|
+| 2) https://www.youtube.com/watch?v=a7jhcrlyGe4[문법 개념 설명 2] (40:34) 
+| 3) https://www.youtube.com/watch?v=kWwtc-7uLlg[문법 개념 설명 3] (40:27) 
+
+| 4) https://www.youtube.com/watch?v=dsvv8mD2JgU[문법 문제 풀이 1] (1:02:17) 
+| 5) https://www.youtube.com/watch?v=lH5mbYYr75A[문법 문제 풀이 2] (54:26) 
 |
 
-//| 2) https://www.youtube.com/watch?v=[문법 개념 설명 2] (45:54) 
-//| 3) https://www.youtube.com/watch?v=[문법 개념 설명 3] (41:54) 
-
-//| 4) https://www.youtube.com/watch?v=[문법 문제 풀이 1] (35:17) 
-//| 5) https://www.youtube.com/watch?v=[문법 문제 풀이 2] (56:59) 
 //| 6) https://www.youtube.com/watch?v=[독해 1] (51:42) 
 
 //| 7) https://www.youtube.com/watch?v=[독해 2] (57:09)
@@ -341,6 +340,10 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 |===
 
   
+
+
+
+
 
 
 
