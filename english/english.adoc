@@ -347,63 +347,25 @@ TOEIC/TEPS/TOEFL의 지문들의 문체가 천편일률적으로 거의 동일�
 | 5) https://www.youtube.com/watch?v=Lkf6qhx0wCg[독해 1] (1:00:42) 
 | 6) https://www.youtube.com/watch?v=FT5QDSHR3UE[독해 2] (1:02:44)
 
-//| 8) https://www.youtube.com/watch?v=[독해 3] (41:51)
-//|
-//|
+| 7) https://www.youtube.com/watch?v=d-4475dQ_as[독해 3] (33:29)
+|
+|
   
 |===
 
- 
 
+=== 고급 독해
 
+[cols="3*"]
+|===
 
+| 1) https://www.youtube.com/watch?v=w7TDkoadLUs[고급 독해 1] (48:47)
+| 2) https://www.youtube.com/watch?v=XnAc5k3U0Ek[고급 독해 2] (39:19) 
+| 3) https://www.youtube.com/watch?v=zawJvcrissE[고급 독해 3] (53:49) 
 
+| 4) https://www.youtube.com/watch?v=uw3UhbJoI78[고급 독해 4] (45:03) 
+| 
+| 
 
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-//| https://www.youtube.com/watch?v=[] (:) 
-
-
-
-
+  
+|===
