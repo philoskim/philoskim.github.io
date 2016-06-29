@@ -1,7 +1,7 @@
 String.prototype.format = function()
 {
   var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number) { 
+  return this.replace(/{(\d+)}/g, function(match, number) {
     return typeof args[number] != 'undefined'
       ? args[number]
       : match
@@ -35,7 +35,7 @@ function getCookie(cname)
 
 $(document).ready(function() {
 
-  var buttonInfos = 
+  var buttonInfos =
   // id : [url, inputKind, isIframed]    inputKind : "space", "plus", "minus"
   { guide      : ["guide.html", "space", true],
     home       : ["http://www.english4u.kr/", "space", false],
@@ -43,7 +43,7 @@ $(document).ready(function() {
     naver      : ["http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query={0}",
                   "space", false],
     daum       : ["http://dic.daum.net/search.do?q={0}", "space", true],
-    sisa       : ["http://www.ybmallinall.com/stylev2/dicview.asp?kwdseq=0" + 
+    sisa       : ["http://www.ybmallinall.com/stylev2/dicview.asp?kwdseq=0" +
                   "&kwdseq2=0&DictCategory=DictAll&DictNum=0&ById=0&PageSize=5&StartNum=0" +
                   "&GroupMode=0&cmd=0&kwd={0}&x=0&y=0", "plus", true],
     bluedic    : ["http://www.bluedic.com/{0}", "plus", true],
@@ -59,7 +59,7 @@ $(document).ready(function() {
                   + "&year_end=2000&corpus=0&smoothing=0", "plus", true],
     regex      : ["http://www.visca.com/regexdict/", "plus", true],
     name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
-   
+
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
 
     cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
@@ -74,7 +74,8 @@ $(document).ready(function() {
     free       : ["http://www.thefreedictionary.com/{0}", "plus", true],
     thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
     collins    : ["http://dictionary.reverso.net/english-cobuild/{0}", "space", true],
-    onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true]
+    onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true],
+    math       : ["http://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true]
    };
 
   function handleButtonClick(e)
@@ -102,13 +103,13 @@ $(document).ready(function() {
     {
       $("#iframe")[0].src = url;
     }
-    else 
+    else
     {
       window.location.href = url;
     }
 
     $("#words").focus();
-  } 
+  }
 
   function handleKeydown(e)
   {
@@ -134,8 +135,7 @@ $(document).ready(function() {
 
   $("button").click(handleButtonClick);
   $("#words").keydown(handleKeydown);
-  $("#words").click(function (e) {$(this).val("");} );    
+  $("#words").click(function (e) {$(this).val("");} );
 
-  window.onload = handleLoad;	
+  window.onload = handleLoad;
 });
-
