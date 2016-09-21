@@ -39,11 +39,11 @@ $(document).ready(function() {
   // id : [url, inputKind, isIframed]    inputKind : "space", "plus", "minus"
   { naver      : ["http://dedic.naver.com/#search/all/q={0}&sm=de_key",
                   "space", false],
-    dict_cc    : ["http://www.dict.cc/?s={0}", "space", true],
+    dict_cc    : ["http://www.dict.cc/?s={0}", "plus", true],
     chemnitz   : ["http://dict.tu-chemnitz.de/dings.cgi?service=deen&opterrors=0&optpro=0&" +
                   "query={0}", "plus", true],
     collins    : ["http://www.collinsdictionary.com/dictionary/german-english/{0}",
-                  "plus", false],
+                  "minus", false],
     reverso    : ["http://dictionary.reverso.net/german-english/{0}",
                   "plus", false]
    };
