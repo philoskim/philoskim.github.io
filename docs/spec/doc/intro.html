@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>clojure.spec 개관</title>
+<link rel="stylesheet" href="../my-asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../coderay-asciidoctor.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>clojure.spec 개관</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_clojure_spec_소개">1. clojure.spec 소개</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>clojure.spec</strong>은 클로저 언어의 창시자인 Rich Hickey가 만든 라이브러리로, <code>clojure
+1.9.0</code> 버전에 추가될 예정이다.</p>
+</li>
+<li>
+<p><a href="https://racket-lang.org">Racket</a> 언어의
+<a href="https://docs.racket-lang.org/reference/contracts.html">Contracts</a> 시스템의 영향을
+많이 받아 만들어졌다.</p>
+</li>
+<li>
+<p>Dynamic type/value Checking and Generative Testing을 수행한다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>spec을 정의하면, runtime에 type과 value를 검사할 수 있다.</p>
+</li>
+<li>
+<p>spec과 generator를 정의하면, 테스트 케이스 자동 생성 및 테스트까지 자동 수행</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>이와같은 기능을 특정 이름공간(namespace)만을 대상으로 켜거나 끌 수 있다. 그래서
+개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때 중단시키면,
+프로그램의 실행 속도에 전혀 영향을 미치지 않는다. 이것이 가능한 이유는 clojure.spec
+코드의 상당 부분이 매크로로 작성되어 있기 때문이다.</p>
+</li>
+<li>
+<p>결과적으로, 동적 언어인 클로저에서 정적 언어의 특징들을 이용할 수 있게 해준다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_제공하는_주요_기능들">2. 제공하는 주요 기능들</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>spec은 함수 입출력 데이터의 구조를 명시적으로 정의함으로써, 표준화된 documentation을
+제공한다. 팀원들 사이에 그리고 자기 자신의, 코드에 대한 이해도를 높일 수 있다.</p>
+</li>
+<li>
+<p>spce은 runtime에 데이터의 유효성(validation), 즉 타입 및 값을 검증할 수 있게 해주므로,
+버그 발생 가능성을 현저히 줄일 수 있다.</p>
+</li>
+<li>
+<p>spec은 자동 테스트 케이스 생성(generative testing) 및 자동 테스팅 기능을 제공함으로써
+코드의 무결성을 높일 수 있다.</p>
+</li>
+<li>
+<p>spec은 데이터의 구조분해(destructuring: 일종의 코드 parsing) 기능을 제공한다. 이 기능이
+매크로와 결합되면, 기존에 Clojure에서 불가능하지는 않지만 하기 어려웠던 일을 쉽게 할 수
+있다. (참고: <a href="http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&amp;utm_medium=facebook">Custom defn macro with clojure.spec</a>)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojure_spec이_유용한_한_예">3. clojure.spec이 유용한 한 예</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_문제_없는_예">3.1. 문제 없는 예</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">max</span> <span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span> <span class="integer">4</span>)
+<span class="comment">; =&gt; 4</span>
+
+(<span class="keyword">max</span>)
+<span class="comment">; &gt;&gt; 1. Unhandled clojure.lang.ArityException</span>
+<span class="comment">;       Wrong number of args (0) passed to: <mark>core/max</mark></span>
+<span class="comment">;</span>
+<span class="comment">;                      AFn.java:  429  clojure.lang.AFn/throwArity</span>
+<span class="comment">;                   RestFn.java:  399  clojure.lang.RestFn/invoke</span>
+<span class="comment">;                          REPL:    9  spec-guide.core/eval10839</span>
+<span class="comment">;                          REPL:    9  spec-guide.core/eval10839</span>
+<span class="comment">;                 Compiler.java: 6977  clojure.lang.Compiler/eval</span>
+<span class="comment">;                 Compiler.java: 6940  clojure.lang.Compiler/eval</span>
+<span class="comment">;                      core.clj: 3187  clojure.core/eval</span>
+<span class="comment">;                      core.clj: 3183  clojure.core/eval</span>
+<span class="comment">;                         ......</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_문제_있는_예">3.2. 문제 있는 예</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">my-max</span> [coll]
+  (<span class="keyword">apply</span> <span class="keyword">max</span> coll))
+
+(my-max [<span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span> <span class="integer">4</span>])
+<span class="comment">; =&gt; 4</span>
+
+(my-max <span class="predefined-constant">nil</span>)
+<span class="comment">; &gt;&gt; 1. Unhandled clojure.lang.ArityException</span>
+<span class="comment">;       Wrong number of args (0) passed to: <mark>core/max</mark></span>
+<span class="comment">;</span>
+<span class="comment">;                      AFn.java:  429  clojure.lang.AFn/throwArity</span>
+<span class="comment">;                   RestFn.java:  399  clojure.lang.RestFn/invoke</span>
+<span class="comment">;                      AFn.java:  152  clojure.lang.AFn/applyToHelper</span>
+<span class="comment">;                   RestFn.java:  132  clojure.lang.RestFn/applyTo</span>
+<span class="comment">;                      core.clj:  657  clojure.core/apply</span>
+<span class="comment">;                      core.clj:  652  clojure.core/apply</span>
+<span class="comment">;                          REPL:    7  <mark>spec-guide.core/my-max</mark></span>
+<span class="comment">;                          REPL:    6  <mark>spec-guide.core/my-max</mark></span>
+<span class="comment">;                          REPL:   28  spec-guide.core/eval10841</span>
+<span class="comment">;                          REPL:   28  spec-guide.core/eval10841</span>
+<span class="comment">;                 Compiler.java: 6977  clojure.lang.Compiler/eval</span>
+<span class="comment">;                 Compiler.java: 6940  clojure.lang.Compiler/eval</span>
+<span class="comment">;                      core.clj: 3187  clojure.core/eval</span>
+<span class="comment">;                         ......</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_core_spec으로_문제_해결">3.3. core.spec으로 문제 해결</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">spec-guide.core</span>
+  (<span class="symbol">:require</span> [clojure.spec <span class="symbol">:as</span> s]
+            [clojure.spec.gen <span class="symbol">:as</span> gen]
+            [clojure.spec.test <span class="symbol">:as</span> stest]))
+
+(s/fdef my-max2
+  <span class="symbol">:args</span> (s/cat <span class="symbol">:coll</span> (s/coll-of <span class="keyword">number?</span>))
+  <span class="symbol">:ret</span> <span class="keyword">number?</span>)
+
+(<span class="keyword">defn</span> <span class="function">my-max2</span> [coll]
+  (<span class="keyword">apply</span> <span class="keyword">max</span> coll))
+
+(stest/instrument `my-max2)
+
+(my-max2 [<span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span> <span class="integer">4</span>])
+<span class="comment">; =&gt; 4</span>
+
+(my-max2 <span class="predefined-constant">nil</span>)
+<span class="comment">; &gt;&gt; 1. Unhandled clojure.lang.ExceptionInfo</span>
+<span class="comment">;       Call to <mark>spec-guide.core/my-max2</mark> did not conform to spec:</span>
+<span class="comment">;         In: [0]</span>
+<span class="comment">;         <mark>val: nil</mark> fails</span>
+<span class="comment">;         at: [:args :coll]</span>
+<span class="comment">;         <mark>predicate: coll?</mark></span>
+<span class="comment">;       :clojure.spec/args (nil)</span>
+<span class="comment">;       :clojure.spec/failure :instrument</span>
+<span class="comment">;       :clojure.spec.test/caller {:file &quot;form-init414233231437328049.clj&quot;,</span>
+<span class="comment">;                                  :line 63, :var-scope spec-guide.core/eval10997}</span>
+<span class="comment">;</span>
+<span class="comment">;       {:clojure.spec/problems [{:path [:args :coll],</span>
+<span class="comment">;                                 :pred coll?,</span>
+<span class="comment">;                                 :val nil,</span>
+<span class="comment">;                                 :via [],</span>
+<span class="comment">;                                 :in [0]}],</span>
+<span class="comment">;        :clojure.spec/args (nil),</span>
+<span class="comment">;        :clojure.spec/failure :instrument,</span>
+<span class="comment">;        :clojure.spec.test/caller {:file &quot;form-init414233231437328049.clj&quot;,</span>
+<span class="comment">;                                   :line 63,</span>
+<span class="comment">;                                   :var-scope spec-guide.core/eval10997}}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_core_spec은_실행_중_값도_검사할_수_있다">3.4. core.spec은 실행 중 값도 검사할 수 있다</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/fdef my-max3
+  <span class="symbol">:args</span> (s/and (s/cat <span class="symbol">:coll</span> (s/coll-of <span class="keyword">number?</span>))
+               <span class="char">#</span>(<span class="keyword">every?</span> (<span class="keyword">fn</span> [<span class="keyword">num</span>]
+                          (<span class="keyword">&lt;</span> <span class="keyword">num</span> <span class="integer">10</span>))
+                        (<span class="symbol">:coll</span> %) ))
+  <span class="symbol">:ret</span> <span class="keyword">number?</span>)
+
+(<span class="keyword">defn</span> <span class="function">my-max3</span> [coll]
+  (<span class="keyword">apply</span> <span class="keyword">max</span> coll))
+
+(stest/instrument `my-max3)
+
+(my-max3 [<span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span> <span class="integer">14</span>])
+<span class="comment">; &gt;&gt; 1. Unhandled clojure.lang.ExceptionInfo</span>
+<span class="comment">;       Call to #spec-guide.core/my-max3# did not conform to spec:</span>
+<span class="comment">;         <mark>val: {:coll [1 2 3 14]}</mark> fails</span>
+<span class="comment">;         at: [:args]</span>
+<span class="comment">;         <mark>predicate: (every? (fn [num] (&lt; num 10)) (:coll %))</mark></span>
+<span class="comment">;       :clojure.spec/args ([1 2 3 14])</span>
+<span class="comment">;       :clojure.spec/failure :instrument</span>
+<span class="comment">;       :clojure.spec.test/caller {:file &quot;form-init414233231437328049.clj&quot;,</span>
+<span class="comment">;                                  :line 97,</span>
+<span class="comment">;                                  :var-scope spec-guide.core/eval11148}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_사전_예비_지식">4. 사전 예비 지식</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_unnamespaced_namespaced_keyword">4.1. unnamespaced/namespaced keyword</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">user&gt; <span class="symbol">:cat</span>          <span class="comment">; unnamespaced keyword</span>
+<span class="symbol">:cat</span>
+
+user&gt; <span class="symbol">:animal/cat</span>   <span class="comment">; namespaced keyword</span>
+<span class="symbol">:animal/cat</span>
+
+user&gt; <span class="symbol">::cat</span>         <span class="comment">; namespaced keyword</span>
+<span class="symbol">:user/cat</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_unnamespaced_namespaced_symbol">4.2. unnamespaced/namespaced symbol</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">user&gt; 'dog          <span class="comment">; unnamespaced symbol</span>
+dog
+
+user&gt; 'animal/dog   <span class="comment">; namespaced symbol</span>
+animal/dog
+
+user&gt; `dog          <span class="comment">; namespaced symbol</span>
+user/dog</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_set_자료형은_함수명_자리에_올_수_있다">4.3. set 자료형은 함수명 자리에 올 수 있다</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">user&gt; #{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>}
+#{<span class="integer">20</span> <span class="integer">40</span> <span class="integer">30</span> <span class="integer">10</span>}
+
+user&gt; (#{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>} <span class="integer">10</span>)
+<span class="integer">10</span>
+
+user&gt; (#{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>} <span class="integer">50</span>)
+<span class="predefined-constant">nil</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojure_spec의_특징">5. clojure.spec의 특징</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_spec은_predicate으로_이루어져_있다">5.1. spec은 predicate으로 이루어져 있다</h3>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">predicate (진위 함수)</div>
+<div class="ulist">
+<ul>
+<li>
+<p>한 개의 인수를 받고, 논리적 참/거짓을 반환하는 함수이다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>논리적 거짓: <code>nil</code>과 <code>false</code></p>
+</li>
+<li>
+<p>논리적 참: <code>nil</code>과 <code>false`를 제외한 모든 값. &#160; &#160; &#160; 예) `0 "" [] () {} #{} ...</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>이 규정만 준수하면 Clojure의 어떤 함수도 predicate이 될 수 있다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spec은_composable_조합_가능_하다">5.2. spec은 composable(조합 가능)하다</h3>
+<div class="paragraph">
+<p>단순한 spec들을 조합해서 복잡한 spec을 정의할 수 있다. --> reusability(재사용성)의 증가</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">def</span> <span class="function">suit?</span> #{<span class="symbol">:club</span> <span class="symbol">:diamond</span> <span class="symbol">:heart</span> <span class="symbol">:spade</span>})
+(<span class="keyword">def</span> <span class="function">rank?</span> (<span class="keyword">into</span> #{<span class="symbol">:jack</span> <span class="symbol">:queen</span> <span class="symbol">:king</span> <span class="symbol">:ace</span>} (<span class="keyword">range</span> <span class="integer">2</span> <span class="integer">11</span>)))
+(<span class="keyword">def</span> <span class="function">deck</span> (<span class="keyword">for</span> [suit suit? rank rank?] [rank suit]))
+
+(s/def <span class="symbol">::card</span> (s/tuple rank? suit?))
+(s/def <span class="symbol">::hand</span> (s/* <span class="symbol">::card</span>))
+
+(s/def <span class="symbol">::name</span> <span class="keyword">string?</span>)
+(s/def <span class="symbol">::score</span> int?)
+(s/def <span class="symbol">::player</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::name</span> <span class="symbol">::score</span> <span class="symbol">::hand</span>]))
+
+(s/def <span class="symbol">::players</span> (s/* <span class="symbol">::player</span>))
+(s/def <span class="symbol">::deck</span> (s/* <span class="symbol">::card</span>))
+(s/def <span class="symbol">::game</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::players</span> <span class="symbol">::deck</span>]))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>::players
+  ::player
+    ::name
+    ::score
+    ::hand
+      ::card
+
+::deck
+  ::card
+
+::game
+  ::players
+  ::deck</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-02 14:26:19 KST
+</div>
+</div>
+</body>
+</html>

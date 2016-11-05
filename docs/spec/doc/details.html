@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>clojure.spec 세부 내용</title>
+<link rel="stylesheet" href="../my-asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../coderay-asciidoctor.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>clojure.spec 세부 내용</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>이 발표에 사용한 clojure.spec 버전은 <code>clojure 1.9.0-alpha14</code>이다.</p>
+</li>
+<li>
+<p>여기에서 보여주는 예제들은 다음과 같은 이름공간에서 실행되었다.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">spec-guide.core</span>
+  (<span class="symbol">:require</span> [clojure.spec <span class="symbol">:as</span> s]
+            [clojure.spec.gen <span class="symbol">:as</span> gen]
+            [clojure.spec.test <span class="symbol">:as</span> stest]))</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>clojure.spec: spec 정의 --> Runtime type/value checking을 위해 필요</p>
+</li>
+<li>
+<p>clojure.spec.gen: generator 정의 --> 자동 test-case 생성을 위해 필요</p>
+</li>
+<li>
+<p>clojure.spec.test: 자동 테스트 수행을 위해 필요</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojure_spec">1. clojure.spec</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_s_valid">1.1. s/valid?</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(valid? spec value) =&gt; boolean
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/valid? <span class="keyword">even?</span> <span class="integer">10</span>)            <span class="comment">; =&gt; true</span>
+(s/valid? <span class="keyword">string?</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>)       <span class="comment">; =&gt; true</span>
+
+(s/valid? #(<span class="keyword">&gt;</span> % <span class="integer">5</span>) <span class="integer">10</span>)         <span class="comment">; =&gt; true</span>
+(s/valid? #(<span class="keyword">&gt;</span> % <span class="integer">5</span>) <span class="integer">0</span>)          <span class="comment">; =&gt; false</span>
+
+(s/valid? #{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>} <span class="integer">10</span>)   <span class="comment">; =&gt; true</span>
+(s/valid? #{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>} <span class="integer">50</span>)   <span class="comment">; =&gt; false</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_def">1.2. s/def</h3>
+<div class="paragraph">
+<p><code>def</code>는 spec을 정의하고, 중앙 저장소에 이를 저장한다. 이렇게 spec을 global하게 저장하는
+이유는 재사용도를 증가시키기 위해서다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(def namespaced-keyword spec) =&gt; namespaced-keyword
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::suit</span> #{<span class="symbol">:club</span> <span class="symbol">:diamond</span> <span class="symbol">:heart</span> <span class="symbol">:spade</span>})
+<span class="comment">; =&gt; :spec-guide.core/suit</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_conform">1.3. s/conform</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(confirm spec value)
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/conform <span class="symbol">::suit</span> <span class="symbol">:club</span>)    <span class="comment">; =&gt; :club</span>
+(s/conform <span class="symbol">::suit</span> <span class="symbol">:hello</span>)   <span class="comment">; =&gt; :clojure.spec/invalid</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spec의_합성">1.4. spec의 합성</h3>
+<div class="sect3">
+<h4 id="_s_and">1.4.1. s/and</h4>
+<div class="listingblock">
+<div class="content">
+<pre>(and spec+)
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::big-even</span> (s/and int? <span class="keyword">even?</span> #(<span class="keyword">&gt;</span> % <span class="integer">1000</span>)))
+
+(s/valid? <span class="symbol">::big-even</span> <span class="symbol">:foo</span>)    <span class="comment">; =&gt; false</span>
+(s/valid? <span class="symbol">::big-even</span> <span class="integer">10</span>)      <span class="comment">; =&gt; false</span>
+(s/valid? <span class="symbol">::big-even</span> <span class="integer">100000</span>)  <span class="comment">; =&gt; true</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_s_or">1.4.2. s/or</h4>
+<div class="listingblock">
+<div class="content">
+<pre>(or &lt;tag spec&gt;+)
+
+tag  ::= keyowrd
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>or</code>의 경우에는 spec 앞에 tag를 붙여 주어야 한다. 아래에 소개하는 <code>cat</code>도
+마찬가지이다.</p>
+</div>
+<div class="paragraph">
+<p>여러가지 경우의 수로 분기하는 경우에는 tag를 붙여 주는데, 나중에 분기되는 항목 중의 어느
+항목에서 문제가 발생했는지 식별하기 위한 용도로 사용된다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::name-or-id</span> (s/or <span class="symbol">:name</span> <span class="keyword">string?</span>
+                          <span class="symbol">:id</span>   int?))
+
+(s/valid? <span class="symbol">::name-or-id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>)    <span class="comment">; =&gt; true</span>
+(s/valid? <span class="symbol">::name-or-id</span> <span class="integer">100</span>)      <span class="comment">; =&gt; true</span>
+(s/valid? <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)     <span class="comment">; =&gt; false</span>
+
+(s/conform <span class="symbol">::name-or-id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>)   <span class="comment">; =&gt; [<mark>:name</mark> &quot;abc&quot;]</span>
+(s/conform <span class="symbol">::name-or-id</span> <span class="integer">100</span>)     <span class="comment">; =&gt; [<mark>:id</mark> 100]</span>
+(s/conform <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)    <span class="comment">; =&gt; :clojure.spec/invalid</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_explain">1.5. s/explain</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(explain spec value)
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>explain</code>은 spec을 통과하지 못한 이유를 설명해 준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">when</span> (<span class="keyword">=</span> (s/conform <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)
+         <span class="symbol">:clojure.spec/invalid</span>)
+  (s/explain <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>))
+<span class="comment">; &gt;&gt; val: :foo fails</span>
+<span class="comment">;    spec: :spec-guide.core/name-or-id</span>
+<span class="comment">;    at: [:name] predicate: string?</span>
+<span class="comment">;</span>
+<span class="comment">;    val: :foo fails</span>
+<span class="comment">;    spec: :spec-guide.core/name-or-id</span>
+<span class="comment">;    at: [:id] predicate: int?</span>
+<span class="comment">;</span>
+<span class="comment">; =&gt; nil</span>
+
+(s/explain <span class="symbol">::name-or-id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">tom</span><span class="delimiter">&quot;</span></span>)
+<span class="comment">; &gt;&gt; Success!</span>
+<span class="comment">; =&gt; nil</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>s/explain</code>: 결과를 stdout에 출력한다.</p>
+</li>
+<li>
+<p><code>s/explain-str</code>: 결과를 문자열로 반환한다.</p>
+</li>
+<li>
+<p><code>s/explain-data</code>: 결과를 클로저 데이터형으로 반환한다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/explain-str <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)
+<span class="comment">; =&gt; &quot;val: :foo fails spec: :spec-guide.core/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.core/name-or-id at: [:id] predicate: int?\n&quot;</span>
+
+(s/explain-data <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)
+<span class="comment">; =&gt; #:clojure.spec{:problems ({:path [:name],</span>
+<span class="comment">;                               :pred string?,</span>
+<span class="comment">;                               :val :foo,</span>
+<span class="comment">;                               :via [:spec-guide.core/name-or-id],</span>
+<span class="comment">;                               :in []}</span>
+<span class="comment">;                              {:path [:id],</span>
+<span class="comment">;                               :pred int?,</span>
+<span class="comment">;                               :val :foo,</span>
+<span class="comment">;                               :via [:spec-guide.core/name-or-id],</span>
+<span class="comment">;                               :in []})}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_map_자료형의_spec_정의하기_s_keys">1.6. map 자료형의 spec 정의하기: s/keys</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(keys &lt; keyword [namespacd-key+] &gt;+)
+
+keyword ::= :req | :opt | :req-un | :opt-un</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_namespaced_keys">1.6.1. namespaced keys</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::first-name</span> <span class="keyword">string?</span>)
+(s/def <span class="symbol">::last-name</span> <span class="keyword">string?</span>)
+(s/def <span class="symbol">::phone</span> <span class="keyword">string?</span>)
+
+(s/def <span class="symbol">::person</span> (s/keys <span class="error"><mark></span><span class="symbol">:req</mark></span> [<span class="symbol">::first-name</span> <span class="symbol">::last-name</span>]
+                        <span class="error"><mark></span><span class="symbol">:opt</mark></span> [<span class="symbol">::phone</span>]))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/valid? <span class="symbol">::person</span>
+  {<span class="error"><mark></span><span class="symbol">::first-name</mark></span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Elon</span><span class="delimiter">&quot;</span></span>
+   <span class="symbol">::last-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Musk</span><span class="delimiter">&quot;</span></span>
+   <span class="symbol">::phone</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">010-1234-5678</span><span class="delimiter">&quot;</span></span>})
+<span class="comment">; =&gt; true</span>
+
+(s/conform <span class="symbol">::person</span>
+  {<span class="symbol">::first-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Elon</span><span class="delimiter">&quot;</span></span>
+   <span class="symbol">::last-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Musk</span><span class="delimiter">&quot;</span></span>})
+<span class="comment">; =&gt; #:spec-guide.core{:first-name &quot;Elon&quot;, :last-name &quot;Musk&quot;}</span>
+
+(s/explain <span class="symbol">::person</span>
+  {<span class="symbol">::first-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Elon</span><span class="delimiter">&quot;</span></span>})
+<span class="comment">; &gt;&gt; val: #:spec-guide.core{:first-name &quot;Elon&quot;} fails</span>
+<span class="comment">;    spec: :spec-guide.core/person predicate: (contains? % :spec-guide.core/last-name)</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_unnamespaced_keys">1.6.2. unnamespaced keys</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">:unq/person</span>
+  (s/keys <span class="error"><mark></span><span class="symbol">:req-un</mark></span> [<span class="symbol">::first-name</span> <span class="symbol">::last-name</span>]
+          <span class="error"><mark></span><span class="symbol">:opt-un</mark></span> [<span class="symbol">::phone</span>]))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/conform <span class="symbol">:unq/person</span>
+  {<span class="error"><mark></span><span class="symbol">:first-name</mark></span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Elon</span><span class="delimiter">&quot;</span></span>
+   <span class="symbol">:last-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Musk</span><span class="delimiter">&quot;</span></span>})
+<span class="comment">; =&gt; {:first-name &quot;Elon&quot;, :last-name &quot;Musk&quot;}</span>
+
+(s/explain <span class="symbol">:unq/person</span>
+  {<span class="symbol">:first-name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Elon</span><span class="delimiter">&quot;</span></span>})
+<span class="comment">; &gt;&gt; val: {:first-name &quot;Elon&quot;} fails</span>
+<span class="comment">;    spec: :unq/person</span>
+<span class="comment">;    predicate: (contains? % :last-name)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-04 21:24:18 KST
+</div>
+</div>
+</body>
+</html>

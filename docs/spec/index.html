@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>clojure.spec</title>
+<link rel="stylesheet" href="./my-asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="./coderay-asciidoctor.css">
+</head>
+<body class="book">
+<div id="header">
+<h1>clojure.spec</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_발표자">1. 발표자</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>김영태 (<a href="mailto:philos99@gmail.com">philos99@gmail.com</a>)</p>
+</li>
+<li>
+<p>현재 Infokraft에서 Clojure와 ClojureScript로 프로그램 개발 중</p>
+</li>
+<li>
+<p><a href="http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&amp;mallGb=KOR&amp;barcode=9788966261802&amp;orderClick=LEA&amp;Kc=">클로저
+시작하기</a> (원서 제목:
+<a href="https://www.amazon.com/Living-Clojure-Introduction-Training-Developers/dp/1491909048/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1478059213&amp;sr=1-1&amp;keywords=living+clojure">Living
+Clojure</a>) 공동 번역</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_참고_링크">2. 참고 링크</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://clojure.org/guides/spec">spec Guide</a></p>
+</li>
+<li>
+<p><a href="http://clojure.org/about/spec">clojure.spec - Rationale and Overview</a></p>
+</li>
+<li>
+<p><a href="http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&amp;utm_medium=facebook">Custom defn macro with clojure.spec</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_소스코드_예제_표기요령">3. 소스코드 예제 표기요령</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">get-name</span> []
+  (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Enter Your Name:</span><span class="delimiter">&quot;</span></span>)
+  (<span class="keyword">let</span> [<span class="keyword">name</span> (<span class="keyword">read-line</span>)]
+    (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Hello,</span><span class="delimiter">&quot;</span></span> <span class="keyword">name</span>)
+    <span class="keyword">name</span>))
+
+(get-name)
+<span class="comment">; &gt;&gt; Enter Your Name:</span>
+<span class="comment">; &lt;&lt; Mr. Kim</span>
+<span class="comment">; &gt;&gt; Hello, Mr. Kim</span>
+<span class="comment">; =&gt; &quot;Mr. Kim&quot;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_목차">4. 목차</h2>
+<div class="sectionbody">
+<div class="sidebarblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="doc/intro.html">clojure.spec 개관</a></p>
+</li>
+<li>
+<p><a href="doc/details.html">clojure.spec 세부 내용</a></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_국내_clojure_관련_링크">5. 국내 Clojure 관련 링크</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://clojure.or.kr">clojure.or.kr</a></p>
+</li>
+<li>
+<p><a href="https://groups.google.com/forum/#!forum/clojure-kr">Korean Clojure User Group</a> (Google Groups)</p>
+</li>
+<li>
+<p><a href="https://www.facebook.com/groups/defnclojure">Clojure Korea</a> (Facebook)</p>
+</li>
+<li>
+<p><a href="https://groups.google.com/forum/#!forum/lisp-korea">Lisp을 좋아하는 사람들의 그룹(한국 리스퍼)</a> (Google Groups)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-05 10:25:43 KST
+</div>
+</div>
+</body>
+</html>

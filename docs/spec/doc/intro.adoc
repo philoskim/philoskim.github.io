@@ -1,0 +1,279 @@
+= clojure.spec 개관
+:source-highlighter: coderay
+:source-language: clojure
+:sectnums:
+:icons: font
+:imagesdir: ../img
+:linkcss:
+:stylesdir: ../
+:stylesheet: my-asciidoctor.css
+
+
+== clojure.spec 소개
+
+* **clojure.spec**은 클로저 언어의 창시자인 Rich Hickey가 만든 라이브러리로, `clojure
+  1.9.0` 버전에 추가될 예정이다.
+
+* link:https://racket-lang.org[Racket] 언어의
+  link:https://docs.racket-lang.org/reference/contracts.html[Contracts] 시스템의 영향을
+  많이 받아 만들어졌다.
+
+* Dynamic type/value Checking and Generative Testing을 수행한다.
+** spec을 정의하면, runtime에 type과 value를 검사할 수 있다.
+** spec과 generator를 정의하면, 테스트 케이스 자동 생성 및 테스트까지 자동 수행
+
+* 이와같은 기능을 특정 이름공간(namespace)만을 대상으로 켜거나 끌 수 있다. 그래서
+  개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때 중단시키면,
+  프로그램의 실행 속도에 전혀 영향을 미치지 않는다. 이것이 가능한 이유는 clojure.spec
+  코드의 상당 부분이 매크로로 작성되어 있기 때문이다.
+
+* 결과적으로, 동적 언어인 클로저에서 정적 언어의 특징들을 이용할 수 있게 해준다.
+
+
+== 제공하는 주요 기능들
+
+. spec은 함수 입출력 데이터의 구조를 명시적으로 정의함으로써, 표준화된 documentation을
+  제공한다. 팀원들 사이에 그리고 자기 자신의, 코드에 대한 이해도를 높일 수 있다.
+
+. spce은 runtime에 데이터의 유효성(validation), 즉 타입 및 값을 검증할 수 있게 해주므로,
+  버그 발생 가능성을 현저히 줄일 수 있다.
+
+. spec은 자동 테스트 케이스 생성(generative testing) 및 자동 테스팅 기능을 제공함으로써
+  코드의 무결성을 높일 수 있다.
+
+. spec은 데이터의 구조분해(destructuring: 일종의 코드 parsing) 기능을 제공한다. 이 기능이
+  매크로와 결합되면, 기존에 Clojure에서 불가능하지는 않지만 하기 어려웠던 일을 쉽게 할 수
+  있다. (참고: link:http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&utm_medium=facebook[Custom defn macro with clojure.spec])
+
+
+== clojure.spec이 유용한 한 예
+
+=== 문제 없는 예
+
+[source,subs="verbatim,quotes"]
+....
+(max 1 2 3 4)
+; => 4
+
+(max)
+; >> 1. Unhandled clojure.lang.ArityException
+;       Wrong number of args (0) passed to: #core/max#
+;    
+;                      AFn.java:  429  clojure.lang.AFn/throwArity
+;                   RestFn.java:  399  clojure.lang.RestFn/invoke
+;                          REPL:    9  spec-guide.core/eval10839
+;                          REPL:    9  spec-guide.core/eval10839
+;                 Compiler.java: 6977  clojure.lang.Compiler/eval
+;                 Compiler.java: 6940  clojure.lang.Compiler/eval
+;                      core.clj: 3187  clojure.core/eval
+;                      core.clj: 3183  clojure.core/eval
+;                         ......
+....
+
+
+=== 문제 있는 예
+
+[source,subs="verbatim,quotes"]
+....
+(defn my-max [coll]
+  (apply max coll))
+
+(my-max [1 2 3 4])
+; => 4
+
+(my-max nil)
+; >> 1. Unhandled clojure.lang.ArityException
+;       Wrong number of args (0) passed to: #core/max#
+;    
+;                      AFn.java:  429  clojure.lang.AFn/throwArity
+;                   RestFn.java:  399  clojure.lang.RestFn/invoke
+;                      AFn.java:  152  clojure.lang.AFn/applyToHelper
+;                   RestFn.java:  132  clojure.lang.RestFn/applyTo
+;                      core.clj:  657  clojure.core/apply
+;                      core.clj:  652  clojure.core/apply
+;                          REPL:    7  #spec-guide.core/my-max#
+;                          REPL:    6  #spec-guide.core/my-max#
+;                          REPL:   28  spec-guide.core/eval10841
+;                          REPL:   28  spec-guide.core/eval10841
+;                 Compiler.java: 6977  clojure.lang.Compiler/eval
+;                 Compiler.java: 6940  clojure.lang.Compiler/eval
+;                      core.clj: 3187  clojure.core/eval
+;                         ......
+....
+
+
+=== core.spec으로 문제 해결
+
+[source,subs="verbatim,quotes"]
+....
+(ns spec-guide.core
+  (:require [clojure.spec :as s]
+            [clojure.spec.gen :as gen]
+            [clojure.spec.test :as stest]))
+
+(s/fdef my-max2
+  :args (s/cat :coll (s/coll-of number?))
+  :ret number?)
+
+(defn my-max2 [coll]
+  (apply max coll))
+
+(stest/instrument `my-max2)
+
+(my-max2 [1 2 3 4])
+; => 4
+
+(my-max2 nil)
+; >> 1. Unhandled clojure.lang.ExceptionInfo
+;       Call to #spec-guide.core/my-max2# did not conform to spec:
+;         In: [0]
+;         #val: nil# fails
+;         at: [:args :coll]
+;         #predicate: coll?#
+;       :clojure.spec/args (nil)
+;       :clojure.spec/failure :instrument
+;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                  :line 63, :var-scope spec-guide.core/eval10997}
+;    
+;       {:clojure.spec/problems [{:path [:args :coll],
+;                                 :pred coll?,
+;                                 :val nil,
+;                                 :via [],
+;                                 :in [0]}],
+;        :clojure.spec/args (nil),
+;        :clojure.spec/failure :instrument,
+;        :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                   :line 63,
+;                                   :var-scope spec-guide.core/eval10997}}
+....
+
+
+=== core.spec은 실행 중 값도 검사할 수 있다
+
+[source,subs="verbatim,quotes"]
+....
+(s/fdef my-max3
+  :args (s/and (s/cat :coll (s/coll-of number?))
+               \#(every? (fn [num]
+                          (< num 10))
+                        (:coll %) ))
+  :ret number?)
+
+(defn my-max3 [coll]
+  (apply max coll))
+
+(stest/instrument `my-max3)
+
+(my-max3 [1 2 3 14])
+; >> 1. Unhandled clojure.lang.ExceptionInfo
+;       Call to #spec-guide.core/my-max3# did not conform to spec:
+;         #val: {:coll [1 2 3 14]}# fails
+;         at: [:args]
+;         #predicate: (every? (fn [num] (< num 10)) (:coll %))#
+;       :clojure.spec/args ([1 2 3 14])
+;       :clojure.spec/failure :instrument
+;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                  :line 97,
+;                                  :var-scope spec-guide.core/eval11148}
+....
+
+
+== 사전 예비 지식
+
+=== unnamespaced/namespaced keyword
+
+[source]
+....
+user> :cat          ; unnamespaced keyword
+:cat
+
+user> :animal/cat   ; namespaced keyword
+:animal/cat
+
+user> ::cat         ; namespaced keyword
+:user/cat
+....
+
+
+=== unnamespaced/namespaced symbol
+
+[source]
+....
+user> 'dog          ; unnamespaced symbol
+dog
+
+user> 'animal/dog   ; namespaced symbol
+animal/dog
+
+user> `dog          ; namespaced symbol
+user/dog
+....
+
+
+=== set 자료형은 함수명 자리에 올 수 있다
+
+[source]
+....
+user> #{10 20 30 40}
+#{20 40 30 10}
+
+user> (#{10 20 30 40} 10)
+10
+
+user> (#{10 20 30 40} 50)
+nil
+....
+
+
+== clojure.spec의 특징
+
+=== spec은 predicate으로 이루어져 있다
+
+[sidebar]
+.predicate (진위 함수)
+****
+* 한 개의 인수를 받고, 논리적 참/거짓을 반환하는 함수이다.
+** 논리적 거짓: ``nil``과 `false`
+** 논리적 참: ``nil``과 `false`를 제외한 모든 값. {nbsp} {nbsp} {nbsp} 예) `0 "" [] () {} #{} pass:q[...]` 
+
+* 이 규정만 준수하면 Clojure의 어떤 함수도 predicate이 될 수 있다.
+****
+
+=== spec은 composable(조합 가능)하다
+
+단순한 spec들을 조합해서 복잡한 spec을 정의할 수 있다. pass:q[-->] reusability(재사용성)의 증가
+
+[source]
+....
+(def suit? #{:club :diamond :heart :spade})
+(def rank? (into #{:jack :queen :king :ace} (range 2 11)))
+(def deck (for [suit suit? rank rank?] [rank suit]))
+
+(s/def ::card (s/tuple rank? suit?))
+(s/def ::hand (s/* ::card))
+
+(s/def ::name string?)
+(s/def ::score int?)
+(s/def ::player (s/keys :req [::name ::score ::hand]))
+
+(s/def ::players (s/* ::player))
+(s/def ::deck (s/* ::card))
+(s/def ::game (s/keys :req [::players ::deck]))
+....
+
+[listing]
+----
+::players
+  ::player
+    ::name
+    ::score
+    ::hand
+      ::card
+
+::deck
+  ::card
+
+::game
+  ::players
+  ::deck
+----
