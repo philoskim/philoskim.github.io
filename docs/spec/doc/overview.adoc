@@ -1,0 +1,137 @@
+= Clojure 언어의 특징
+:source-highlighter: coderay
+:source-language: clojure
+:sectnums:
+:icons: font
+:imagesdir: ../img
+:linkcss:
+:stylesdir: ../
+:stylesheet: my-asciidoctor.css
+
+
+* 프로그램 개발과 유지/보수 시간 단축 pass:[-->] 프로그래밍 생산성의 증가
+* 프로그램 실행 속도보다 프로그램 개발 속도가 더 중요하다.
+
+== 클로저 코드는 짧고 간결하다.
+
+* 구현하고자 하는 로직에만 집중할 수 있다.
+* 프로그램의 이해/유지/보수에 유리하다. 
++
+link:http://labs.ig.com/lines-of-code-matter[Java: 441 lines of code across 7 files.
+Clojure: 58 lines of code in 1 file.]
++
+link:http://clojure.or.kr/docs/clojure-and-gof-design-patterns.html[클로저 디자인 패턴]
+
+
+== 클로저는 다른 동적 언어들에 비해 속도가 월등하게 빠르다.
+
+https://benchmarksgame.alioth.debian.org/u64q/clojure.html
+
+
+== 클로저는 Lisp 계열 언어다.
+
+* 프로그래밍 언어의 역사에서 Fortran 다음으로 등장한 오래된 언어임에도 여전히 많은 Lisp
+   계열 언어들이 만들어지고 있다. pass:[<--] 간결하면서도 표현력 높은 코드를 만들 수 있다.
+
+* link:https://en.wikipedia.org/wiki/Category:Lisp_programming_language_family[Lisp programming language family]
+
+* link:https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations[List of Common Lisp implementations]
+
+* link:https://en.wikipedia.org/wiki/Category:Scheme_(programming_language)_implementations[List of Scheme implementations]
+
+* 강력한 매크로 프로그래밍이 가능하다. 매크로를 이용하면 코드를 더 짧게 표현할 수 있다.
+
+
+== 클로저에서는 자바의 라이브러리를 그대로 불러 쓸 수 있다.
+
+== 클로저는 함수형 언어다.
+
+* Rich Hickey는 "클로저는 80% 함수형 언어다."
+* Haskell처럼 어렵지는 않다.
+* 함수형 언어가 주목받는 이유: immutability(변수의 내용을 한 번 초기화한 이후에는 변경
+   불가능)의 도입으로 상태(state)를 최대한 제거함으로써 프로그램의 복잡성을 최대한
+   줄여준다.
++
+link:https://www.google.co.kr/search?q=gordian+knot&biw=1220&bih=613&tbm=isch&tbo=u&source=univ&sa=X&sqi=2&ved=0ahUKEwiK0-btypjQAhVHhbwKHX8SD5gQ7AkINA&dpr=1.25[고르디우스의 매듭(Gordian Knot)]
+
+[listing]
+----
+OOP:  code + data = class: data를 숨긴다
+FP:   code와 data의 분리 : data를 노출시킨다
+----
+
+.객체지향언어에서의 상태 관리
+image:oop.png[]
+
+.Clojure에서의 상태 관리
+image:fp.png[]
+
+
+== 클로저는 동적 언어(Dynamc Language)이다
+
+[quote, Alan Perlis]
+____
+"It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures."
+____
+
+* Ruby나 Python같은 다른 동적 언어들: 클래스(User-defined Type) 기반의 객체지향 언어
+* Clojure는 지원하는 데이터형이 많지 않다. (총 15개)
+** 장점: 함수의 합성이 용이
+** 단점: 세밀한 type checking을 하기 어렵다.
+
+=== Ruby의 예
+
+[source,ruby,subs="quotes"]
+....
+# box.rb
+class Box
+   # constructor method
+   def initialize(w,h)
+      @width, @height = w, h
+   end
+
+   # accessor methods
+   def printWidth
+      #@with#
+   end
+
+   def printHeight
+      @height
+   end
+end
+
+# create an object
+box = Box.new(10, 20)
+
+# use accessor methods
+x = box.printWidth()
+y = box.printHeight()
+
+puts "Width of the box is : #{x}"
+puts "Height of the box is : #{y}"
+....
+
+[listing]
+----
+$ ruby box.rb
+box.rb:12: warning: instance variable @with not initialized
+Width of the box is : 
+Height of the box is : 20
+----
+
+=== Clojure의 예
+
+[source,subs="quotes"]
+....
+(def box {:width 10
+          :height 20})
+
+(defn print-box [box]
+  (println "Width of the box is" (#:with# box))
+  (println "Height of the box is" (:height box)))
+
+(print-box box)
+; => Width of the box is nil
+;    Height of the box is 20
+....
+

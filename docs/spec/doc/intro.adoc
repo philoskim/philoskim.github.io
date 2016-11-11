@@ -1,4 +1,4 @@
-= clojure.spec 개관
+= clojure.spec
 :source-highlighter: coderay
 :source-language: clojure
 :sectnums:
@@ -8,72 +8,423 @@
 :stylesdir: ../
 :stylesheet: my-asciidoctor.css
 
-
 == clojure.spec 소개
 
 * **clojure.spec**은 클로저 언어의 창시자인 Rich Hickey가 만든 라이브러리로, `clojure
   1.9.0` 버전에 추가될 예정이다.
 
+* 이 발표에 사용한 clojure.spec 버전은 ``clojure 1.9.0-alpha14``이다.
+
 * link:https://racket-lang.org[Racket] 언어의
   link:https://docs.racket-lang.org/reference/contracts.html[Contracts] 시스템의 영향을
   많이 받아 만들어졌다.
 
-* Dynamic type/value Checking and Generative Testing을 수행한다.
-** spec을 정의하면, runtime에 type과 value를 검사할 수 있다.
-** spec과 generator를 정의하면, 테스트 케이스 자동 생성 및 테스트까지 자동 수행
+* Dynamic type/value Checking: spec을 정의하면, runtime에 type과 value를 검사할 수 있다.
+
+* Generative Testing: spec을 정의하면, 테스트 케이스를 자동 생성하고, 자동으로 테스트를
+  수행하게 할 수 있다.
 
 * 이와같은 기능을 특정 이름공간(namespace)만을 대상으로 켜거나 끌 수 있다. 그래서
   개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때 중단시키면,
-  프로그램의 실행 속도에 전혀 영향을 미치지 않는다. 이것이 가능한 이유는 clojure.spec
-  코드의 상당 부분이 매크로로 작성되어 있기 때문이다.
+  프로그램의 실행 속도에 전혀 영향을 미치지 않는다.
 
 * 결과적으로, 동적 언어인 클로저에서 정적 언어의 특징들을 이용할 수 있게 해준다.
 
 
-== 제공하는 주요 기능들
+== 기존의 Clojure 타입 체킹 라이브러리와의 비교
 
-. spec은 함수 입출력 데이터의 구조를 명시적으로 정의함으로써, 표준화된 documentation을
+[listing]
+----
+              type checking        run-time       generative   ClojureScript
+                                value checking      testing        지원
+------------------------------------------------------------------------------
+core.typed    compile-time           X                X             X
+schema          run-time             X                △             O
+core.spec       run-time             O                O             O
+----
+
+.링크 참조
+* link:https://github.com/clojure/core.typed[core.typed]
+* link:https://github.com/plumatic/schema[Schema]
+* http://www.lispcast.com/clojure.spec-vs-schema[5 Differences between clojure.spec and Schema]
+
+
+
+== clojure.spec의 기본 API
+
+* 여기에서 보여주는 예제들은 다음과 같은 이름공간에서 실행되었다.
++
+[source]
+....
+(ns spec-guide.api
+  (:require [clojure.spec :as s]
+            [clojure.spec.gen :as gen]
+            [clojure.spec.test :as stest]))
+....
++
+** clojure.spec: spec 정의 pass:[-->] Runtime type/value checking을 위해 필요
+** clojure.spec.gen: generator 정의 pass:[-->] 자동 test-case 생성을 위해 필요
+** clojure.spec.test: 자동 테스트 수행을 위해 필요
+
+
+=== s/valid?
+
+[listing]
+----
+(valid? spec value) => boolean
+
+spec ::= predicate | namespaced-keyword
+----
+
+* <<api.doc#predicate, predicate>>이란
+* <<api.doc#namespaced-keyword, namespaced-keyword>>란?
+
+[source,subs="quotes"]
+....
+;; clojure.core가 제공하고 있는 함수
+(s/valid? even? 10)            ; => true
+(s/valid? string? "abc")       ; => true
+
+;; 사용자 정의 함수
+(s/valid? #(> % 5) 10)         ; => true
+(s/valid? #(> % 5) 0)          ; => false
+
+;; set as function
+(s/valid? #{10 20 30 40} 10)   ; => true
+(s/valid? #{10 20 30 40} 50)   ; => false
+....
+
+* <<api.doc#set-as-function, set as function>>이란?
+
+
+=== s/def
+
+``def``는 spec을 정의하고, global 저장소에 이를 저장한다. 이렇게 spec을 global하게 저장하는
+이유는 재사용성(reusability)를 증가시키기 위해서다.
+ 
+ 
+[listing]
+----
+(def namespaced-keyword spec) => namespaced-keyword
+----
+
+[source]
+....
+(s/def ::big-even (s/and int? even? #(> % 1000)))
+; => :spec-guide.api/big-even
+
+(s/valid? ::big-even :foo)     ; => false
+(s/valid? ::big-even 100)      ; => false
+(s/valid? ::big-even 100000)   ; => true
+
+
+(s/def ::suit #{:club :diamond :heart :spade})
+; => :spec-guide.api/suit
+
+(s/valid? ::suit ::diamond)   ; => true
+(s/valid? ::suit ::space)     ; => false
+....
+
+
+=== s/explain
+
+[listing]
+----
+(explain spec value) => nil
+----
+
+``explain``은 spec을 통과하지 못한 이유를 설명해 준다.
+
+[source]
+....
+(s/def ::suit #{:club :diamond :heart :spade})
+
+(s/explain ::suit 42)
+; >> val: 42 fails 
+;    spec: ::suit 
+;    predicate: #{:spade :heart :diamond :club}
+ 
+
+(s/def ::big-even (s/and int? even? #(> % 1000)))
+
+(s/explain ::big-even 5)
+; >> val: 5 fails 
+;    spec: ::big-even 
+;    predicate: even?
+
+(s/explain ::big-even 100)
+; >> val: 100 fails 
+;    spec: ::big-even 
+;    predicate: (> % 1000)
+....
+
+
+=== s/keys: map 자료형의 spec 정의 
+
+[listing]
+----
+(keys < keyword [namespacd-key+] >+) => spec
+
+keyword ::= :req | :opt
+----
+
+[source,subs="quotes"]
+....
+(s/def ::first-name string?)
+(s/def ::last-name string?)
+(s/def ::age int?)
+
+(s/def ::person (s/keys :req [::first-name ::last-name]
+                        :opt [::age]))
+....
+
+
+[source,subs="quotes"]
+....
+(s/valid? ::person
+  {::first-name "Elon"
+   ::last-name "Musk"
+   ::age 45})
+; => true
+
+(s/explain ::person
+  {::first-name "Elon"})
+; >> val: #:spec-guide.api{:first-name "Elon"} fails
+;    spec: :spec-guide.api/person
+;    predicate: (contains? % :spec-guide.api/last-name)
+....
+
+
+=== Collections
+
+==== s/coll-of
+
+'a homogenous collection of arbitrary size'
+
+[source]
+....
+(s/valid? (s/coll-of keyword?) [:a :b :c])
+; => true
+
+(s/valid? (s/coll-of keyword?) [:a :b 10])
+; => false
+
+(s/valid? (s/coll-of number?) #{5 10 2})
+; => true
+....
+
+
+[source]
+....
+(s/def ::vnum3 (s/coll-of number? :kind vector? :count 3 :distinct true :into #{}))
+
+(s/explain ::vnum3 #{1 2 3})   ;; not a vector
+; >> val: #{1 3 2} fails 
+;    spec: ::vnum3
+;    predicate: clojure.core/vector?
+
+(s/explain ::vnum3 [1 1 1])    ;; not distinct
+; >> val: [1 1 1] fails 
+;    spec: ::vnum3 
+;    predicate: distinct?
+
+(s/explain ::vnum3 [1 2 :a])   ;; not a number
+; >> In: [2]
+;    val: :a fails 
+;    spec: ::vnum3 
+;    predicate: number?
+....
+
+
+=== Sequences: Sequentials (vector와 list) 대상
+
+[sidebar]
+.regular expression operators
+****
+* `cat` - concatenation of predicates/patterns
+* `*` - 0 or more of a predicate/pattern
+* `+` - 1 or more of a predicate/pattern
+* `?` - 0 or 1 of a predicate/pattern
+****
+
+==== s/cat
+
+[listing]
+----
+(cat <keyword spec>+)
+----
+
+[source]
+----
+(s/def ::ingredient (s/cat :quantity number? :unit keyword?))
+
+(s/conform ::ingredient [2 :teaspoon])
+; => {:quantity 2, :unit :teaspoon}
+
+(s/conform ::ingredient '(2 :teaspoon))
+; => {:quantity 2, :unit :teaspoon}
+----
+
+[source]
+....
+;; pass string for unit instead of keyword
+(s/explain ::ingredient [11 "peaches"])
+; >> In: [1]
+;    val: "peaches" fails
+;    spec: :spec-guide.api/ingredient
+;    at: [:unit]
+;    predicate: keyword?
+
+;; leave out the unit
+(s/explain ::ingredient [2])
+; >> val: () fails
+;    spec: :spec-guide.api/ingredient
+;    at: [:unit]
+;    predicate: keyword?, Insufficient input
+....
+
+
+==== s/* s/+ s/?
+
+[listing]
+----
+(* spec)
+(+ spec)
+(? spwc)
+----
+
+[source]
+....
+(s/def ::odds-then-maybe-even (s/cat :odds (s/+ odd?)
+                                     :even (s/? even?)))
+
+(s/conform ::odds-then-maybe-even [1 3 5 100])
+; => {:odds [1 3 5], :even 100}
+
+(s/conform ::odds-then-maybe-even [1])
+; => {:odds [1]}
+
+(s/explain ::odds-then-maybe-even [100])
+; >> In: [0]
+;    val: 100 fails
+;    spec: ::odds-then-maybe-even
+;    at: [:odds]
+;    predicate: odd?
+....
+
+
+
+=== s/fdef: function spec
+
+[source]
+....
+(defn ranged-rand
+  "Returns random int in range start <= rand < end"
+  [start end]
+  (+ start (long (rand (- end start)))))
+....
+
+[source]
+....
+(s/fdef ranged-rand
+  :args (s/and (s/cat :start int? :end int?)
+               #(< (:start %) (:end %)))
+  :ret int?
+  :fn (s/and #(>= (:ret %) (-> % :args :start))
+             #(< (:ret %) (-> % :args :end))))
+....
+
+[source]
+....
+(ranged-rand 5 10)
+; => 7
+
+(ranged-rand 10 5)
+; => 9
+
+(stest/instrument `ranged-rand)
+
+(ranged-rand 5 10)
+; => 7
+
+; (ranged-rand 10 5)
+; >> Call to #'spec-guide.api/ranged-rand did not conform to spec:
+;    val: {:start 10, :end 5} fails
+;    at: [:args]
+;    predicate: (< (:start %) (:end %))
+;    :clojure.spec/args (10 5)
+;    :clojure.spec/failure :instrument
+;    :clojure.spec.test/caller {:file "form-init7709795464976482689.clj",
+;                               :line 400,
+;                               :var-scope spec-guide.api/eval13655}
+....
+
+
+== clojure.spec의 용도
+
+=== Documentation
+
+* spec은 함수 입출력 데이터의 구조를 명시적으로 정의함으로써, 표준화된 documentation을
   제공한다. 팀원들 사이에 그리고 자기 자신의, 코드에 대한 이해도를 높일 수 있다.
 
-. spce은 runtime에 데이터의 유효성(validation), 즉 타입 및 값을 검증할 수 있게 해주므로,
+
+.기존의 제가 사용하던 방식
+[source]
+....
+(defn snake-case
+  "Converts lisp-case keyword to snake-case string.
+   <k keyword>
+   <return string>
+
+   ex) :get-sock-address => \"get_sock_address\""
+  [k]
+  (-> (name k) (str/replace "-" "_")))
+....
+
+.clojure.spec을 이용한 방식
+
+[source]
+....
+(s/fdef snake-case
+  :args (s/cat keyword?)
+  :ret string?)
+ 
+(defn snake-case
+  "Converts lisp-case keyword to snake-case string.
+   ex) :get-sock-address => \"get_sock_address\""
+  [k]
+  (-> (name k) (str/replace "-" "_")))
+....
+
+
+=== Debugging
+
+* spec은 runtime에 데이터의 유효성(validation), 즉 타입 및 값을 검증할 수 있게 해주므로,
   버그 발생 가능성을 현저히 줄일 수 있다.
 
-. spec은 자동 테스트 케이스 생성(generative testing) 및 자동 테스팅 기능을 제공함으로써
-  코드의 무결성을 높일 수 있다.
+==== 문제 없는 예
 
-. spec은 데이터의 구조분해(destructuring: 일종의 코드 parsing) 기능을 제공한다. 이 기능이
-  매크로와 결합되면, 기존에 Clojure에서 불가능하지는 않지만 하기 어려웠던 일을 쉽게 할 수
-  있다. (참고: link:http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&utm_medium=facebook[Custom defn macro with clojure.spec])
-
-
-== clojure.spec이 유용한 한 예
-
-=== 문제 없는 예
-
-[source,subs="verbatim,quotes"]
+[source,subs="quotes"]
 ....
 (max 1 2 3 4)
 ; => 4
 
 (max)
-; >> 1. Unhandled clojure.lang.ArityException
+; >> 1. Caused by clojure.lang.ArityException
 ;       Wrong number of args (0) passed to: #core/max#
-;    
-;                      AFn.java:  429  clojure.lang.AFn/throwArity
-;                   RestFn.java:  399  clojure.lang.RestFn/invoke
-;                          REPL:    9  spec-guide.core/eval10839
-;                          REPL:    9  spec-guide.core/eval10839
-;                 Compiler.java: 6977  clojure.lang.Compiler/eval
-;                 Compiler.java: 6940  clojure.lang.Compiler/eval
-;                      core.clj: 3187  clojure.core/eval
-;                      core.clj: 3183  clojure.core/eval
-;                         ......
+;
+;                  AFn.java:  429  clojure.lang.AFn/throwArity
+;               RestFn.java:  399  clojure.lang.RestFn/invoke
+;                 intro.clj:   14  spec-guide.intro/eval13365
+;                 intro.clj:   14  spec-guide.intro/eval13365
+;             Compiler.java: 6978  clojure.lang.Compiler/eval
+;             Compiler.java: 7430  clojure.lang.Compiler/load
 ....
 
 
-=== 문제 있는 예
+==== 문제 있는 예
 
-[source,subs="verbatim,quotes"]
+[source,subs="quotes"]
 ....
 (defn my-max [coll]
   (apply max coll))
@@ -91,10 +442,10 @@
 ;                   RestFn.java:  132  clojure.lang.RestFn/applyTo
 ;                      core.clj:  657  clojure.core/apply
 ;                      core.clj:  652  clojure.core/apply
-;                          REPL:    7  #spec-guide.core/my-max#
-;                          REPL:    6  #spec-guide.core/my-max#
-;                          REPL:   28  spec-guide.core/eval10841
-;                          REPL:   28  spec-guide.core/eval10841
+;                          REPL:    7  #spec-guide.intro/my-max#
+;                          REPL:    6  #spec-guide.intro/my-max#
+;                          REPL:   28  spec-guide.intro/eval10841
+;                          REPL:   28  spec-guide.intro/eval10841
 ;                 Compiler.java: 6977  clojure.lang.Compiler/eval
 ;                 Compiler.java: 6940  clojure.lang.Compiler/eval
 ;                      core.clj: 3187  clojure.core/eval
@@ -102,11 +453,11 @@
 ....
 
 
-=== core.spec으로 문제 해결
+==== core.spec으로 문제 해결
 
-[source,subs="verbatim,quotes"]
+[source,subs="quotes"]
 ....
-(ns spec-guide.core
+(ns spec-guide.intro
   (:require [clojure.spec :as s]
             [clojure.spec.gen :as gen]
             [clojure.spec.test :as stest]))
@@ -125,7 +476,7 @@
 
 (my-max2 nil)
 ; >> 1. Unhandled clojure.lang.ExceptionInfo
-;       Call to #spec-guide.core/my-max2# did not conform to spec:
+;       Call to #spec-guide.intro/my-max2# did not conform to spec:
 ;         In: [0]
 ;         #val: nil# fails
 ;         at: [:args :coll]
@@ -133,7 +484,7 @@
 ;       :clojure.spec/args (nil)
 ;       :clojure.spec/failure :instrument
 ;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
-;                                  :line 63, :var-scope spec-guide.core/eval10997}
+;                                  :line 63, :var-scope spec-guide.intro/eval10997}
 ;    
 ;       {:clojure.spec/problems [{:path [:args :coll],
 ;                                 :pred coll?,
@@ -144,13 +495,13 @@
 ;        :clojure.spec/failure :instrument,
 ;        :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
 ;                                   :line 63,
-;                                   :var-scope spec-guide.core/eval10997}}
+;                                   :var-scope spec-guide.intro/eval10997}}
 ....
 
 
-=== core.spec은 실행 중 값도 검사할 수 있다
+==== core.spec은 실행 중 값도 검사할 수 있다
 
-[source,subs="verbatim,quotes"]
+[source,subs="quotes"]
 ....
 (s/fdef my-max3
   :args (s/and (s/cat :coll (s/coll-of number?))
@@ -166,7 +517,7 @@
 
 (my-max3 [1 2 3 14])
 ; >> 1. Unhandled clojure.lang.ExceptionInfo
-;       Call to #spec-guide.core/my-max3# did not conform to spec:
+;       Call to #spec-guide.intro/my-max3# did not conform to spec:
 ;         #val: {:coll [1 2 3 14]}# fails
 ;         at: [:args]
 ;         #predicate: (every? (fn [num] (< num 10)) (:coll %))#
@@ -174,106 +525,196 @@
 ;       :clojure.spec/failure :instrument
 ;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
 ;                                  :line 97,
-;                                  :var-scope spec-guide.core/eval11148}
+;                                  :var-scope spec-guide.intro/eval11148}
 ....
 
 
-== 사전 예비 지식
+=== Generative Testing
 
-=== unnamespaced/namespaced keyword
+* spec은 자동 테스트 케이스 생성(generative testing) 및 테스팅 기능을 제공함으로써 코드의
+  무결성을 높일 수 있다.
 
 [source]
 ....
-user> :cat          ; unnamespaced keyword
-:cat
+(s/fdef ranged-rand
+  :args (s/and (s/cat :start int? :end int?)
+               #(< (:start %) (:end %)))
+  :ret int?
+  :fn (s/and #(>= (:ret %) (-> % :args :start))
+             #(< (:ret %) (-> % :args :end))))
 
-user> :animal/cat   ; namespaced keyword
-:animal/cat
+(defn ranged-rand
+  "Returns random int in range start <= rand < end"
+  [start end]
+  (+ start (long (rand (- end start)))))
 
-user> ::cat         ; namespaced keyword
-:user/cat
-....
+;; 자동 샘플 생성
+(s/exercise-fn `ranged-rand 5)
+; => ([(-2 -1) -2] [(-2 0) -1] [(-2 0) -2] [(0 2) 1] [(-14 1) -3])
 
-
-=== unnamespaced/namespaced symbol
-
-[source]
-....
-user> 'dog          ; unnamespaced symbol
-dog
-
-user> 'animal/dog   ; namespaced symbol
-animal/dog
-
-user> `dog          ; namespaced symbol
-user/dog
-....
-
-
-=== set 자료형은 함수명 자리에 올 수 있다
-
-[source]
-....
-user> #{10 20 30 40}
-#{20 40 30 10}
-
-user> (#{10 20 30 40} 10)
-10
-
-user> (#{10 20 30 40} 50)
-nil
-....
-
-
-== clojure.spec의 특징
-
-=== spec은 predicate으로 이루어져 있다
-
-[sidebar]
-.predicate (진위 함수)
-****
-* 한 개의 인수를 받고, 논리적 참/거짓을 반환하는 함수이다.
-** 논리적 거짓: ``nil``과 `false`
-** 논리적 참: ``nil``과 `false`를 제외한 모든 값. {nbsp} {nbsp} {nbsp} 예) `0 "" [] () {} #{} pass:q[...]` 
-
-* 이 규정만 준수하면 Clojure의 어떤 함수도 predicate이 될 수 있다.
-****
-
-=== spec은 composable(조합 가능)하다
-
-단순한 spec들을 조합해서 복잡한 spec을 정의할 수 있다. pass:q[-->] reusability(재사용성)의 증가
-
-[source]
-....
-(def suit? #{:club :diamond :heart :spade})
-(def rank? (into #{:jack :queen :king :ace} (range 2 11)))
-(def deck (for [suit suit? rank rank?] [rank suit]))
-
-(s/def ::card (s/tuple rank? suit?))
-(s/def ::hand (s/* ::card))
-
-(s/def ::name string?)
-(s/def ::score int?)
-(s/def ::player (s/keys :req [::name ::score ::hand]))
-
-(s/def ::players (s/* ::player))
-(s/def ::deck (s/* ::card))
-(s/def ::game (s/keys :req [::players ::deck]))
+;; 자동 테스트 수행
+(stest/check `ranged-rand)
+; => ({:spec #object[clojure.spec$fspec_impl$reify__14282 0x28315748
+;                    "clojure.spec$fspec_impl$reify__14282@28315748"], 
+;      :clojure.spec.test.check/ret {:result true, 
+;                                    :num-tests 1000,
+;                                    :seed 1478747287406},
+;                                    :sym spec-guide.api/ranged-rand})
 ....
 
 [listing]
 ----
-::players
-  ::player
-    ::name
-    ::score
-    ::hand
-      ::card
-
-::deck
-  ::card
-
-::game
-  ::players
-  ::deck
+        stest/instrument   stest/check
+----------------------------------------------
+:args      check              check
+:ret       no check           check
+:fn        no check           check
 ----
+
+
+=== Destructuring(구조분해) 
+
+* spec은 데이터의 구조분해(일종의 코드 parsing) 기능을 제공한다. 이 기능이 매크로와
+  결합되면, 기존에 Clojure에서 불가능하지는 않지만 하기 어려웠던 일을 쉽게 할 수
+  있다. (참고:
+  link:http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&utm_medium=facebook[Custom
+  defn macro with clojure.spec])
+
+[source]
+....
+;; 매크로 적용 이전 코드
+(defn add [a b]
+  (+ a b))
+
+;; 매크로 적용 이후 코드
+(defn add [a b]
+  (println "add" "has been called.")
+  (+ a b))
+....
+
+
+[sidebar]
+.함수와 매크로 비교
+****
+[listing]
+----
+   입력(데이터) -->  함수  --> 출력(데이터)
+   입력(코드)   --> 매크로 --> 출력(코드)
+----
+****
+
+* link:https://github.com/clojure/clojure/blob/clojure-1.9.0-alpha14/src/clj/clojure/core/specs.clj[clojure/core/specs.clj]
+
+[source, subs="quotes"]
+....
+(defn prepend-log [name body]
+  (cons `(println ~name "has been called.") body))
+
+(defn update-conf [{:keys [:bs] :as conf} body-update-fn]
+  (update-in conf [:bs 1 :body] body-update-fn))
+
+(defmacro defnlog [& args]
+  (let [{:keys [name] :as conf} #(s/conform ::defn-args args)#
+        new-conf (update-conf conf (partial prepend-log (str name)))
+        new-args #(s/unform ::defn-args new-conf)#]
+    (cons `defn new-args)))
+....
+
+
+[source]
+....
+(s/conform ::defn-args '(add [a b] (+ a b)))
+; => {:name add,
+;     :bs [:arity-1 {:args {:args [[:sym a] [:sym b]]},
+;     :body [(+ a b)]}]}
+
+(defnlog add [a b]
+  (+ a b))
+
+(add 10 20)
+; >> add has been called.
+; => 30
+....
+
+
+
+
+=== schema와 clojure.spec 예제 비교
+
+[source]
+....
+(ns schema-examples
+  (:require [schema.core :as s]))
+
+(def Data
+  "A schema for a nested data type"
+  {:a {:b s/Str
+       :c s/Int}
+   :d [{:e s/Keyword
+        :f [s/Num]}]})
+
+(s/validate
+  Data
+  {:a {:b "abc"
+       :c 123}
+   :d [{:e :bc
+        :f [12.2 13 100]}
+       {:e :bc
+        :f [-1]}]})
+;; Success!
+
+(s/validate
+  Data
+  {:a {:b 123
+       :c "ABC"}})
+;; Exception -- Value does not match schema:
+;;  {:a {:b (not (instance? java.lang.String 123)),
+;;       :c (not (integer? "ABC"))},
+;;   :d missing-required-key}
+....
+
+
+.clojure.spec의 예
+[source]
+....
+(s/def ::b string?)
+(s/def ::c int?)
+(s/def ::a (s/keys :req [::b ::c]))
+
+(s/def ::e keyword?)
+(s/def ::f (s/coll-of number?))
+(s/def ::d (s/coll-of (s/keys :req [::e ::f])))
+
+(s/def ::data (s/keys :req [::a ::d]))
+
+
+(s/valid? ::data {::a {::b "abc"
+                       ::c 123}
+                  ::d [{::e :bc
+                        ::f [12.2 13 100]}
+                       {::e :bc
+                        ::f [-1] }]})
+; => true
+
+(s/valid? ::data {::a {::b 123
+                       ::c "ABC"}})
+; => false
+
+(s/explain ::data {::a {::b 123
+                        ::c "ABC"}})
+; >> val: {:a {:b 123, :c "ABC"}} fails
+;    spec: ::data
+;    predicate: (contains? % ::d)
+;
+;    In: [::a ::b]
+;    val: 123 fails
+;    spec: ::b
+;    at: [::a ::b]
+;    predicate: string?
+;
+;    In: [::a ::c]
+;    val: "ABC" fails
+;    spec: ::c
+;    at: [::a ::c]
+;    predicate: int?
+....

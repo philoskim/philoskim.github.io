@@ -1,0 +1,950 @@
+= clojure.spec API
+:source-highlighter: coderay
+:source-language: clojure
+:sectnums:
+:icons: font
+:imagesdir: ../img
+:linkcss:
+:stylesdir: ../
+:stylesheet: my-asciidoctor.css
+
+== 사전 예비 지식
+
+
+[[predicate]]
+=== spec은 predicate으로 이루어져 있다
+
+[sidebar]
+.predicate (진위 함수)
+****
+* 한 개의 인수를 받고, 논리적 참/거짓을 반환하는 함수이다.
+** 논리적 거짓: ``nil``과 `false`
+** 논리적 참: ``nil``과 `false`를 제외한 모든 값. {nbsp} {nbsp} {nbsp} 예) `0 "" [] () {} #{} pass:q[...]` 
+
+* 이 규정만 준수하면 Clojure의 어떤 함수도 predicate이 될 수 있다.
+****
+
+[[namespaced-keyword]]
+=== unnamespaced/namespaced keyword
+
+[source]
+....
+user> :cat          ; unnamespaced keyword
+:cat
+
+user> :animal/cat   ; namespaced keyword
+:animal/cat
+
+user> ::cat         ; namespaced keyword
+:user/cat
+....
+
+
+[[set-as-function]]
+=== set 자료형은 함수명 자리에 올 수 있다
+
+[source]
+....
+user> #{10 20 30 40}
+#{20 40 30 10}
+
+user> (#{10 20 30 40} 10)
+10
+
+user> (#{10 20 30 40} 50)
+nil
+....
+
+
+== clojure.spec API
+
+=== s/valid?
+
+[listing]
+----
+(valid? spec value) => boolean
+
+spec ::= predicate | namespaced-keyword
+----
+
+[source]
+....
+(s/valid? even? 10)            ; => true
+(s/valid? string? "abc")       ; => true
+
+(s/valid? #(> % 5) 10)         ; => true
+(s/valid? #(> % 5) 0)          ; => false
+
+(s/valid? #{10 20 30 40} 10)   ; => true
+(s/valid? #{10 20 30 40} 50)   ; => false
+....
+
+
+
+=== s/def
+
+``def``는 spec을 정의하고, 중앙 저장소에 이를 저장한다. 이렇게 spec을 global하게 저장하는
+이유는 재사용도를 증가시키기 위해서다.
+ 
+ 
+[listing]
+----
+(def namespaced-keyword spec) => namespaced-keyword
+
+spec ::= predicate | namespaced-keyword
+----
+
+[source]
+....
+(s/def ::suit #{:club :diamond :heart :spade})
+; => :spec-guide.details/suit
+
+(s/valid? ::suit ::space)
+; => false
+....
+
+
+=== s/conform
+
+[listing]
+----
+(conform spec value)
+
+spec ::= predicate | namespaced-keyword
+----
+
+[source]
+....
+(s/conform ::suit :club)    ; => :club
+(s/conform ::suit :hello)   ; => :clojure.spec/invalid
+....
+
+
+=== spec의 합성
+
+==== s/and
+
+[listing]
+----
+(and spec+) => spec
+
+spec ::= predicate | namespaced-keyword
+----
+
+
+[source]
+....
+(s/def ::big-even (s/and int? even? #(> % 1000)))
+
+(s/valid? ::big-even :foo)    ; => false
+(s/valid? ::big-even 10)      ; => false
+(s/valid? ::big-even 100000)  ; => true
+....
+
+
+==== s/or
+
+[listing]
+----
+(or <tag spec>+) => spec
+
+tag  ::= keyowrd
+spec ::= predicate | namespaced-keyword
+----
+
+``or``의 경우에는 spec 앞에 tag를 붙여 주어야 한다. 아래에 소개하는 ``cat``도
+마찬가지이다. 
+
+여러가지 경우의 수로 분기하는 경우에는 tag를 붙여 주는데, 나중에 분기되는 항목 중의 어느
+항목에서 문제가 발생했는지 식별하기 위한 용도로 사용된다.
+
+[source,subs="quotes"]
+....
+(s/def ::name-or-id (s/or :name string?
+                          :id   int?))
+
+(s/valid? ::name-or-id "abc")    ; => true
+(s/valid? ::name-or-id 100)      ; => true
+(s/valid? ::name-or-id :foo)     ; => false
+
+(s/conform ::name-or-id "abc")   ; => [#:name# "abc"]
+(s/conform ::name-or-id 100)     ; => [#:id# 100]
+(s/conform ::name-or-id :foo)    ; => :clojure.spec/invalid
+....
+
+
+=== s/explain
+
+[listing]
+----
+(explain spec value) => nil
+
+spec ::= predicate | namespaced-keyword
+----
+
+``explain``은 spec을 통과하지 못한 이유를 설명해 준다.
+
+[source]
+....
+(when (= (s/conform ::name-or-id :foo)
+         :clojure.spec/invalid)
+  (s/explain ::name-or-id :foo))
+; >> val: :foo fails
+;    spec: :spec-guide.details/name-or-id
+;    at: [:name] predicate: string?
+;
+;    val: :foo fails
+;    spec: :spec-guide.details/name-or-id
+;    at: [:id] predicate: int?
+;
+; => nil
+
+(s/explain ::name-or-id "tom")
+; >> Success!
+; => nil
+....
+
+* `s/explain`: 결과를 stdout에 출력한다.  
+* `s/explain-str`: 결과를 문자열로 반환한다.
+* `s/explain-data`: 결과를 클로저 데이터형으로 반환한다.
+
+[source]
+....
+(s/explain-str ::name-or-id :foo)
+; => "val: :foo fails spec: :spec-guide.details/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.details/name-or-id at: [:id] predicate: int?\n"
+
+(s/explain-data ::name-or-id :foo)
+; => #:clojure.spec{:problems ({:path [:name],
+;                               :pred string?,
+;                               :val :foo,
+;                               :via [:spec-guide.details/name-or-id],
+;                               :in []}
+;                              {:path [:id],
+;                               :pred int?,
+;                               :val :foo,
+;                               :via [:spec-guide.details/name-or-id],
+;                               :in []})}
+....
+
+
+=== s/keys: map 자료형의 spec 정의 
+
+[listing]
+----
+(keys < keyword [namespacd-key+] >+) => spec
+
+keyword ::= :req | :opt | :req-un | :opt-un 
+----
+
+==== namespaced keys
+
+[source,subs="quotes,macros"]
+....
+(s/def ::first-name string?)
+(s/def ::last-name string?)
+(s/def ::age int?)
+
+(s/def ::person (s/keys #:req# [::first-name ::last-name]
+                        #:opt# [::age]))
+....
+
+
+[source,subs="quotes"]
+....
+(s/valid? ::person
+  {#::first-name# "Elon"
+   ::last-name "Musk"
+   ::age 45})
+; => true
+
+(s/conform ::person
+  {::first-name "Elon"
+   ::last-name "Musk"})
+; => #:spec-guide.details{:first-name "Elon", :last-name "Musk"}
+
+(s/explain ::person
+  {::first-name "Elon"})
+; >> val: #:spec-guide.details{:first-name "Elon"} fails
+;    spec: :spec-guide.details/person
+;    predicate: (contains? % :spec-guide.details/last-name)
+....
+
+
+==== unnamespaced keys
+
+[source,subs="quotes"]
+....
+(s/def :unq/person
+  (s/keys #:req-un# [::first-name ::last-name]
+          #:opt-un# [::age]))
+....
+
+[source,subs="quotes"]
+....
+(s/conform :unq/person
+  {#:first-name# "Elon"
+   :last-name "Musk"})
+; => {:first-name "Elon", :last-name "Musk"}
+
+(s/explain :unq/person
+  {:first-name "Elon" :age "45"})
+; >> val: {:first-name "Elon", :sex :mail} fails
+;    spec: :unq/person
+;    predicate: (contains? % :last-name)
+;
+;    In: [:age]
+;    val: "45" fails
+;    spec: :spec-guide.details/age
+;    at: [:age]
+;    predicate: int?
+....
+
+
+==== unnamespaced keys and defrecord
+
+[listing]
+----
+(defrecord Person [first-name last-name age])
+
+(s/conform :unq/person
+  (->Person "Elon" "Musk" 45))
+; => #spec_guide.details.Person{:first-name "Elon", :last-name "Musk", :age 45}
+
+(s/explain :unq/person
+           (->Person "Elon" nil nil))
+; >> In: [:last-name]
+;    val: nil fails
+;    spec: :spec-guide.details/last-name
+;    at: [:last-name]
+;    predicate: string?
+;
+;    In: [:age]
+;    val: nilfails
+;    spec: :spec-guide.details/age
+;    at: [:age]
+;    predicate: int?
+----
+
+
+=== s/keys*: keyword arguments spec 정의
+
+
+[listing]
+----
+(keys* < keyword [namespacd-key+] >+) => spec
+
+keyword ::= :req | :opt | :req-un | :opt-un 
+----
+
+[source]
+....
+(s/def ::port number?)
+(s/def ::host string?)
+(s/def ::id keyword?)
+
+(s/def ::server (s/keys* :req [::id ::host] :opt [::port]))
+....
+
+[source]
+....
+(s/conform ::server [::id :s1 ::host "example.com" ::port 5555])
+....
+
+
+
+=== s/merge: spec의 병합
+
+[listing]
+----
+(merge keys-spec+) => spec
+
+keys-spec ::= spec created by s/keys
+----
+
+[source]
+....
+;; :animal spec
+(s/def :animal/kind string?)
+(s/def :animal/says string?)
+
+(s/def :animal/common (s/keys :req [:animal/kind :animal/says]))
+
+
+;; :dog spec
+(s/def :dog/tail? boolean?)
+(s/def :dog/breed string?)
+
+
+;; merged :animal/dog spec 
+(s/def :animal/dog (s/merge :animal/common
+                            (s/keys :req [:dog/tail? :dog/breed])))
+....
+
+[source]
+....
+(s/valid? :animal/dog
+  {:animal/kind "dog"
+   :animal/says "woof"
+   :dog/tail? true
+   :dog/breed "retriever"})
+; => true
+....
+
+
+=== s/multi-spec
+
+`defmulti` + `defmethod` + `multi-spec` pass:[-->] spec에 다형성(polymorphism)을 도입한 것.
+
+.spec 정의
+[source]
+....
+;; common spec
+(s/def :event/type keyword?)
+(s/def :event/timestamp int?)
+
+;; only for :event/search spec
+(s/def :search/url string?)
+
+;; only for :event/error spec
+(s/def :error/message string?)
+(s/def :error/code int?)
+....
+
+
+.defmulti + defmethod 정의
+[source]
+....
+(defmulti event-type :event/type)
+
+(defmethod event-type :event/search [_]
+  (s/keys :req [:event/type :event/timestamp :search/url]))
+
+(defmethod event-type :event/error [_]
+  (s/keys :req [:event/type :event/timestamp :error/message :error/code]))
+....
+
+
+.multi-spec 정의
+[source]
+....
+(s/def :event/event (s/multi-spec event-type :event/type))
+....
+
+
+.실행
+[source]
+....
+(s/valid? :event/event
+  {:event/type :event/search
+   :event/timestamp 1463970123000
+   :search/url "http://clojure.org"})
+; => true
+
+(s/valid? :event/event
+  {:event/type :event/error
+   :event/timestamp 1463970123000
+   :error/message "Invalid host"
+   :error/code 500})
+; => true
+
+(s/explain :event/event
+  {:event/type :event/restart})
+; >> val: #:event{:type :event/restart} fails
+;    spec: :event/event
+;    at: [:event/restart]
+;    predicate: event-type, no method
+
+(s/explain :event/event
+  {:event/type :event/search
+   :search/url 200})
+; >> val: {:event/type :event/search, :search/url 200} fails
+;    spec: :event/event
+;    at: [:event/search]
+;    predicate: (contains? % :event/timestamp)
+;
+;    In: [:search/url]
+;    val: 200 fails
+;    spec: :search/url
+;    at: [:event/search :search/url]
+;    predicate: string?
+....
+
+
+=== Collections
+
+[listing]
+----
+          coll-of   map-of   tuple
+-----------------------------------
+list         O         X       X
+vector       O         X       O
+map          O         O       X
+set          O         X       X
+
+요소 타입   동일      동일     이질
+크기        임의      임의     고정 
+----
+
+
+==== s/coll-of
+
+[source]
+....
+(s/conform (s/coll-of keyword?) [:a :b :c])
+; => [:a :b :c]
+
+(s/conform (s/coll-of number?) #{5 10 2})
+; => #{2 5 10}
+....
+
+
+[source]
+....
+(s/def ::vnum3 (s/coll-of number? :kind vector? :count 3 :distinct true :into #{}))
+
+(s/conform ::vnum3 [1 2 3])
+; => #{1 2 3}
+
+(s/explain ::vnum3 #{1 2 3})   ;; not a vector
+; >> val: #{1 3 2} fails 
+;    spec: ::vnum3
+;    predicate: clojure.core/vector?
+
+(s/explain ::vnum3 [1 1 1])    ;; not distinct
+; >> val: [1 1 1] fails 
+;    spec: ::vnum3 
+;    predicate: distinct?
+
+(s/explain ::vnum3 [1 2 :a])   ;; not a number
+; >> In: [2]
+;    val: :a fails 
+;    spec: ::vnum3 
+;    predicate: number?
+....
+
+
+==== s/map-of
+
+[source]
+....
+(s/def ::scores (s/map-of string? int?))
+
+(s/conform ::scores {"Sally" 1000, "Joe" 500})
+; => {"Sally" 1000, "Joe" 500}
+....
+
+
+==== s/tuple
+
+[source]
+....
+(s/def ::point (s/tuple double? double? double?))
+
+(s/conform ::point [1.5 2.5 -0.5])
+; => [1.5 2.5 -0.5]
+
+(s/explain ::point [1.5 2.5 5])
+; >> In: [2]
+;    val: 5 fails
+;    spec: :spec-guide.details/point
+;    at: [2]
+;    predicate: double?
+
+;; tuple: list 자료형을 대상으로는 작동하지 않는다.
+;;        대상 자료형이 반드시 vector 형이어야 한다.
+(s/conform ::point '(1.5 2.5 -0.5))
+; => :clojure.spec/invalid
+....
+
+
+=== Sequences: Sequentials (vector와 list) 대상
+
+==== regular expression operators
+
+* `cat` - concatenation of predicates/patterns
+* `alt` - choice among alternative predicates/patterns
+
+* `*` - 0 or more of a predicate/pattern
+* `+` - 1 or more of a predicate/pattern
+* `?` - 0 or 1 of a predicate/pattern
+* `&` -  regex operators with filters
+
+``s/cat``과 ``s/alt``는 ``s/or`` 와 마찬가지로 <keyword spec> 쌍으로 이루어지는 인수를 가진다.
+
+==== s/cat
+
+
+[listing]
+----
+(cat <keyword spec>+)
+----
+
+[source]
+----
+(s/def ::ingredient (s/cat :quantity number? :unit keyword?))
+
+(s/conform ::ingredient [2 :teaspoon])
+; => {:quantity 2, :unit :teaspoon}
+
+(s/conform ::ingredient '(2 :teaspoon))
+; => {:quantity 2, :unit :teaspoon}
+----
+
+[source]
+....
+;; pass string for unit instead of keyword
+(s/explain ::ingredient [11 "peaches"])
+; >> In: [1]
+;    val: "peaches" fails
+;    spec: :spec-guide.details/ingredient
+;    at: [:unit]
+;    predicate: keyword?
+
+;; leave out the unit
+(s/explain ::ingredient [2])
+; >> val: () fails
+;    spec: :spec-guide.details/ingredient
+;    at: [:unit]
+;    predicate: keyword?,  Insufficient input
+....
+
+
+==== s/* s/+ s/?
+
+
+[listing]
+----
+(* spec)
+(+ spec)
+(? spwc)
+----
+
+[source]
+....
+(s/def ::seq-of-keywords (s/* keyword?))
+
+(s/conform ::seq-of-keywords [:a :b :c])
+; => [:a :b :c]
+
+(s/explain ::seq-of-keywords [10 20])
+; >> In: [0]
+;    val: 10 fails
+;    spec: :spec.examples.guide/seq-of-keywords
+;    predicate: keyword?
+
+(s/def ::odds-then-maybe-even (s/cat :odds (s/+ odd?)
+                                     :even (s/? even?)))
+
+(s/conform ::odds-then-maybe-even [1 3 5 100])
+; => {:odds [1 3 5], :even 100}
+
+(s/conform ::odds-then-maybe-even [1])
+; => {:odds [1]}
+
+(s/explain ::odds-then-maybe-even [100])
+; >> In: [0]
+;    val: 100 fails
+;    spec: ::odds-then-maybe-even
+;    at: [:odds]
+;    predicate: odd?
+
+
+;; opts are alternating keywords and booleans
+(s/def ::opts (s/* (s/cat :opt keyword? :val boolean?)))
+
+(s/conform ::opts [:silent? false :verbose true])
+; => [{:opt :silent?, :val false} {:opt :verbose, :val true}]
+....
+
+
+==== s/alt
+
+[listing]
+----
+(alt <keyword spec>+) => spec
+----
+
+[source]
+....
+(s/def ::config (s/*
+                  (s/cat :prop string?
+                         :val  (s/alt :s string? :b boolean?))))
+
+(s/conform ::config ["-server" "foo" "-verbose" true "-user" "joe"])
+; => [{:prop "-server", :val [:s "foo"]}
+;     {:prop "-verbose", :val [:b true]}
+;     {:prop "-user", :val [:s "joe"]}]
+....
+
+
+==== s/&
+
+[listing]
+----
+(& regex-operator spec+) => spec
+----
+
+[source]
+....
+(s/def ::even-strings (s/& (s/* string?) #(even? (count %))))
+
+(s/valid? ::even-strings ["a"])       ; => false
+(s/valid? ::even-strings ["a" "b"])   ; => true
+....
+
+
+==== s/describe
+
+[listing]
+----
+(describe spec) => list
+----
+
+[source]
+....
+(s/describe ::seq-of-keywords)
+; => (* keyword?)
+
+(s/describe ::odds-then-maybe-even)
+; => (cat :odds (+ odd?) :even (? even?))
+
+(s/describe ::opts)
+; => (* (cat :opt keyword? :val boolean?))
+....
+
+
+==== s/spec
+
+nested sequential collection
+
+[listing]
+----
+(spec form)
+
+form ::= predicate | regex-operator
+----
+
+
+[source]
+....
+(s/def ::nested
+  (s/cat :names-kw #{:names}
+         :names (s/spec (s/* string?))
+         :nums-kw #{:nums}
+         :nums (s/spec (s/* number?))))
+
+(s/conform ::nested [:names ["a" "b"] :nums [1 2 3]])
+; => {:names-kw :names, :names ["a" "b"], :nums-kw :nums, :nums [1 2 3]}
+....
+
+[source]
+....
+(s/def ::unnested
+  (s/cat :names-kw #{:names}
+         :names (s/* string?)
+         :nums-kw #{:nums}
+         :nums (s/* number?)))
+
+(s/conform ::unnested [:names "a" "b" :nums 1 2 3])
+; => {:names-kw :names, :names ["a" "b"], :nums-kw :nums, :nums [1 2 3]}
+....
+
+
+
+=== s/fedf: function spec
+
+[source]
+....
+(defn ranged-rand
+  "Returns random int in range start <= rand < end"
+  [start end]
+  (+ start (long (rand (- end start)))))
+....
+
+[source]
+....
+(s/fdef ranged-rand
+  :args (s/and (s/cat :start int? :end int?)
+               #(< (:start %) (:end %)))
+  :ret int?
+  :fn (s/and #(>= (:ret %) (-> % :args :start))
+             #(< (:ret %) (-> % :args :end))))
+....
+
+[source]
+....
+
+(ranged-rand 5 10)
+; => 7
+
+(ranged-rand 10 5)
+; => 9
+
+(stest/instrument `ranged-rand)
+
+(ranged-rand 5 10)
+; => 7
+
+; (ranged-rand 10 5)
+; >> Call to #'spec-guide.details/ranged-rand did not conform to spec:
+;    val: {:start 10, :end 5} fails
+;    at: [:args]
+;    predicate: (< (:start %) (:end %))
+;    :clojure.spec/args (10 5)
+;    :clojure.spec/failure :instrument
+;    :clojure.spec.test/caller {:file "form-init7709795464976482689.clj",
+;                               :line 400,
+;                               :var-scope spec-guide.details/eval13655}
+....
+
+
+=== s/fdef: macro spec
+
+[source]
+....
+(s/fdef clojure.core/declare
+    :args (s/cat :names (s/* simple-symbol?))
+    :ret any?)
+....
+
+[source]
+....
+(declare 100)
+; >> Unhandled clojure.lang.ExceptionInfo
+;      Call to clojure.core/declare did not conform to spec:
+;      In: [0]
+;      val: 100 fails 
+;      at: [:args :names]
+;      predicate: simple-symbol?
+;     :clojure.spec/args (100)
+....
+
+
+=== s/fspec: anonymous function spec
+
+[source]
+....
+(defn adder [x] #(+ x %))
+....
+
+[source]
+....
+(s/fdef adder
+  :args (s/cat :x number?)
+  :ret (s/fspec :args (s/cat :y number?)
+                :ret number?)
+  :fn #(= (-> % :args :x) ((:ret %) 0)))
+....
+
+
+
+== test case 생성
+
+=== s/gen, gen/generate, gen/sample
+
+[listing]
+----
+(gen spec) => generator
+
+(generate generator) => 한 개의 sample
+
+(sample generator) => 10개(default)의 sample
+(sample generator n) => n개의 sample
+----
+
+[source]
+....
+(gen/generate (s/gen int?))
+; => -959
+
+(gen/generate (s/gen nil?))
+; => nil
+
+(gen/sample (s/gen string?))
+; => ("" "" "" "" "8" "W" "" "G74SmCm" "K9sL9" "82vC")
+
+(gen/sample (s/gen #{:club :diamond :heart :spade}))
+; => (:heart :diamond :heart :heart :heart :diamond :spade :spade :spade :club)
+
+(gen/sample (s/gen (s/cat :k keyword? :ns (s/+ number?))))
+; => ((:D -2.0)
+      (:q4/c 0.75 -1)
+      (:*!3/? 0)
+      (:+k_?.p*K.*o!d/*V -3)
+      (:i -1 -1 0.5 -0.5 -4)
+      (:?!/! 0.515625 -15 -8 0.5 0 0.75)
+      (:vv_z2.A??!377.+z1*gR.D9+G.l9+.t9/L34p -1.4375 -29 0.75 -1.25)
+      (:-.!pm8bS_+.Z2qB5cd.p.JI0?_2m.S8l.a_Xtu/+OM_34* -2.3125)
+      (:Ci 6.0 -30 -3 1.0)
+      (:s?cw*8.t+G.OS.xh_z2!.cF-b!PAQ_.E98H4_4lSo/?_m0T*7i 
+       4.4375 -3.5 6.0 108 0.33203125 2 8 -0.517578125 -4))
+....
+
+
+==== s/exercise
+
+[listing]
+----
+(exercise generator)   => 10개의 [sample conformed-value]
+(exercise generator n) => n개의 [sample conformed-value]
+----
+
+
+[source]
+....
+(s/exercise (s/cat :k keyword? :ns (s/+ number?)) 5)
+; => ([(:y -2.0) {:k :y, :ns [-2.0]}]
+;     [(:_/? -1.0 0.5) {:k :_/?, :ns [-1.0 0.5]}]
+;     [(:-B 0 3.0) {:k :-B, :ns [0 3.0]}]
+;     [(:-!.gD*/W+ -3 3.0 3.75) {:k :-!.gD*/W+, :ns [-3 3.0 3.75]}]
+;     [(:_Y*+._?q-H/-3* 0 1.25 1.5) {:k :_Y*+._?q-H/-3*, :ns [0 1.25 1.5]}])
+
+(s/exercise (s/or :k keyword? :s string? :n number?) 5)
+; => ([:H [:k :H]]
+;     [:ka [:k :ka]]
+;     [-1 [:n -1]]
+;     ["" [:s ""]]
+;     [-3.0 [:n -3.0]])
+....
+
+
+==== s/exercise-fn
+
+[listing]
+----
+(exercise-fn symbol)    => 10개의 [sample conformed-value]
+(exercise-fn symbol n)  => n개의 [sample conformed-value]
+----
+
+[source]
+....
+(s/exercise-fn `ranged-rand 5)
+; => ([(-2 -1)   -2]
+;     [(-3 3)     0]
+;     [(0 1)      0]
+;     [(-8 -7)   -8]
+;     [(3 13)     7]
+....
+
+
+==== generator 정교화하기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
