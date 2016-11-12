@@ -40,9 +40,9 @@
 수행하게 할 수 있다.</p>
 </li>
 <li>
-<p>이와같은 기능을 특정 이름공간(namespace)만을 대상으로 켜거나 끌 수 있다. 그래서
-개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때 중단시키면,
-프로그램의 실행 속도에 전혀 영향을 미치지 않는다.</p>
+<p>이와같은 기능을 특정 이름공간(namespace) 또는 특정 함수만을 대상으로 켜거나 끌 수
+있다. 그래서 개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때
+중단시키면, 프로그램의 실행 속도에 전혀 영향을 미치지 않는다.</p>
 </li>
 <li>
 <p>결과적으로, 동적 언어인 클로저에서 정적 언어의 특징들을 이용할 수 있게 해준다.</p>
@@ -401,86 +401,6 @@ defn macro with clojure.spec</a>)</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_schema와_clojure_spec_예제_비교">3.5. schema와 clojure.spec 예제 비교</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">schema-examples</span>
-  (<span class="symbol">:require</span> [schema.core <span class="symbol">:as</span> s]))
-
-(<span class="keyword">def</span> <span class="function">Data</span>
-  <span class="string"><span class="delimiter">&quot;</span><span class="content">A schema for a nested data type</span><span class="delimiter">&quot;</span></span>
-  {<span class="symbol">:a</span> {<span class="symbol">:b</span> s/Str
-       <span class="symbol">:c</span> s/Int}
-   <span class="symbol">:d</span> [{<span class="symbol">:e</span> s/Keyword
-        <span class="symbol">:f</span> [s/Num]}]})
-
-(s/validate
-  Data
-  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
-       <span class="symbol">:c</span> <span class="integer">123</span>}
-   <span class="symbol">:d</span> [{<span class="symbol">:e</span> <span class="symbol">:bc</span>
-        <span class="symbol">:f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
-       {<span class="symbol">:e</span> <span class="symbol">:bc</span>
-        <span class="symbol">:f</span> [<span class="integer">-1</span>]}]})
-<span class="comment">;; Success!</span>
-
-(s/validate
-  Data
-  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="integer">123</span>
-       <span class="symbol">:c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
-<span class="comment">;; Exception -- Value does not match schema:</span>
-<span class="comment">;;  {:a {:b (not (instance? java.lang.String 123)),</span>
-<span class="comment">;;       :c (not (integer? &quot;ABC&quot;))},</span>
-<span class="comment">;;   :d missing-required-key}</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">clojure.spec의 예</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::b</span> <span class="keyword">string?</span>)
-(s/def <span class="symbol">::c</span> int?)
-(s/def <span class="symbol">::a</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::b</span> <span class="symbol">::c</span>]))
-
-(s/def <span class="symbol">::e</span> <span class="keyword">keyword?</span>)
-(s/def <span class="symbol">::f</span> (s/coll-of <span class="keyword">number?</span>))
-(s/def <span class="symbol">::d</span> (s/coll-of (s/keys <span class="symbol">:req</span> [<span class="symbol">::e</span> <span class="symbol">::f</span>])))
-
-(s/def <span class="symbol">::data</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::a</span> <span class="symbol">::d</span>]))
-
-
-(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
-                       <span class="symbol">::c</span> <span class="integer">123</span>}
-                  <span class="symbol">::d</span> [{<span class="symbol">::e</span> <span class="symbol">:bc</span>
-                        <span class="symbol">::f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
-                       {<span class="symbol">::e</span> <span class="symbol">:bc</span>
-                        <span class="symbol">::f</span> [<span class="integer">-1</span>] }]})
-<span class="comment">; =&gt; true</span>
-
-(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
-                       <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
-<span class="comment">; =&gt; false</span>
-
-(s/explain <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
-                        <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
-<span class="comment">; &gt;&gt; val: {:a {:b 123, :c &quot;ABC&quot;}} fails</span>
-<span class="comment">;    spec: ::data</span>
-<span class="comment">;    predicate: (contains? % ::d)</span>
-<span class="comment">;</span>
-<span class="comment">;    In: [::a ::b]</span>
-<span class="comment">;    val: 123 fails</span>
-<span class="comment">;    spec: ::b</span>
-<span class="comment">;    at: [::a ::b]</span>
-<span class="comment">;    predicate: string?</span>
-<span class="comment">;</span>
-<span class="comment">;    In: [::a ::c]</span>
-<span class="comment">;    val: &quot;ABC&quot; fails</span>
-<span class="comment">;    spec: ::c</span>
-<span class="comment">;    at: [::a ::c]</span>
-<span class="comment">;    predicate: int?</span></code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -834,10 +754,92 @@ keyword ::= :req | :opt</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_schema와_clojure_spec_예제_비교">5. schema와 clojure.spec 예제 비교</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">schema-examples</span>
+  (<span class="symbol">:require</span> [schema.core <span class="symbol">:as</span> s]))
+
+(<span class="keyword">def</span> <span class="function">Data</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">A schema for a nested data type</span><span class="delimiter">&quot;</span></span>
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> s/Str
+       <span class="symbol">:c</span> s/Int}
+   <span class="symbol">:d</span> [{<span class="symbol">:e</span> s/Keyword
+        <span class="symbol">:f</span> [s/Num]}]})
+
+(s/validate
+  Data
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
+       <span class="symbol">:c</span> <span class="integer">123</span>}
+   <span class="symbol">:d</span> [{<span class="symbol">:e</span> <span class="symbol">:bc</span>
+        <span class="symbol">:f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
+       {<span class="symbol">:e</span> <span class="symbol">:bc</span>
+        <span class="symbol">:f</span> [<span class="integer">-1</span>]}]})
+<span class="comment">;; Success!</span>
+
+(s/validate
+  Data
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="integer">123</span>
+       <span class="symbol">:c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">;; Exception -- Value does not match schema:</span>
+<span class="comment">;;  {:a {:b (not (instance? java.lang.String 123)),</span>
+<span class="comment">;;       :c (not (integer? &quot;ABC&quot;))},</span>
+<span class="comment">;;   :d missing-required-key}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">clojure.spec의 예</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::b</span> <span class="keyword">string?</span>)
+(s/def <span class="symbol">::c</span> int?)
+(s/def <span class="symbol">::a</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::b</span> <span class="symbol">::c</span>]))
+
+(s/def <span class="symbol">::e</span> <span class="keyword">keyword?</span>)
+(s/def <span class="symbol">::f</span> (s/coll-of <span class="keyword">number?</span>))
+(s/def <span class="symbol">::d</span> (s/coll-of (s/keys <span class="symbol">:req</span> [<span class="symbol">::e</span> <span class="symbol">::f</span>])))
+
+(s/def <span class="symbol">::data</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::a</span> <span class="symbol">::d</span>]))
+
+
+(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
+                       <span class="symbol">::c</span> <span class="integer">123</span>}
+                  <span class="symbol">::d</span> [{<span class="symbol">::e</span> <span class="symbol">:bc</span>
+                        <span class="symbol">::f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
+                       {<span class="symbol">::e</span> <span class="symbol">:bc</span>
+                        <span class="symbol">::f</span> [<span class="integer">-1</span>] }]})
+<span class="comment">; =&gt; true</span>
+
+(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
+                       <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">; =&gt; false</span>
+
+(s/explain <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
+                        <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">; &gt;&gt; val: {:a {:b 123, :c &quot;ABC&quot;}} fails</span>
+<span class="comment">;    spec: ::data</span>
+<span class="comment">;    predicate: (contains? % ::d)</span>
+<span class="comment">;</span>
+<span class="comment">;    In: [::a ::b]</span>
+<span class="comment">;    val: 123 fails</span>
+<span class="comment">;    spec: ::b</span>
+<span class="comment">;    at: [::a ::b]</span>
+<span class="comment">;    predicate: string?</span>
+<span class="comment">;</span>
+<span class="comment">;    In: [::a ::c]</span>
+<span class="comment">;    val: &quot;ABC&quot; fails</span>
+<span class="comment">;    spec: ::c</span>
+<span class="comment">;    at: [::a ::c]</span>
+<span class="comment">;    predicate: int?</span></code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-11-12 12:42:04 KST
+Last updated 2016-11-12 13:43:07 KST
 </div>
 </div>
 </body>
