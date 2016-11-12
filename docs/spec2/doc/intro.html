@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>clojure.spec</title>
+<link rel="stylesheet" href="../my-asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../coderay-asciidoctor.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>clojure.spec</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_clojure_spec_소개">1. clojure.spec 소개</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>clojure.spec</strong>은 클로저 언어의 창시자인 Rich Hickey가 만든 라이브러리로, <code>clojure
+1.9.0</code> 버전에 추가될 예정이다.</p>
+</li>
+<li>
+<p>이 발표에 사용한 clojure.spec 버전은 <code>clojure 1.9.0-alpha14</code>이다.</p>
+</li>
+<li>
+<p><a href="https://racket-lang.org">Racket</a> 언어의
+<a href="https://docs.racket-lang.org/reference/contracts.html">Contracts</a> 시스템의 영향을
+많이 받아 만들어졌다.</p>
+</li>
+<li>
+<p>Dynamic type/value Checking: spec을 정의하면, runtime에 type과 value를 검사할 수 있다.</p>
+</li>
+<li>
+<p>Generative Testing: spec을 정의하면, 테스트 케이스를 자동 생성하고, 자동으로 테스트를
+수행하게 할 수 있다.</p>
+</li>
+<li>
+<p>이와같은 기능을 특정 이름공간(namespace)만을 대상으로 켜거나 끌 수 있다. 그래서
+개발/테스트 기간에만 이 기능을 작동시키고, 제품이 정식으로 출시될 때 중단시키면,
+프로그램의 실행 속도에 전혀 영향을 미치지 않는다.</p>
+</li>
+<li>
+<p>결과적으로, 동적 언어인 클로저에서 정적 언어의 특징들을 이용할 수 있게 해준다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_기존의_clojure_타입_체킹_라이브러리와의_비교">2. 기존의 Clojure 타입 체킹 라이브러리와의 비교</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>              type checking        run-time       generative   ClojureScript
+                                value checking      testing        지원
+------------------------------------------------------------------------------
+core.typed    compile-time           X                X             X
+schema          run-time             X                △             O
+core.spec       run-time             O                O             O</pre>
+</div>
+</div>
+<div class="ulist">
+<div class="title">링크 참조</div>
+<ul>
+<li>
+<p><a href="https://github.com/clojure/core.typed">core.typed</a></p>
+</li>
+<li>
+<p><a href="https://github.com/plumatic/schema">Schema</a></p>
+</li>
+<li>
+<p><a href="http://www.lispcast.com/clojure.spec-vs-schema">5 Differences between clojure.spec and Schema</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojure_spec의_용도">3. clojure.spec의 용도</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_documentation">3.1. Documentation</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>spec은 함수 입출력 데이터의 구조를 명시적으로 정의함으로써, 표준화된 documentation을
+제공한다. 팀원들 사이에 그리고 자기 자신의, 코드에 대한 이해도를 높일 수 있다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">기존의 제가 사용하던 방식</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">snake-case</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Converts lisp-case keyword to snake-case string.
+   &lt;k keyword&gt;
+   &lt;return string&gt;
+
+   ex) :get-sock-address =&gt; </span><span class="content">\&quot;</span><span class="content">get_sock_address</span><span class="content">\&quot;</span><span class="delimiter">&quot;</span></span>
+  [k]
+  (<span class="keyword">-&gt;</span> (<span class="keyword">name</span> k) (str/replace <span class="string"><span class="delimiter">&quot;</span><span class="content">-</span><span class="delimiter">&quot;</span></span> <span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>)))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">clojure.spec을 이용한 방식</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/fdef snake-case
+  <span class="symbol">:args</span> (s/cat <span class="keyword">keyword?</span>)
+  <span class="symbol">:ret</span> <span class="keyword">string?</span>)
+
+(<span class="keyword">defn</span> <span class="function">snake-case</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Converts lisp-case keyword to snake-case string.
+   ex) :get-sock-address =&gt; </span><span class="content">\&quot;</span><span class="content">get_sock_address</span><span class="content">\&quot;</span><span class="delimiter">&quot;</span></span>
+  [k]
+  (<span class="keyword">-&gt;</span> (<span class="keyword">name</span> k) (str/replace <span class="string"><span class="delimiter">&quot;</span><span class="content">-</span><span class="delimiter">&quot;</span></span> <span class="string"><span class="delimiter">&quot;</span><span class="content">_</span><span class="delimiter">&quot;</span></span>)))</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_debugging">3.2. Debugging</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>spec은 runtime에 데이터의 유효성(validation), 즉 타입 및 값을 검증할 수 있게 해주므로,
+버그 발생 가능성을 현저히 줄일 수 있다.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_문제_없는_예">3.2.1. 문제 없는 예</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(max 1 2 3 4)
+; => 4
+
+(max)
+; >> 1. Caused by clojure.lang.ArityException
+;       Wrong number of args (0) passed to: <mark>core/max</mark>
+;
+;                  AFn.java:  429  clojure.lang.AFn/throwArity
+;               RestFn.java:  399  clojure.lang.RestFn/invoke
+;                 intro.clj:   14  spec-guide.intro/eval13365
+;                 intro.clj:   14  spec-guide.intro/eval13365
+;             Compiler.java: 6978  clojure.lang.Compiler/eval
+;             Compiler.java: 7430  clojure.lang.Compiler/load</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_문제_있는_예">3.2.2. 문제 있는 예</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(defn my-max [coll]
+  (apply max coll))
+
+(my-max [1 2 3 4])
+; => 4
+
+(my-max nil)
+; >> 1. Unhandled clojure.lang.ArityException
+;       Wrong number of args (0) passed to: <mark>core/max</mark>
+;
+;                      AFn.java:  429  clojure.lang.AFn/throwArity
+;                   RestFn.java:  399  clojure.lang.RestFn/invoke
+;                      AFn.java:  152  clojure.lang.AFn/applyToHelper
+;                   RestFn.java:  132  clojure.lang.RestFn/applyTo
+;                      core.clj:  657  clojure.core/apply
+;                      core.clj:  652  clojure.core/apply
+;                          REPL:    7  <mark>spec-guide.intro/my-max</mark>
+;                          REPL:    6  <mark>spec-guide.intro/my-max</mark>
+;                          REPL:   28  spec-guide.intro/eval10841
+;                          REPL:   28  spec-guide.intro/eval10841
+;                 Compiler.java: 6977  clojure.lang.Compiler/eval
+;                 Compiler.java: 6940  clojure.lang.Compiler/eval
+;                      core.clj: 3187  clojure.core/eval
+;                         ......</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_core_spec으로_문제_해결">3.2.3. core.spec으로 문제 해결</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(ns spec-guide.intro
+  (:require [clojure.spec :as s]
+            [clojure.spec.gen :as gen]
+            [clojure.spec.test :as stest]))
+
+(s/fdef my-max2
+  :args (s/cat :coll (s/coll-of number?))
+  :ret number?)
+
+(defn my-max2 [coll]
+  (apply max coll))
+
+(stest/instrument `my-max2)
+
+(my-max2 [1 2 3 4])
+; => 4
+
+(my-max2 nil)
+; >> 1. Unhandled clojure.lang.ExceptionInfo
+;       Call to <mark>spec-guide.intro/my-max2</mark> did not conform to spec:
+;         In: [0]
+;         <mark>val: nil</mark> fails
+;         at: [:args :coll]
+;         <mark>predicate: coll?</mark>
+;       :clojure.spec/args (nil)
+;       :clojure.spec/failure :instrument
+;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                  :line 63, :var-scope spec-guide.intro/eval10997}
+;
+;       {:clojure.spec/problems [{:path [:args :coll],
+;                                 :pred coll?,
+;                                 :val nil,
+;                                 :via [],
+;                                 :in [0]}],
+;        :clojure.spec/args (nil),
+;        :clojure.spec/failure :instrument,
+;        :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                   :line 63,
+;                                   :var-scope spec-guide.intro/eval10997}}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_core_spec은_실행_중_값도_검사할_수_있다">3.2.4. core.spec은 실행 중 값도 검사할 수 있다</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/fdef my-max3
+  :args (s/and (s/cat :coll (s/coll-of number?))
+               #(every? (fn [num]
+                          (< num 10))
+                        (:coll %) ))
+  :ret number?)
+
+(defn my-max3 [coll]
+  (apply max coll))
+
+(stest/instrument `my-max3)
+
+(my-max3 [1 2 3 14])
+; >> 1. Unhandled clojure.lang.ExceptionInfo
+;       Call to #spec-guide.intro/my-max3# did not conform to spec:
+;         <mark>val: {:coll [1 2 3 14]}</mark> fails
+;         at: [:args]
+;         <mark>predicate: (every? (fn [num] (< num 10)) (:coll %))</mark>
+;       :clojure.spec/args ([1 2 3 14])
+;       :clojure.spec/failure :instrument
+;       :clojure.spec.test/caller {:file "form-init414233231437328049.clj",
+;                                  :line 97,
+;                                  :var-scope spec-guide.intro/eval11148}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generative_testing">3.3. Generative Testing</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>spec은 자동 테스트 케이스 생성(generative testing) 및 테스팅 기능을 제공함으로써 코드의
+무결성을 높일 수 있다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/fdef ranged-rand
+  <span class="symbol">:args</span> (s/and (s/cat <span class="symbol">:start</span> int? <span class="symbol">:end</span> int?)
+               #(<span class="keyword">&lt;</span> (<span class="symbol">:start</span> %) (<span class="symbol">:end</span> %)))
+  <span class="symbol">:ret</span> int?
+  <span class="symbol">:fn</span> (s/and #(<span class="keyword">&gt;=</span> (<span class="symbol">:ret</span> %) (<span class="keyword">-&gt;</span> % <span class="symbol">:args</span> <span class="symbol">:start</span>))
+             #(<span class="keyword">&lt;</span> (<span class="symbol">:ret</span> %) (<span class="keyword">-&gt;</span> % <span class="symbol">:args</span> <span class="symbol">:end</span>))))
+
+(<span class="keyword">defn</span> <span class="function">ranged-rand</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Returns random int in range start &lt;= rand &lt; end</span><span class="delimiter">&quot;</span></span>
+  [start end]
+  (<span class="keyword">+</span> start (<span class="keyword">long</span> (<span class="keyword">rand</span> (<span class="keyword">-</span> end start)))))
+
+<span class="comment">;; 자동 샘플 생성</span>
+(s/exercise-fn `ranged-rand <span class="integer">5</span>)
+<span class="comment">; =&gt; ([(-2 -1) -2] [(-2 0) -1] [(-2 0) -2] [(0 2) 1] [(-14 1) -3])</span>
+
+<span class="comment">;; 자동 테스트 수행</span>
+(stest/check `ranged-rand)
+<span class="comment">; =&gt; ({:spec #object[clojure.spec$fspec_impl$reify__14282 0x28315748</span>
+<span class="comment">;                    &quot;clojure.spec$fspec_impl$reify__14282@28315748&quot;],</span>
+<span class="comment">;      :clojure.spec.test.check/ret {:result true,</span>
+<span class="comment">;                                    :num-tests 1000,</span>
+<span class="comment">;                                    :seed 1478747287406},</span>
+<span class="comment">;                                    :sym spec-guide.api/ranged-rand})</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">instrument와 check 비교(검사 수행 여부)</div>
+<div class="content">
+<pre>         instrument    check
+---------------------------------
+:args        O           O
+:ret         X           O
+:fn          X           O</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_destructuring_구조분해">3.4. Destructuring(구조분해)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>spec은 데이터의 구조분해(일종의 코드 parsing) 기능을 제공한다. 이 기능이 매크로와
+결합되면, 기존에 Clojure에서 불가능하지는 않지만 하기 어려웠던 일을 쉽게 할 수
+있다. (참고:
+<a href="http://blog.klipse.tech//clojure/2016/10/10/defn-args.html?utm_source=dlvr.it&amp;utm_medium=facebook">Custom
+defn macro with clojure.spec</a>)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">original code</th>
+<th class="tableblock halign-center valign-top">target code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">add</span> [a b]
+  (<span class="keyword">+</span> a b))</code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">add</span> [a b]
+  (<span class="keyword">println</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">add</span><span class="delimiter">&quot;</span></span> <span class="string"><span class="delimiter">&quot;</span><span class="content">has been called.</span><span class="delimiter">&quot;</span></span>)
+  (<span class="keyword">+</span> a b))</code></pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">함수와 매크로 비교</div>
+<div class="listingblock">
+<div class="content">
+<pre>       입력                      출력
+   ---------------------------------------
+      데이터  --&gt;  함수   --&gt;   데이터
+       코드   --&gt; 매크로  --&gt;    코드</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/clojure/clojure/blob/clojure-1.9.0-alpha14/src/clj/clojure/core/specs.clj#L78">clojure/core/specs.clj</a></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(defn prepend-log [name body]
+  (cons <mark>`(println ~name "has been called.")</mark> body))
+
+(defn update-conf [{:keys [:bs] :as conf} body-update-fn]
+  (update-in conf [:bs 1 :body] body-update-fn))
+
+(defmacro defnlog [& args]
+  (let [{:keys [name] :as conf} <mark>(s/conform ::defn-args args)</mark>
+        new-conf (update-conf conf (partial prepend-log <mark>(str name)</mark>))
+        new-args <mark>(s/unform ::defn-args new-conf)</mark>]
+    (cons `defn new-args)))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/conform <span class="symbol">::defn-args</span> '(add [a b] (<span class="keyword">+</span> a b)))
+<span class="comment">; =&gt; {:name add,</span>
+<span class="comment">;     :bs [:arity-1 {:args {:args [[:sym a] [:sym b]]},</span>
+<span class="comment">;     :body [(+ a b)]}]}</span>
+
+(defnlog add [a b]
+  (<span class="keyword">+</span> a b))
+
+(add <span class="integer">10</span> <span class="integer">20</span>)
+<span class="comment">; &gt;&gt; add has been called.</span>
+<span class="comment">; =&gt; 30</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_schema와_clojure_spec_예제_비교">3.5. schema와 clojure.spec 예제 비교</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">schema-examples</span>
+  (<span class="symbol">:require</span> [schema.core <span class="symbol">:as</span> s]))
+
+(<span class="keyword">def</span> <span class="function">Data</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">A schema for a nested data type</span><span class="delimiter">&quot;</span></span>
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> s/Str
+       <span class="symbol">:c</span> s/Int}
+   <span class="symbol">:d</span> [{<span class="symbol">:e</span> s/Keyword
+        <span class="symbol">:f</span> [s/Num]}]})
+
+(s/validate
+  Data
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
+       <span class="symbol">:c</span> <span class="integer">123</span>}
+   <span class="symbol">:d</span> [{<span class="symbol">:e</span> <span class="symbol">:bc</span>
+        <span class="symbol">:f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
+       {<span class="symbol">:e</span> <span class="symbol">:bc</span>
+        <span class="symbol">:f</span> [<span class="integer">-1</span>]}]})
+<span class="comment">;; Success!</span>
+
+(s/validate
+  Data
+  {<span class="symbol">:a</span> {<span class="symbol">:b</span> <span class="integer">123</span>
+       <span class="symbol">:c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">;; Exception -- Value does not match schema:</span>
+<span class="comment">;;  {:a {:b (not (instance? java.lang.String 123)),</span>
+<span class="comment">;;       :c (not (integer? &quot;ABC&quot;))},</span>
+<span class="comment">;;   :d missing-required-key}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">clojure.spec의 예</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::b</span> <span class="keyword">string?</span>)
+(s/def <span class="symbol">::c</span> int?)
+(s/def <span class="symbol">::a</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::b</span> <span class="symbol">::c</span>]))
+
+(s/def <span class="symbol">::e</span> <span class="keyword">keyword?</span>)
+(s/def <span class="symbol">::f</span> (s/coll-of <span class="keyword">number?</span>))
+(s/def <span class="symbol">::d</span> (s/coll-of (s/keys <span class="symbol">:req</span> [<span class="symbol">::e</span> <span class="symbol">::f</span>])))
+
+(s/def <span class="symbol">::data</span> (s/keys <span class="symbol">:req</span> [<span class="symbol">::a</span> <span class="symbol">::d</span>]))
+
+
+(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">abc</span><span class="delimiter">&quot;</span></span>
+                       <span class="symbol">::c</span> <span class="integer">123</span>}
+                  <span class="symbol">::d</span> [{<span class="symbol">::e</span> <span class="symbol">:bc</span>
+                        <span class="symbol">::f</span> [<span class="float">12.2</span> <span class="integer">13</span> <span class="integer">100</span>]}
+                       {<span class="symbol">::e</span> <span class="symbol">:bc</span>
+                        <span class="symbol">::f</span> [<span class="integer">-1</span>] }]})
+<span class="comment">; =&gt; true</span>
+
+(s/valid? <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
+                       <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">; =&gt; false</span>
+
+(s/explain <span class="symbol">::data</span> {<span class="symbol">::a</span> {<span class="symbol">::b</span> <span class="integer">123</span>
+                        <span class="symbol">::c</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">ABC</span><span class="delimiter">&quot;</span></span>}})
+<span class="comment">; &gt;&gt; val: {:a {:b 123, :c &quot;ABC&quot;}} fails</span>
+<span class="comment">;    spec: ::data</span>
+<span class="comment">;    predicate: (contains? % ::d)</span>
+<span class="comment">;</span>
+<span class="comment">;    In: [::a ::b]</span>
+<span class="comment">;    val: 123 fails</span>
+<span class="comment">;    spec: ::b</span>
+<span class="comment">;    at: [::a ::b]</span>
+<span class="comment">;    predicate: string?</span>
+<span class="comment">;</span>
+<span class="comment">;    In: [::a ::c]</span>
+<span class="comment">;    val: &quot;ABC&quot; fails</span>
+<span class="comment">;    spec: ::c</span>
+<span class="comment">;    at: [::a ::c]</span>
+<span class="comment">;    predicate: int?</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clojure_spec의_기본_api">4. clojure.spec의 기본 API</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>여기에서 보여주는 예제들은 다음과 같은 이름공간에서 실행되었다.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">spec-guide.api</span>
+  (<span class="symbol">:require</span> [clojure.spec <span class="symbol">:as</span> s]
+            [clojure.spec.gen <span class="symbol">:as</span> gen]
+            [clojure.spec.test <span class="symbol">:as</span> stest]))</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>clojure.spec: spec 정의 --> Runtime type/value checking을 위해 필요</p>
+</li>
+<li>
+<p>clojure.spec.gen: generator 정의 --> 자동 test-case 생성을 위해 필요</p>
+</li>
+<li>
+<p>clojure.spec.test: 자동 테스트 수행을 위해 필요</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_s_valid">4.1. s/valid?</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(valid? spec value) =&gt; boolean
+
+spec ::= predicate | namespaced-keyword</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="api.html#predicate">predicate</a>이란</p>
+</li>
+<li>
+<p><a href="api.html#namespaced-keyword">namespaced-keyword</a>란?</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">;; clojure.core가 제공하고 있는 함수
+(s/valid? even? 10)            ; => true
+(s/valid? string? "abc")       ; => true
+
+;; 사용자 정의 함수
+(s/valid? #(> % 5) 10)         ; => true
+(s/valid? #(> % 5) 0)          ; => false
+
+;; set as function
+(s/valid? #{10 20 30 40} 10)   ; => true
+(s/valid? #{10 20 30 40} 50)   ; => false</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="api.html#set-as-function">set as function</a>이란?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_def">4.2. s/def</h3>
+<div class="paragraph">
+<p><code>def</code>는 spec을 정의하고, global 저장소에 이를 저장한다. 이렇게 spec을 global하게 저장하는
+이유는 재사용성(reusability)를 증가시키기 위해서다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(def namespaced-keyword spec) =&gt; namespaced-keyword</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::big-even</span> (s/and int? <span class="keyword">even?</span> #(<span class="keyword">&gt;</span> % <span class="integer">1000</span>)))
+<span class="comment">; =&gt; :spec-guide.api/big-even</span>
+
+(s/valid? <span class="symbol">::big-even</span> <span class="symbol">:foo</span>)     <span class="comment">; =&gt; false</span>
+(s/valid? <span class="symbol">::big-even</span> <span class="integer">100</span>)      <span class="comment">; =&gt; false</span>
+(s/valid? <span class="symbol">::big-even</span> <span class="integer">100000</span>)   <span class="comment">; =&gt; true</span>
+
+
+(s/def <span class="symbol">::suit</span> #{<span class="symbol">:club</span> <span class="symbol">:diamond</span> <span class="symbol">:heart</span> <span class="symbol">:spade</span>})
+<span class="comment">; =&gt; :spec-guide.api/suit</span>
+
+(s/valid? <span class="symbol">::suit</span> <span class="symbol">::diamond</span>)   <span class="comment">; =&gt; true</span>
+(s/valid? <span class="symbol">::suit</span> <span class="symbol">::space</span>)     <span class="comment">; =&gt; false</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_explain">4.3. s/explain</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(explain spec value) =&gt; nil</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>explain</code>은 spec을 통과하지 못한 이유를 설명해 준다.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::suit</span> #{<span class="symbol">:club</span> <span class="symbol">:diamond</span> <span class="symbol">:heart</span> <span class="symbol">:spade</span>})
+
+(s/explain <span class="symbol">::suit</span> <span class="integer">42</span>)
+<span class="comment">; &gt;&gt; val: 42 fails</span>
+<span class="comment">;    spec: ::suit</span>
+<span class="comment">;    predicate: #{:spade :heart :diamond :club}</span>
+
+
+(s/def <span class="symbol">::big-even</span> (s/and int? <span class="keyword">even?</span> #(<span class="keyword">&gt;</span> % <span class="integer">1000</span>)))
+
+(s/explain <span class="symbol">::big-even</span> <span class="integer">5</span>)
+<span class="comment">; &gt;&gt; val: 5 fails</span>
+<span class="comment">;    spec: ::big-even</span>
+<span class="comment">;    predicate: even?</span>
+
+(s/explain <span class="symbol">::big-even</span> <span class="integer">100</span>)
+<span class="comment">; &gt;&gt; val: 100 fails</span>
+<span class="comment">;    spec: ::big-even</span>
+<span class="comment">;    predicate: (&gt; % 1000)</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_keys_map_자료형의_spec_정의">4.4. s/keys: map 자료형의 spec 정의</h3>
+<div class="listingblock">
+<div class="content">
+<pre>(keys &lt; keyword [namespacd-key+] &gt;+) =&gt; spec
+
+keyword ::= :req | :opt</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def ::first-name string?)
+(s/def ::last-name string?)
+(s/def ::age int?)
+
+(s/def ::person (s/keys :req [::first-name ::last-name]
+                        :opt [::age]))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/valid? ::person
+  {::first-name "Elon"
+   ::last-name "Musk"
+   ::age 45})
+; => true
+
+(s/explain ::person
+  {::first-name "Elon"})
+; >> val: #:spec-guide.api{:first-name "Elon"} fails
+;    spec: :spec-guide.api/person
+;    predicate: (contains? % :spec-guide.api/last-name)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_collections">4.5. Collections</h3>
+<div class="sect3">
+<h4 id="_s_coll_of">4.5.1. s/coll-of</h4>
+<div class="paragraph">
+<p>'a homogenous collection of arbitrary size'</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/valid? (s/coll-of <span class="keyword">keyword?</span>) [<span class="symbol">:a</span> <span class="symbol">:b</span> <span class="symbol">:c</span>])
+<span class="comment">; =&gt; true</span>
+
+(s/valid? (s/coll-of <span class="keyword">keyword?</span>) [<span class="symbol">:a</span> <span class="symbol">:b</span> <span class="integer">10</span>])
+<span class="comment">; =&gt; false</span>
+
+(s/valid? (s/coll-of <span class="keyword">number?</span>) #{<span class="integer">5</span> <span class="integer">10</span> <span class="integer">2</span>})
+<span class="comment">; =&gt; true</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::vnum3</span> (s/coll-of <span class="keyword">number?</span> <span class="symbol">:kind</span> <span class="keyword">vector?</span> <span class="symbol">:count</span> <span class="integer">3</span> <span class="symbol">:distinct</span> <span class="predefined-constant">true</span> <span class="symbol">:into</span> #{}))
+
+(s/explain <span class="symbol">::vnum3</span> #{<span class="integer">1</span> <span class="integer">2</span> <span class="integer">3</span>})   <span class="comment">;; not a vector</span>
+<span class="comment">; &gt;&gt; val: #{1 3 2} fails</span>
+<span class="comment">;    spec: ::vnum3</span>
+<span class="comment">;    predicate: clojure.core/vector?</span>
+
+(s/explain <span class="symbol">::vnum3</span> [<span class="integer">1</span> <span class="integer">1</span> <span class="integer">1</span>])    <span class="comment">;; not distinct</span>
+<span class="comment">; &gt;&gt; val: [1 1 1] fails</span>
+<span class="comment">;    spec: ::vnum3</span>
+<span class="comment">;    predicate: distinct?</span>
+
+(s/explain <span class="symbol">::vnum3</span> [<span class="integer">1</span> <span class="integer">2</span> <span class="symbol">:a</span>])   <span class="comment">;; not a number</span>
+<span class="comment">; &gt;&gt; In: [2]</span>
+<span class="comment">;    val: :a fails</span>
+<span class="comment">;    spec: ::vnum3</span>
+<span class="comment">;    predicate: number?</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sequences_sequentials_vector와_list_대상">4.6. Sequences: Sequentials (vector와 list) 대상</h3>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">regular expression operators</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>cat</code> - concatenation of predicates/patterns</p>
+</li>
+<li>
+<p><code>*</code> - 0 or more of a predicate/pattern</p>
+</li>
+<li>
+<p><code>+</code> - 1 or more of a predicate/pattern</p>
+</li>
+<li>
+<p><code>?</code> - 0 or 1 of a predicate/pattern</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_s_cat">4.6.1. s/cat</h4>
+<div class="listingblock">
+<div class="content">
+<pre>(cat &lt;keyword spec&gt;+)</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::ingredient</span> (s/cat <span class="symbol">:quantity</span> <span class="keyword">number?</span> <span class="symbol">:unit</span> <span class="keyword">keyword?</span>))
+
+(s/conform <span class="symbol">::ingredient</span> [<span class="integer">2</span> <span class="symbol">:teaspoon</span>])
+<span class="comment">; =&gt; {:quantity 2, :unit :teaspoon}</span>
+
+(s/conform <span class="symbol">::ingredient</span> '(<span class="integer">2</span> <span class="symbol">:teaspoon</span>))
+<span class="comment">; =&gt; {:quantity 2, :unit :teaspoon}</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><span class="comment">;; pass string for unit instead of keyword</span>
+(s/explain <span class="symbol">::ingredient</span> [<span class="integer">11</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">peaches</span><span class="delimiter">&quot;</span></span>])
+<span class="comment">; &gt;&gt; In: [1]</span>
+<span class="comment">;    val: &quot;peaches&quot; fails</span>
+<span class="comment">;    spec: :spec-guide.api/ingredient</span>
+<span class="comment">;    at: [:unit]</span>
+<span class="comment">;    predicate: keyword?</span>
+
+<span class="comment">;; leave out the unit</span>
+(s/explain <span class="symbol">::ingredient</span> [<span class="integer">2</span>])
+<span class="comment">; &gt;&gt; val: () fails</span>
+<span class="comment">;    spec: :spec-guide.api/ingredient</span>
+<span class="comment">;    at: [:unit]</span>
+<span class="comment">;    predicate: keyword?, Insufficient input</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_s_s_s">4.6.2. s/* s/+ s/?</h4>
+<div class="listingblock">
+<div class="content">
+<pre>(* spec)
+(+ spec)
+(? spwc)</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::odds-then-maybe-even</span> (s/cat <span class="symbol">:odds</span> (s/+ <span class="keyword">odd?</span>)
+                                     <span class="symbol">:even</span> (s/? <span class="keyword">even?</span>)))
+
+(s/conform <span class="symbol">::odds-then-maybe-even</span> [<span class="integer">1</span> <span class="integer">3</span> <span class="integer">5</span> <span class="integer">100</span>])
+<span class="comment">; =&gt; {:odds [1 3 5], :even 100}</span>
+
+(s/conform <span class="symbol">::odds-then-maybe-even</span> [<span class="integer">1</span>])
+<span class="comment">; =&gt; {:odds [1]}</span>
+
+(s/explain <span class="symbol">::odds-then-maybe-even</span> [<span class="integer">100</span>])
+<span class="comment">; &gt;&gt; In: [0]</span>
+<span class="comment">;    val: 100 fails</span>
+<span class="comment">;    spec: ::odds-then-maybe-even</span>
+<span class="comment">;    at: [:odds]</span>
+<span class="comment">;    predicate: odd?</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_s_fdef_function_spec">4.7. s/fdef: function spec</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">defn</span> <span class="function">ranged-rand</span>
+  <span class="string"><span class="delimiter">&quot;</span><span class="content">Returns random int in range start &lt;= rand &lt; end</span><span class="delimiter">&quot;</span></span>
+  [start end]
+  (<span class="keyword">+</span> start (<span class="keyword">long</span> (<span class="keyword">rand</span> (<span class="keyword">-</span> end start)))))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(s/fdef ranged-rand
+  <span class="symbol">:args</span> (s/and (s/cat <span class="symbol">:start</span> int? <span class="symbol">:end</span> int?)
+               #(<span class="keyword">&lt;</span> (<span class="symbol">:start</span> %) (<span class="symbol">:end</span> %)))
+  <span class="symbol">:ret</span> int?
+  <span class="symbol">:fn</span> (s/and #(<span class="keyword">&gt;=</span> (<span class="symbol">:ret</span> %) (<span class="keyword">-&gt;</span> % <span class="symbol">:args</span> <span class="symbol">:start</span>))
+             #(<span class="keyword">&lt;</span> (<span class="symbol">:ret</span> %) (<span class="keyword">-&gt;</span> % <span class="symbol">:args</span> <span class="symbol">:end</span>))))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(ranged-rand <span class="integer">5</span> <span class="integer">10</span>)
+<span class="comment">; =&gt; 7</span>
+
+(ranged-rand <span class="integer">10</span> <span class="integer">5</span>)
+<span class="comment">; =&gt; 9</span>
+
+(stest/instrument `ranged-rand)
+
+(ranged-rand <span class="integer">5</span> <span class="integer">10</span>)
+<span class="comment">; =&gt; 7</span>
+
+<span class="comment">; (ranged-rand 10 5)</span>
+<span class="comment">; &gt;&gt; Call to #'spec-guide.api/ranged-rand did not conform to spec:</span>
+<span class="comment">;    val: {:start 10, :end 5} fails</span>
+<span class="comment">;    at: [:args]</span>
+<span class="comment">;    predicate: (&lt; (:start %) (:end %))</span>
+<span class="comment">;    :clojure.spec/args (10 5)</span>
+<span class="comment">;    :clojure.spec/failure :instrument</span>
+<span class="comment">;    :clojure.spec.test/caller {:file &quot;form-init7709795464976482689.clj&quot;,</span>
+<span class="comment">;                               :line 400,</span>
+<span class="comment">;                               :var-scope spec-guide.api/eval13655}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2016-11-12 12:42:04 KST
+</div>
+</div>
+</body>
+</html>

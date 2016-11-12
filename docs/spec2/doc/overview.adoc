@@ -44,6 +44,9 @@ https://benchmarksgame.alioth.debian.org/u64q/clojure.html
 
 == 클로저에서는 자바의 라이브러리를 그대로 불러 쓸 수 있다.
 
+* 클로저스크립트에서는 자바스크립트의 라이브러리를 그대로 불러 쓸 수 있다.
+
+
 == 클로저는 함수형 언어다.
 
 * Rich Hickey는 "클로저는 80% 함수형 언어다."
@@ -57,7 +60,7 @@ link:https://www.google.co.kr/search?q=gordian+knot&biw=1220&bih=613&tbm=isch&tb
 [listing]
 ----
 OOP:  code + data = class: data를 숨긴다
-FP:   code와 data의 분리 : data를 노출시킨다
+FP:   code와 data의 분리: data를 노출시킨다
 ----
 
 .객체지향언어에서의 상태 관리
