@@ -8,10 +8,9 @@
 :stylesdir: ../
 :stylesheet: my-asciidoctor.css
 
+
 == 사전 예비 지식
 
-
-[[predicate]]
 === spec은 predicate으로 이루어져 있다
 
 [sidebar]
@@ -24,7 +23,7 @@
 * 이 규정만 준수하면 Clojure의 어떤 함수도 predicate이 될 수 있다.
 ****
 
-[[namespaced-keyword]]
+
 === unnamespaced/namespaced keyword
 
 [source]
@@ -37,10 +36,14 @@ user> :animal/cat   ; namespaced keyword
 
 user> ::cat         ; namespaced keyword
 :user/cat
+
+user> (require '[very.very.long.namespace :as long])
+
+user> ::long/cat    ; alias substitution
+:very.very.long.namespace/cat
 ....
 
 
-[[set-as-function]]
 === set 자료형은 함수명 자리에 올 수 있다
 
 [source]
@@ -97,7 +100,7 @@ spec ::= predicate | namespaced-keyword
 [source]
 ....
 (s/def ::suit #{:club :diamond :heart :spade})
-; => :spec-guide.details/suit
+; => :spec-guide.api/suit
 
 (s/valid? ::suit ::space)
 ; => false
@@ -190,11 +193,11 @@ spec ::= predicate | namespaced-keyword
          :clojure.spec/invalid)
   (s/explain ::name-or-id :foo))
 ; >> val: :foo fails
-;    spec: :spec-guide.details/name-or-id
+;    spec: :spec-guide.api/name-or-id
 ;    at: [:name] predicate: string?
 ;
 ;    val: :foo fails
-;    spec: :spec-guide.details/name-or-id
+;    spec: :spec-guide.api/name-or-id
 ;    at: [:id] predicate: int?
 ;
 ; => nil
@@ -211,18 +214,18 @@ spec ::= predicate | namespaced-keyword
 [source]
 ....
 (s/explain-str ::name-or-id :foo)
-; => "val: :foo fails spec: :spec-guide.details/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.details/name-or-id at: [:id] predicate: int?\n"
+; => "val: :foo fails spec: :spec-guide.api/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.api/name-or-id at: [:id] predicate: int?\n"
 
 (s/explain-data ::name-or-id :foo)
 ; => #:clojure.spec{:problems ({:path [:name],
 ;                               :pred string?,
 ;                               :val :foo,
-;                               :via [:spec-guide.details/name-or-id],
+;                               :via [:spec-guide.api/name-or-id],
 ;                               :in []}
 ;                              {:path [:id],
 ;                               :pred int?,
 ;                               :val :foo,
-;                               :via [:spec-guide.details/name-or-id],
+;                               :via [:spec-guide.api/name-or-id],
 ;                               :in []})}
 ....
 
@@ -260,13 +263,13 @@ keyword ::= :req | :opt | :req-un | :opt-un
 (s/conform ::person
   {::first-name "Elon"
    ::last-name "Musk"})
-; => #:spec-guide.details{:first-name "Elon", :last-name "Musk"}
+; => #:spec-guide.api{:first-name "Elon", :last-name "Musk"}
 
 (s/explain ::person
   {::first-name "Elon"})
-; >> val: #:spec-guide.details{:first-name "Elon"} fails
-;    spec: :spec-guide.details/person
-;    predicate: (contains? % :spec-guide.details/last-name)
+; >> val: #:spec-guide.api{:first-name "Elon"} fails
+;    spec: :spec-guide.api/person
+;    predicate: (contains? % :spec-guide.api/last-name)
 ....
 
 
@@ -294,7 +297,7 @@ keyword ::= :req | :opt | :req-un | :opt-un
 ;
 ;    In: [:age]
 ;    val: "45" fails
-;    spec: :spec-guide.details/age
+;    spec: :spec-guide.api/age
 ;    at: [:age]
 ;    predicate: int?
 ....
@@ -308,19 +311,19 @@ keyword ::= :req | :opt | :req-un | :opt-un
 
 (s/conform :unq/person
   (->Person "Elon" "Musk" 45))
-; => #spec_guide.details.Person{:first-name "Elon", :last-name "Musk", :age 45}
+; => #spec_guide.api.Person{:first-name "Elon", :last-name "Musk", :age 45}
 
 (s/explain :unq/person
            (->Person "Elon" nil nil))
 ; >> In: [:last-name]
 ;    val: nil fails
-;    spec: :spec-guide.details/last-name
+;    spec: :spec-guide.api/last-name
 ;    at: [:last-name]
 ;    predicate: string?
 ;
 ;    In: [:age]
 ;    val: nilfails
-;    spec: :spec-guide.details/age
+;    spec: :spec-guide.api/age
 ;    at: [:age]
 ;    predicate: int?
 ----
@@ -546,7 +549,7 @@ set          O         X       X
 (s/explain ::point [1.5 2.5 5])
 ; >> In: [2]
 ;    val: 5 fails
-;    spec: :spec-guide.details/point
+;    spec: :spec-guide.api/point
 ;    at: [2]
 ;    predicate: double?
 
@@ -596,14 +599,14 @@ set          O         X       X
 (s/explain ::ingredient [11 "peaches"])
 ; >> In: [1]
 ;    val: "peaches" fails
-;    spec: :spec-guide.details/ingredient
+;    spec: :spec-guide.api/ingredient
 ;    at: [:unit]
 ;    predicate: keyword?
 
 ;; leave out the unit
 (s/explain ::ingredient [2])
 ; >> val: () fails
-;    spec: :spec-guide.details/ingredient
+;    spec: :spec-guide.api/ingredient
 ;    at: [:unit]
 ;    predicate: keyword?,  Insufficient input
 ....
@@ -786,7 +789,7 @@ form ::= predicate | regex-operator
 ; => 7
 
 ; (ranged-rand 10 5)
-; >> Call to #'spec-guide.details/ranged-rand did not conform to spec:
+; >> Call to #'spec-guide.api/ranged-rand did not conform to spec:
 ;    val: {:start 10, :end 5} fails
 ;    at: [:args]
 ;    predicate: (< (:start %) (:end %))
@@ -794,7 +797,7 @@ form ::= predicate | regex-operator
 ;    :clojure.spec/failure :instrument
 ;    :clojure.spec.test/caller {:file "form-init7709795464976482689.clj",
 ;                               :line 400,
-;                               :var-scope spec-guide.details/eval13655}
+;                               :var-scope spec-guide.api/eval13655}
 ....
 
 
@@ -925,26 +928,5 @@ form ::= predicate | regex-operator
 ;     [(-8 -7)   -8]
 ;     [(3 13)     7]
 ....
-
-
-==== generator 정교화하기
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

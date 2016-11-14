@@ -50,6 +50,86 @@ core.spec       run-time             O                O             O
 
 
 
+=== schema와 clojure.spec 예제 비교
+
+[source]
+....
+(ns schema-examples
+  (:require [schema.core :as s]))
+
+(def Data
+  "A schema for a nested data type"
+  {:a {:b s/Str
+       :c s/Int}
+   :d [{:e s/Keyword
+        :f [s/Num]}]})
+
+(s/validate
+  Data
+  {:a {:b "abc"
+       :c 123}
+   :d [{:e :bc
+        :f [12.2 13 100]}
+       {:e :bc
+        :f [-1]}]})
+;; Success!
+
+(s/validate
+  Data
+  {:a {:b 123
+       :c "ABC"}})
+;; Exception -- Value does not match schema:
+;;  {:a {:b (not (instance? java.lang.String 123)),
+;;       :c (not (integer? "ABC"))},
+;;   :d missing-required-key}
+....
+
+
+.clojure.spec의 예
+[source]
+....
+(s/def ::b string?)
+(s/def ::c int?)
+(s/def ::a (s/keys :req [::b ::c]))
+
+(s/def ::e keyword?)
+(s/def ::f (s/coll-of number?))
+(s/def ::d (s/coll-of (s/keys :req [::e ::f])))
+
+(s/def ::data (s/keys :req [::a ::d]))
+
+
+(s/valid? ::data {::a {::b "abc"
+                       ::c 123}
+                  ::d [{::e :bc
+                        ::f [12.2 13 100]}
+                       {::e :bc
+                        ::f [-1] }]})
+; => true
+
+(s/valid? ::data {::a {::b 123
+                       ::c "ABC"}})
+; => false
+
+(s/explain ::data {::a {::b 123
+                        ::c "ABC"}})
+; >> val: {:a {:b 123, :c "ABC"}} fails
+;    spec: ::data
+;    predicate: (contains? % ::d)
+;
+;    In: [::a ::b]
+;    val: 123 fails
+;    spec: ::b
+;    at: [::a ::b]
+;    predicate: string?
+;
+;    In: [::a ::c]
+;    val: "ABC" fails
+;    spec: ::c
+;    at: [::a ::c]
+;    predicate: int?
+....
+
 
 == clojure.spec의 용도
 
@@ -337,400 +417,3 @@ a|
 ; >> add has been called.
 ; => 30
 ....
-
-
-
-
-
-== clojure.spec의 기본 API
-
-* 여기에서 보여주는 예제들은 다음과 같은 이름공간에서 실행되었다.
-+
-[source]
-....
-(ns spec-guide.api
-  (:require [clojure.spec :as s]
-            [clojure.spec.gen :as gen]
-            [clojure.spec.test :as stest]))
-....
-+
-** clojure.spec: spec 정의 pass:[-->] Runtime type/value checking을 위해 필요
-** clojure.spec.gen: generator 정의 pass:[-->] 자동 test-case 생성을 위해 필요
-** clojure.spec.test: 자동 테스트 수행을 위해 필요
-
-
-=== s/valid?
-
-[listing]
-----
-(valid? spec value) => boolean
-
-spec ::= predicate | namespaced-keyword
-----
-
-* <<api.doc#predicate, predicate>>이란
-* <<api.doc#namespaced-keyword, namespaced-keyword>>란?
-
-[source,subs="quotes"]
-....
-;; clojure.core가 제공하고 있는 함수
-(s/valid? even? 10)            ; => true
-(s/valid? string? "abc")       ; => true
-
-;; 사용자 정의 함수
-(s/valid? #(> % 5) 10)         ; => true
-(s/valid? #(> % 5) 0)          ; => false
-
-;; set as function
-(s/valid? #{10 20 30 40} 10)   ; => true
-(s/valid? #{10 20 30 40} 50)   ; => false
-....
-
-* <<api.doc#set-as-function, set as function>>이란?
-
-
-=== s/def
-
-``def``는 spec을 정의하고, global 저장소에 이를 저장한다. 이렇게 spec을 global하게 저장하는
-이유는 재사용성(reusability)를 증가시키기 위해서다.
- 
- 
-[listing]
-----
-(def namespaced-keyword spec) => namespaced-keyword
-----
-
-[source]
-....
-(s/def ::big-even (s/and int? even? #(> % 1000)))
-; => :spec-guide.api/big-even
-
-(s/valid? ::big-even :foo)     ; => false
-(s/valid? ::big-even 100)      ; => false
-(s/valid? ::big-even 100000)   ; => true
-
-
-(s/def ::suit #{:club :diamond :heart :spade})
-; => :spec-guide.api/suit
-
-(s/valid? ::suit ::diamond)   ; => true
-(s/valid? ::suit ::space)     ; => false
-....
-
-
-=== s/explain
-
-[listing]
-----
-(explain spec value) => nil
-----
-
-``explain``은 spec을 통과하지 못한 이유를 설명해 준다.
-
-[source]
-....
-(s/def ::suit #{:club :diamond :heart :spade})
-
-(s/explain ::suit 42)
-; >> val: 42 fails 
-;    spec: ::suit 
-;    predicate: #{:spade :heart :diamond :club}
- 
-
-(s/def ::big-even (s/and int? even? #(> % 1000)))
-
-(s/explain ::big-even 5)
-; >> val: 5 fails 
-;    spec: ::big-even 
-;    predicate: even?
-
-(s/explain ::big-even 100)
-; >> val: 100 fails 
-;    spec: ::big-even 
-;    predicate: (> % 1000)
-....
-
-
-=== s/keys: map 자료형의 spec 정의 
-
-[listing]
-----
-(keys < keyword [namespacd-key+] >+) => spec
-
-keyword ::= :req | :opt
-----
-
-[source,subs="quotes"]
-....
-(s/def ::first-name string?)
-(s/def ::last-name string?)
-(s/def ::age int?)
-
-(s/def ::person (s/keys :req [::first-name ::last-name]
-                        :opt [::age]))
-....
-
-
-[source,subs="quotes"]
-....
-(s/valid? ::person
-  {::first-name "Elon"
-   ::last-name "Musk"
-   ::age 45})
-; => true
-
-(s/explain ::person
-  {::first-name "Elon"})
-; >> val: #:spec-guide.api{:first-name "Elon"} fails
-;    spec: :spec-guide.api/person
-;    predicate: (contains? % :spec-guide.api/last-name)
-....
-
-
-=== Collections
-
-==== s/coll-of
-
-'a homogenous collection of arbitrary size'
-
-[source]
-....
-(s/valid? (s/coll-of keyword?) [:a :b :c])
-; => true
-
-(s/valid? (s/coll-of keyword?) [:a :b 10])
-; => false
-
-(s/valid? (s/coll-of number?) #{5 10 2})
-; => true
-....
-
-
-[source]
-....
-(s/def ::vnum3 (s/coll-of number? :kind vector? :count 3 :distinct true :into #{}))
-
-(s/explain ::vnum3 #{1 2 3})   ;; not a vector
-; >> val: #{1 3 2} fails 
-;    spec: ::vnum3
-;    predicate: clojure.core/vector?
-
-(s/explain ::vnum3 [1 1 1])    ;; not distinct
-; >> val: [1 1 1] fails 
-;    spec: ::vnum3 
-;    predicate: distinct?
-
-(s/explain ::vnum3 [1 2 :a])   ;; not a number
-; >> In: [2]
-;    val: :a fails 
-;    spec: ::vnum3 
-;    predicate: number?
-....
-
-
-=== Sequences: Sequentials (vector와 list) 대상
-
-[sidebar]
-.regular expression operators
-****
-* `cat` - concatenation of predicates/patterns
-* `*` - 0 or more of a predicate/pattern
-* `+` - 1 or more of a predicate/pattern
-* `?` - 0 or 1 of a predicate/pattern
-****
-
-==== s/cat
-
-[listing]
-----
-(cat <keyword spec>+)
-----
-
-[source]
-----
-(s/def ::ingredient (s/cat :quantity number? :unit keyword?))
-
-(s/conform ::ingredient [2 :teaspoon])
-; => {:quantity 2, :unit :teaspoon}
-
-(s/conform ::ingredient '(2 :teaspoon))
-; => {:quantity 2, :unit :teaspoon}
-----
-
-[source]
-....
-;; pass string for unit instead of keyword
-(s/explain ::ingredient [11 "peaches"])
-; >> In: [1]
-;    val: "peaches" fails
-;    spec: :spec-guide.api/ingredient
-;    at: [:unit]
-;    predicate: keyword?
-
-;; leave out the unit
-(s/explain ::ingredient [2])
-; >> val: () fails
-;    spec: :spec-guide.api/ingredient
-;    at: [:unit]
-;    predicate: keyword?, Insufficient input
-....
-
-
-==== s/* s/+ s/?
-
-[listing]
-----
-(* spec)
-(+ spec)
-(? spwc)
-----
-
-[source]
-....
-(s/def ::odds-then-maybe-even (s/cat :odds (s/+ odd?)
-                                     :even (s/? even?)))
-
-(s/conform ::odds-then-maybe-even [1 3 5 100])
-; => {:odds [1 3 5], :even 100}
-
-(s/conform ::odds-then-maybe-even [1])
-; => {:odds [1]}
-
-(s/explain ::odds-then-maybe-even [100])
-; >> In: [0]
-;    val: 100 fails
-;    spec: ::odds-then-maybe-even
-;    at: [:odds]
-;    predicate: odd?
-....
-
-
-
-=== s/fdef: function spec
-
-[source]
-....
-(defn ranged-rand
-  "Returns random int in range start <= rand < end"
-  [start end]
-  (+ start (long (rand (- end start)))))
-....
-
-[source]
-....
-(s/fdef ranged-rand
-  :args (s/and (s/cat :start int? :end int?)
-               #(< (:start %) (:end %)))
-  :ret int?
-  :fn (s/and #(>= (:ret %) (-> % :args :start))
-             #(< (:ret %) (-> % :args :end))))
-....
-
-[source]
-....
-(ranged-rand 5 10)
-; => 7
-
-(ranged-rand 10 5)
-; => 9
-
-(stest/instrument `ranged-rand)
-
-(ranged-rand 5 10)
-; => 7
-
-; (ranged-rand 10 5)
-; >> Call to #'spec-guide.api/ranged-rand did not conform to spec:
-;    val: {:start 10, :end 5} fails
-;    at: [:args]
-;    predicate: (< (:start %) (:end %))
-;    :clojure.spec/args (10 5)
-;    :clojure.spec/failure :instrument
-;    :clojure.spec.test/caller {:file "form-init7709795464976482689.clj",
-;                               :line 400,
-;                               :var-scope spec-guide.api/eval13655}
-....
-
-
-
-
-== schema와 clojure.spec 예제 비교
-
-[source]
-....
-(ns schema-examples
-  (:require [schema.core :as s]))
-
-(def Data
-  "A schema for a nested data type"
-  {:a {:b s/Str
-       :c s/Int}
-   :d [{:e s/Keyword
-        :f [s/Num]}]})
-
-(s/validate
-  Data
-  {:a {:b "abc"
-       :c 123}
-   :d [{:e :bc
-        :f [12.2 13 100]}
-       {:e :bc
-        :f [-1]}]})
-;; Success!
-
-(s/validate
-  Data
-  {:a {:b 123
-       :c "ABC"}})
-;; Exception -- Value does not match schema:
-;;  {:a {:b (not (instance? java.lang.String 123)),
-;;       :c (not (integer? "ABC"))},
-;;   :d missing-required-key}
-....
-
-
-.clojure.spec의 예
-[source]
-....
-(s/def ::b string?)
-(s/def ::c int?)
-(s/def ::a (s/keys :req [::b ::c]))
-
-(s/def ::e keyword?)
-(s/def ::f (s/coll-of number?))
-(s/def ::d (s/coll-of (s/keys :req [::e ::f])))
-
-(s/def ::data (s/keys :req [::a ::d]))
-
-
-(s/valid? ::data {::a {::b "abc"
-                       ::c 123}
-                  ::d [{::e :bc
-                        ::f [12.2 13 100]}
-                       {::e :bc
-                        ::f [-1] }]})
-; => true
-
-(s/valid? ::data {::a {::b 123
-                       ::c "ABC"}})
-; => false
-
-(s/explain ::data {::a {::b 123
-                        ::c "ABC"}})
-; >> val: {:a {:b 123, :c "ABC"}} fails
-;    spec: ::data
-;    predicate: (contains? % ::d)
-;
-;    In: [::a ::b]
-;    val: 123 fails
-;    spec: ::b
-;    at: [::a ::b]
-;    predicate: string?
-;
-;    In: [::a ::c]
-;    val: "ABC" fails
-;    spec: ::c
-;    at: [::a ::c]
-;    predicate: int?
-....
-

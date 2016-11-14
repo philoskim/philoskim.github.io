@@ -23,7 +23,7 @@
 == 목표 
 
 * Clojure의 강점과 약점들을 소개
-* CLojure의 약점을 보완하기 위한 clojure.spec 라이브러리를 소개
+* Clojure의 약점을 보완하기 위한 clojure.spec 라이브러리를 소개
 
 
 == 목차
@@ -35,7 +35,15 @@
 ****
 . <<doc/overview.html#, Clojure 언어의 특징>>
 . <<doc/intro.html#, clojure.spec 소개>>
-. <<doc/api.html#, clojure.spec API Reference>>
+. <<doc/api.html#, clojure.spec API>>
 ****
 
 :leveloffset: 0
+
+
+== 국내 Clojure 관련 링크
+
+* link:http://clojure.or.kr[clojure.or.kr]
+* link:https://groups.google.com/forum/#!forum/clojure-kr[Korean Clojure User Group] (Google Groups)
+* link:https://www.facebook.com/groups/defnclojure[Clojure Korea] (Facebook)
+* link:https://groups.google.com/forum/#!forum/lisp-korea[Lisp을 좋아하는 사람들의 그룹(한국 리스퍼)] (Google Groups)

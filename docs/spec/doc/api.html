@@ -19,7 +19,7 @@
 <h2 id="_사전_예비_지식">1. 사전 예비 지식</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="predicate">1.1. spec은 predicate으로 이루어져 있다</h3>
+<h3 id="_spec은_predicate으로_이루어져_있다">1.1. spec은 predicate으로 이루어져 있다</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">predicate (진위 함수)</div>
@@ -47,7 +47,7 @@
 </div>
 </div>
 <div class="sect2">
-<h3 id="namespaced-keyword">1.2. unnamespaced/namespaced keyword</h3>
+<h3 id="_unnamespaced_namespaced_keyword">1.2. unnamespaced/namespaced keyword</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="clojure">user&gt; <span class="symbol">:cat</span>          <span class="comment">; unnamespaced keyword</span>
@@ -57,12 +57,17 @@ user&gt; <span class="symbol">:animal/cat</span>   <span class="comment">; names
 <span class="symbol">:animal/cat</span>
 
 user&gt; <span class="symbol">::cat</span>         <span class="comment">; namespaced keyword</span>
-<span class="symbol">:user/cat</span></code></pre>
+<span class="symbol">:user/cat</span>
+
+user&gt; (<span class="keyword">require</span> '[very.very.long.namespace <span class="symbol">:as</span> <span class="keyword">long</span>])
+
+user&gt; <span class="symbol">::long/cat</span>    <span class="comment">; alias substitution</span>
+<span class="symbol">:very.very.long.namespace/cat</span></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="set-as-function">1.3. set 자료형은 함수명 자리에 올 수 있다</h3>
+<h3 id="_set_자료형은_함수명_자리에_올_수_있다">1.3. set 자료형은 함수명 자리에 올 수 있다</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="clojure">user&gt; #{<span class="integer">10</span> <span class="integer">20</span> <span class="integer">30</span> <span class="integer">40</span>}
@@ -119,7 +124,7 @@ spec ::= predicate | namespaced-keyword</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="clojure">(s/def <span class="symbol">::suit</span> #{<span class="symbol">:club</span> <span class="symbol">:diamond</span> <span class="symbol">:heart</span> <span class="symbol">:spade</span>})
-<span class="comment">; =&gt; :spec-guide.details/suit</span>
+<span class="comment">; =&gt; :spec-guide.api/suit</span>
 
 (s/valid? <span class="symbol">::suit</span> <span class="symbol">::space</span>)
 <span class="comment">; =&gt; false</span></code></pre>
@@ -215,11 +220,11 @@ spec ::= predicate | namespaced-keyword</pre>
          <span class="symbol">:clojure.spec/invalid</span>)
   (s/explain <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>))
 <span class="comment">; &gt;&gt; val: :foo fails</span>
-<span class="comment">;    spec: :spec-guide.details/name-or-id</span>
+<span class="comment">;    spec: :spec-guide.api/name-or-id</span>
 <span class="comment">;    at: [:name] predicate: string?</span>
 <span class="comment">;</span>
 <span class="comment">;    val: :foo fails</span>
-<span class="comment">;    spec: :spec-guide.details/name-or-id</span>
+<span class="comment">;    spec: :spec-guide.api/name-or-id</span>
 <span class="comment">;    at: [:id] predicate: int?</span>
 <span class="comment">;</span>
 <span class="comment">; =&gt; nil</span>
@@ -245,18 +250,18 @@ spec ::= predicate | namespaced-keyword</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="clojure">(s/explain-str <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)
-<span class="comment">; =&gt; &quot;val: :foo fails spec: :spec-guide.details/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.details/name-or-id at: [:id] predicate: int?\n&quot;</span>
+<span class="comment">; =&gt; &quot;val: :foo fails spec: :spec-guide.api/name-or-id at: [:name] predicate: string?\nval: :foo fails spec: :spec-guide.api/name-or-id at: [:id] predicate: int?\n&quot;</span>
 
 (s/explain-data <span class="symbol">::name-or-id</span> <span class="symbol">:foo</span>)
 <span class="comment">; =&gt; #:clojure.spec{:problems ({:path [:name],</span>
 <span class="comment">;                               :pred string?,</span>
 <span class="comment">;                               :val :foo,</span>
-<span class="comment">;                               :via [:spec-guide.details/name-or-id],</span>
+<span class="comment">;                               :via [:spec-guide.api/name-or-id],</span>
 <span class="comment">;                               :in []}</span>
 <span class="comment">;                              {:path [:id],</span>
 <span class="comment">;                               :pred int?,</span>
 <span class="comment">;                               :val :foo,</span>
-<span class="comment">;                               :via [:spec-guide.details/name-or-id],</span>
+<span class="comment">;                               :via [:spec-guide.api/name-or-id],</span>
 <span class="comment">;                               :in []})}</span></code></pre>
 </div>
 </div>
@@ -293,13 +298,13 @@ keyword ::= :req | :opt | :req-un | :opt-un</pre>
 (s/conform ::person
   {::first-name "Elon"
    ::last-name "Musk"})
-; => #:spec-guide.details{:first-name "Elon", :last-name "Musk"}
+; => #:spec-guide.api{:first-name "Elon", :last-name "Musk"}
 
 (s/explain ::person
   {::first-name "Elon"})
-; >> val: #:spec-guide.details{:first-name "Elon"} fails
-;    spec: :spec-guide.details/person
-;    predicate: (contains? % :spec-guide.details/last-name)</code></pre>
+; >> val: #:spec-guide.api{:first-name "Elon"} fails
+;    spec: :spec-guide.api/person
+;    predicate: (contains? % :spec-guide.api/last-name)</code></pre>
 </div>
 </div>
 </div>
@@ -327,7 +332,7 @@ keyword ::= :req | :opt | :req-un | :opt-un</pre>
 ;
 ;    In: [:age]
 ;    val: "45" fails
-;    spec: :spec-guide.details/age
+;    spec: :spec-guide.api/age
 ;    at: [:age]
 ;    predicate: int?</code></pre>
 </div>
@@ -341,19 +346,19 @@ keyword ::= :req | :opt | :req-un | :opt-un</pre>
 
 (s/conform :unq/person
   (-&gt;Person "Elon" "Musk" 45))
-; =&gt; #spec_guide.details.Person{:first-name "Elon", :last-name "Musk", :age 45}
+; =&gt; #spec_guide.api.Person{:first-name "Elon", :last-name "Musk", :age 45}
 
 (s/explain :unq/person
            (-&gt;Person "Elon" nil nil))
 ; &gt;&gt; In: [:last-name]
 ;    val: nil fails
-;    spec: :spec-guide.details/last-name
+;    spec: :spec-guide.api/last-name
 ;    at: [:last-name]
 ;    predicate: string?
 ;
 ;    In: [:age]
 ;    val: nilfails
-;    spec: :spec-guide.details/age
+;    spec: :spec-guide.api/age
 ;    at: [:age]
 ;    predicate: int?</pre>
 </div>
@@ -574,7 +579,7 @@ set          O         X       X
 (s/explain <span class="symbol">::point</span> [<span class="float">1.5</span> <span class="float">2.5</span> <span class="integer">5</span>])
 <span class="comment">; &gt;&gt; In: [2]</span>
 <span class="comment">;    val: 5 fails</span>
-<span class="comment">;    spec: :spec-guide.details/point</span>
+<span class="comment">;    spec: :spec-guide.api/point</span>
 <span class="comment">;    at: [2]</span>
 <span class="comment">;    predicate: double?</span>
 
@@ -640,14 +645,14 @@ set          O         X       X
 (s/explain <span class="symbol">::ingredient</span> [<span class="integer">11</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">peaches</span><span class="delimiter">&quot;</span></span>])
 <span class="comment">; &gt;&gt; In: [1]</span>
 <span class="comment">;    val: &quot;peaches&quot; fails</span>
-<span class="comment">;    spec: :spec-guide.details/ingredient</span>
+<span class="comment">;    spec: :spec-guide.api/ingredient</span>
 <span class="comment">;    at: [:unit]</span>
 <span class="comment">;    predicate: keyword?</span>
 
 <span class="comment">;; leave out the unit</span>
 (s/explain <span class="symbol">::ingredient</span> [<span class="integer">2</span>])
 <span class="comment">; &gt;&gt; val: () fails</span>
-<span class="comment">;    spec: :spec-guide.details/ingredient</span>
+<span class="comment">;    spec: :spec-guide.api/ingredient</span>
 <span class="comment">;    at: [:unit]</span>
 <span class="comment">;    predicate: keyword?,  Insufficient input</span></code></pre>
 </div>
@@ -828,7 +833,7 @@ form ::= predicate | regex-operator</pre>
 <span class="comment">; =&gt; 7</span>
 
 <span class="comment">; (ranged-rand 10 5)</span>
-<span class="comment">; &gt;&gt; Call to #'spec-guide.details/ranged-rand did not conform to spec:</span>
+<span class="comment">; &gt;&gt; Call to #'spec-guide.api/ranged-rand did not conform to spec:</span>
 <span class="comment">;    val: {:start 10, :end 5} fails</span>
 <span class="comment">;    at: [:args]</span>
 <span class="comment">;    predicate: (&lt; (:start %) (:end %))</span>
@@ -836,7 +841,7 @@ form ::= predicate | regex-operator</pre>
 <span class="comment">;    :clojure.spec/failure :instrument</span>
 <span class="comment">;    :clojure.spec.test/caller {:file &quot;form-init7709795464976482689.clj&quot;,</span>
 <span class="comment">;                               :line 400,</span>
-<span class="comment">;                               :var-scope spec-guide.details/eval13655}</span></code></pre>
+<span class="comment">;                               :var-scope spec-guide.api/eval13655}</span></code></pre>
 </div>
 </div>
 </div>
@@ -969,17 +974,13 @@ form ::= predicate | regex-operator</pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_generator_정교화하기">3.1.3. generator 정교화하기</h4>
-
-</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-11-11 13:43:07 KST
+Last updated 2016-11-14 10:06:30 KST
 </div>
 </div>
 </body>
