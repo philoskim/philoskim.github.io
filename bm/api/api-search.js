@@ -14,8 +14,8 @@ for (var i = 0; i < buttons.length; i++)
 
 var buttonInfos =
   // id : [url, isSpacedInput, isIframed]
-   {clojure   : ["http://clojuredocs.org/search?q={0}", false, false],
-    cljs      : ["http://cljs.github.io/api/cljs.core/", false, false],
+   {clojure   : ["http://clojuredocs.org/search?q={0}", false, true],
+    cljs      : ["http://cljs.github.io/api/cljs.core/", false, true],
     clhs      : ["http://www.lispworks.com/cgi-bin/search.cgi?q={0}", false, true],
 
     w3c        : ["https://www.google.co.kr/#hl=ko&q={0}+site:www.w3schools.com",
