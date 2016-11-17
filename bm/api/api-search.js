@@ -1,6 +1,6 @@
 String.prototype.format = function() {
   var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number) { 
+  return this.replace(/{(\d+)}/g, function(match, number) {
     return typeof args[number] != 'undefined'
       ? args[number]
       : match
@@ -8,15 +8,15 @@ String.prototype.format = function() {
   });
 };
 
-var buttons = document.getElementsByTagName("button"); 
+var buttons = document.getElementsByTagName("button");
 for (var i = 0; i < buttons.length; i++)
-  buttons[i].onclick = handleClick; 
+  buttons[i].onclick = handleClick;
 
-var buttonInfos = 
+var buttonInfos =
   // id : [url, isSpacedInput, isIframed]
-    { clojure   : ["http://clojuredocs.org/#{0}", false, false],
-      //cljs      : ["https://www.google.co.kr/search?q={0}+site:github.com/cljsinfo/api-refs/tree/catalog", false, false],
-    clhs       : ["http://www.lispworks.com/cgi-bin/search.cgi?q={0}", false, true],
+   {clojure   : ["http://clojuredocs.org/search?q={0}", false, false],
+    cljs      : ["http://cljs.github.io/api/cljs.core/", false, false],
+    clhs      : ["http://www.lispworks.com/cgi-bin/search.cgi?q={0}", false, true],
 
     w3c        : ["https://www.google.co.kr/#hl=ko&q={0}+site:www.w3schools.com",
                   false, false],
@@ -32,7 +32,7 @@ var buttonInfos =
     itext      : ["https://www.google.co.kr/#hl=ko&q={0}+site:api.itextpdf.com/itext/",
                   false, false],
 
-      
+
 
     d          : ["https://www.google.co.kr/#hl=ko&q={0}+site:dlang.org",
                    false, false],
@@ -45,7 +45,7 @@ var buttonInfos =
     contextapi : ["http://wiki.contextgarden.net/Command/{0}", false, true],
 
     emacs      : ["https://www.google.co.kr/#hl=ko&q=emacs+{0}", false, false],
-    emacswiki  : ["https://www.google.co.kr/#hl=ko&q={0}+site:www.emacswiki.org/", 
+    emacswiki  : ["https://www.google.co.kr/#hl=ko&q={0}+site:www.emacswiki.org/",
                    false, false],
 
 
@@ -74,11 +74,11 @@ function handleClick(e)
   var url = value[0].format(value[1] ? spacedInput : plusedInput);
 
   if (value[2])   // iframe에 담길 수 있으면
-  {           
+  {
     var iframe = document.getElementById("iframe");
     iframe.src = url;
   }
-  else 
+  else
   {
     var anchor = document.getElementById("anchor");
     anchor.href = url;
@@ -86,7 +86,7 @@ function handleClick(e)
     evt.initEvent("click", true, true);
     anchor.dispatchEvent(evt);
   }
-} 
+}
 
 function handleFocus(e) {
   oldInput = document.getElementById("entry").value;
@@ -102,7 +102,7 @@ function handleKeydown(e) {
   }
   else if (e.keyCode == 38) {  // 38 == UpArrow Key
     e.target.value = oldInput;
-  } 
+  }
 }
 
 document.getElementById("entry").onkeydown = handleKeydown;
