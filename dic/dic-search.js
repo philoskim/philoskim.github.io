@@ -59,6 +59,7 @@ $(document).ready(function() {
                   + "&year_end=2000&corpus=0&smoothing=0", "plus", true],
     regex      : ["http://www.visca.com/regexdict/", "plus", true],
     name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
+    corpus     : ["http://www.wordandphrase.info/frequencyList.asp", "space", true],
 
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
 
@@ -75,7 +76,9 @@ $(document).ready(function() {
     thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
     collins    : ["http://dictionary.reverso.net/english-cobuild/{0}", "space", true],
     onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true],
-    math       : ["http://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true]
+    math       : ["http://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true],
+    naver2     : ["http://dic.naver.com/search.nhn?dicQuery={0}&x=0&y=0&query={0}&target=dic&ie=utf8", "space", false]
+
    };
 
   function handleButtonClick(e)
@@ -87,6 +90,7 @@ $(document).ready(function() {
     var input;
 
     var value = buttonInfos[e.target.id];
+
     if (value[1] == "space")
       input = spaceInput;
     else if (value[1] == "plus")

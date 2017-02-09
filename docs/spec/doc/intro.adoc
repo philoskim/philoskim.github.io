@@ -272,7 +272,7 @@ core.spec       run-time             O                O             O
 
 ==== core.spec은 실행 중 값도 검사할 수 있다
 
-[source,subs="quotes"]
+[source,subs="macros,quotes"]
 ....
 (s/fdef my-max3
   :args (s/and (s/cat :coll (s/coll-of number?))
