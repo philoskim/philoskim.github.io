@@ -1,4 +1,4 @@
-= 영어 원서 읽기를 위한 무료 영어 강의
+= 영어 원서 읽기를 위한 무료 영어 공개 강의
 :doctype: book
 //:stem: latexmath
 :linkcss:
