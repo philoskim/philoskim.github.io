@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
+<title>Datomic: 함수형 데이터베이스</title>
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url("asciidoctor.css");
+@import url("coderay-asciidoctor.css");
+
+html{font-family: 'Nanum Gothic', serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family: 'Nanum Gothic', serif;;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
+
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#000;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+
+</style>
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>Datomic: 함수형 데이터베이스</h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_강사_소개">1. 강사 소개</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>이름: 김영태</p>
+</li>
+<li>
+<p>e-mail: <a href="mailto:philos99@gmail.com">philos99@gmail.com</a></p>
+</li>
+<li>
+<p><a href="http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&amp;mallGb=KOR&amp;barcode=9788966261802&amp;orderClick=LAG&amp;Kc=">클로저 시작하기</a> 공역, 인사이트 (원서: <a href="https://www.amazon.com/Living-Clojure-Introduction-Training-Developers/dp/1491909048/ref=sr_1_1?ie=UTF8&amp;qid=1509447512&amp;sr=8-1&amp;keywords=living+clojure">Living Clojure</a>, Carin Meier, O&#8217;Reilly)</p>
+</li>
+<li>
+<p><a href="https://github.com/philoskim/debux">debux</a> (Clojure/ClojureScript 디버깅 라이브러리) 제작</p>
+<div class="ulist">
+<ul>
+<li>
+<p>예제: <a href="https://github.com/philoskim/debux#simple-example" class="bare">https://github.com/philoskim/debux#simple-example</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_참고_자료">2. 참고 자료</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://www.learndatalogtoday.org" class="bare">http://www.learndatalogtoday.org</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Datomic에서 사용하고 있는 Datalog 방식의 query를 간단히 소개</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="http://docs.datomic.com/index.html" class="bare">http://docs.datomic.com/index.html</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Datomic 공식 문서 site</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://github.com/Datomic/day-of-datomic" class="bare">https://github.com/Datomic/day-of-datomic</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>다양하고 풍부한 예제 제공</p>
+</li>
+<li>
+<p>특히 <a href="https://github.com/Datomic/day-of-datomic/tree/master/tutorial">tutorial</a> 폴더에 Datomic이 제공하는 거의 모든 API에 대한 예제가 담겨 있다.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://www.amazon.com/Professional-Clojure-Jeremy-Anderson/dp/1119267277/ref=sr_1_1?ie=UTF8&amp;qid=1510200830&amp;sr=8-1&amp;keywords=professional+clojure">Professional Clojure</a>, Chapter 6</p>
+<div class="ulist">
+<ul>
+<li>
+<p>현재까지 나온 Clojure 관련 책들 중에서 Datomic에 대해 가장 자세하게 소개</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_datomic_소개">3. Datomic 소개</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Clojure 언어의 창시자 Rich Hickey가 만든 함수형 데이터베이스</p>
+</li>
+<li>
+<p>Clojure 언어로 쓰여져 있다.</p>
+</li>
+<li>
+<p>"Immutable" Database: 개념상 git과 유사</p>
+</li>
+<li>
+<p>2012년에 최초 버전(0.8.3335) 발표</p>
+</li>
+<li>
+<p>현재 최신 버전: 0.9.5561.62</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_참고_a_href_https_github_com_tonsky_datascript_datascript_a">3.1. 참고: <a href="https://github.com/tonsky/datascript">DataScript</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Immutable memory database and Datalog query engine for Clojure, ClojureScript and JavaScript</p>
+</li>
+<li>
+<p>서버에서 사용되는 Datomic을 모방해 만들었다.</p>
+</li>
+<li>
+<p>주로 Web Browser Client용으로 사용된다.</p>
+</li>
+<li>
+<p>Datomic과 거의 동일한 API를 제공한다.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_datomic_도입_사례">4. Datomic 도입 사례</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://blog.cognitect.com/blog/2015/6/30/walmart-runs-clojure-at-scale">Walmart runs Clojure and Datomic at scale</a></p>
+</li>
+<li>
+<p><a href="http://blog.datomic.com/2015/09/nubank-chooses-datomic.html">Nubank chooses Datomic</a></p>
+</li>
+<li>
+<p><a href="http://www.datomic.com/customers.html">기타 Customers Story</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_datomic의_특징">5. Datomic의 특징</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Transactional store, Analytics store, Distributed database, Graph database, Logic
+database</p>
+</li>
+<li>
+<p>관계형 데이터베이스 사용 예의 96% 대체 가능. 나머지 4%는 쓰기 작업이 많은(high
+write-volume) 경우.</p>
+</li>
+<li>
+<p>응답 속도가 빠르다 (거의 memory DB 수준)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>ex) 1.5 ms per query, compared to the 10-20 ms in SQL query</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Storage backend로 다양한 DB를 사용할 수 있다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>DynamoDB(AWS), Cassandra, Riak, Couchbase, Infinispan, or SQL database등</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_datomic_architecture">6. Datomic architecture</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Reads are separated from writes and decentralized.</p>
+</li>
+<li>
+<p>Writes don&#8217;t block reads, reads don&#8217;t block one another.</p>
+</li>
+<li>
+<p>Read scaling horizontally by adding more "peer" systems.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/datomic-architecture.png" alt="datomic architecture">
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Datomic DB vs. SQL DB</div>
+<div class="content">
+<pre>   Datomic DB               SQL DB
+=============================================
+|-- Storage
+|
+|-- Transactor
+|   |-- Writing
+|   `-- Indexing          SQL Server
+|
+`-- Peer Library
+    |-- Live index
+    |-- Cache
+====|========================================
+    `-- Query             SQL Client Library
+=============================================</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_keyword_data_type_in_clojure">7. Keyword data type in Clojure</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_keyword_data_type_형식">7.1. keyword data type 형식</h3>
+<div class="listingblock">
+<div class="content">
+<pre>:namespace-part/name-part
+
+:table-name/field-name</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_keyword_examples">7.2. keyword examples</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><span class="symbol">:employee/address</span>
+
+<span class="symbol">:address</span>
+
+<span class="symbol">:user.type/superuser</span>
+
+<span class="symbol">:user.type.v2/superuser</span>
+
+<span class="symbol">:user.type/superuser.boss</span>
+<span class="symbol">:user.type/superuser.manager</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_keyword_data_type의_평가_evaluation">7.3. keyword data type의 평가(evaluation)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Keyowrd data type is a self-evaluated value.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>:employee/address   ;=&gt; :employee/address</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_datom">8. Datom</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>datom은 Datomic이 데이터를 처리할 때의 기본 단위이다.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_datom의_구성요소">8.1. datom의 구성요소</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>하나의 datom은 1 개의 field를 표현한다.</p>
+</li>
+<li>
+<p>하나의 datom은 5 개의 구성요소로 이루어져 있다.</p>
+<div class="listingblock">
+<div class="content">
+<pre>[entity-id attribute value transaction-id added?]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">datom들의 실례</div>
+<div class="content">
+<pre>[&lt;e-id&gt;   &lt;attribute&gt;         &lt;value&gt;     &lt;tx-id&gt;  &lt;added?&gt;]
+...
+[   42    :person/firstName   "James"      102     true    ]
+[   42    :person/lastName    "Clark"      102     true    ]
+[   42    :person/address     <mark>43</mark>           102     true    ]
+
+[   <mark>43</mark>    :address/state      "Oregon"     102     true    ]
+[   <mark>43</mark>    :address/city       "Portland"   102     true    ]
+
+[ 1077    :person/fitstName   "Viola"      103     true    ]
+[ 1077    :person/lastName    "Davis"      103     true    ]
+[ 1077    :person/friends     #{42 89}     103     true    ]
+...</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(참고) <code>:db.type/ref</code> <a href="#db-type-ref">[db-type-ref]</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_datom의_구성요소_설명">8.2. datom의 구성요소 설명</h3>
+<table class="tableblock frame-all grid-all" style="width: 75%;">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>entity-id</code></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>
+<p>SQL DB record에 해당.</p>
+</li>
+<li>
+<p>Datomic이 자동으로 생성해 주며, 동일 db 내에서 유일한 값이다.</p>
+</li>
+<li>
+<p>Java의 long 타입 (64 비트 정수형)</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>attribute</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SQL DB의 field name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SQL DB의 field value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transaction-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동일한 transaction(쓰기)일 때, 동일한 <code>transaction-id</code> 값을 부여 받는다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>added?</code></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>
+<p><code>true</code>: assert or accumulate</p>
+</li>
+<li>
+<p><code>false</code>: retract</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_sql_crud와의_용어_비교">8.3. SQL CRUD와의 용어 비교</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>CRUD vs. ARAR</p>
+<table class="tableblock frame-all grid-all" style="width: 75%;">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">SQL</th>
+<th class="tableblock halign-center valign-top">Datomic</th>
+<th class="tableblock halign-center valign-top">Datomic 담당 함수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Create</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Assert</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>transact</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Read</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Read</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>q</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Update</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Accumulate</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>transact</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Delete</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Retract</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><code>transact</code></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_schema">9. Schema</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_db별_비교">9.1. DB별 비교</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>SQL DB</p>
+<div class="ulist">
+<ul>
+<li>
+<p>schema를 table 단위로 작성한다.</p>
+</li>
+<li>
+<p>record 구조가 고정되어 있다.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Datomic DB</p>
+<div class="ulist">
+<ul>
+<li>
+<p>schema를 field 단위로 작성한다.</p>
+</li>
+<li>
+<p>record 구조가 고정되어 있지 않다.</p>
+<div class="paragraph">
+<p>따라서 동적으로 field를 조합하여 record를 만들 수 있다.</p>
+</div>
+</li>
+<li>
+<p>schema 자체도 datom으로 이루어져 있다.</p>
+<div class="paragraph">
+<p>따라서 프로그램 실행 중에 동적으로 schema 생성 및 변경이 가능하다.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>NoSQL DB</p>
+<div class="ulist">
+<ul>
+<li>
+<p>schema가 아예 없다.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_datomic_schema의_구성">9.2. Datomic Schema의 구성</h3>
+<div class="listingblock">
+<div class="title">Datomic Schema의 예</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">def</span> <span class="function">schema</span>
+  [{<span class="symbol">:db/ident</span> <span class="symbol">:user/id</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/unique</span> <span class="symbol">:db.unique/value</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/name</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/e-mail</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}])</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Schema Attributes</th>
+<th class="tableblock halign-left valign-top">Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>:db/ident</code></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>field name을 지정한다. 반드시 keyword 자료형이어야 한다.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>:db/valueType</code> <a id="db-type-ref"></a></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>field value의 자료형을 지정힌다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>:db.type/string</code></p>
+</li>
+<li>
+<p><code>:db.type/long :db.type/bigint</code></p>
+</li>
+<li>
+<p><code>:db.type/float :db.type/double :db.type/bigdec</code></p>
+</li>
+<li>
+<p><code>:db.type/boolean</code></p>
+</li>
+<li>
+<p><code>:db.type/keyword</code></p>
+</li>
+<li>
+<p><code>:db.type/ref</code></p>
+</li>
+<li>
+<p><code>:db.type/instant</code></p>
+</li>
+<li>
+<p><code>:db.type/uuid</code></p>
+</li>
+<li>
+<p><code>:db.type/url</code></p>
+</li>
+<li>
+<p><code>:db.type/bytes</code></p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>:db/cardinality</code></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>
+<p><code>:db.cardinality/one</code> - 일대일 대응</p>
+</li>
+<li>
+<p><code>:db.cardinality/many</code> - 일대다 대응</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>:db/noHistory</code></p></td>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>
+<p><code>true</code> - field value를 누적(accumulate)시키지 않고, 기존의 값을 덮어 쓴다(overwrite).</p>
+</li>
+<li>
+<p><code>false</code> - default</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">......</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="paragraph">
+<p>......</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_schema_예제">9.3. Schema 예제</h3>
+<div class="listingblock">
+<div class="title">datomic-guide/schema-example.clj</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">datomic-guide.schema-example</span>
+  (<span class="symbol">:require</span> [datomic.api <span class="symbol">:as</span> d]))
+
+<span class="comment">;;; database 생성</span>
+(<span class="keyword">def</span> <span class="function">db-uri</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">datomic:mem://schema-example</span><span class="delimiter">&quot;</span></span>)
+
+(d/create-database db-uri)
+
+<span class="comment">;;; conn 얻기</span>
+(<span class="keyword">def</span> <span class="function">conn</span> (d/connect db-uri))
+
+<span class="comment">;;;</span>
+<span class="comment">;;; schema definitions</span>
+<span class="comment">;;;</span>
+(<span class="keyword">def</span> <span class="function">schema-1</span>
+  [{<span class="symbol">:db/ident</span> <span class="symbol">:user/id</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/unique</span> <span class="symbol">:db.unique/value</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/name</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/e-mail</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}])
+
+<span class="comment">;;; schema-1 install</span>
+@(d/transact conn schema-1)
+
+
+<span class="comment">;;;</span>
+<span class="comment">;;; data definitions</span>
+<span class="comment">;;;</span>
+(<span class="keyword">def</span> <span class="function">user-data</span>
+  [{<span class="symbol">:db/id</span> <span class="error">#</span>db/id[<span class="symbol">:db.part/user</span>]
+    <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Alice Parker</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/e-mail</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice@gmail.com</span><span class="delimiter">&quot;</span></span>}
+
+   {<span class="symbol">:db/id</span> <span class="error">#</span>db/id[<span class="symbol">:db.part/user</span>]
+    <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">jack</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Jack Hinton</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/e-mail</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">jack@gmail.com</span><span class="delimiter">&quot;</span></span>}])
+
+<span class="comment">;;; data install</span>
+@(d/transact conn user-data)
+
+
+<span class="comment">;;;</span>
+<span class="comment">;;; &quot;alice&quot; 관련 정보 확인</span>
+<span class="comment">;;;</span>
+(<span class="keyword">defn</span> <span class="function">find-user</span> [id]
+  (d/q '[<span class="symbol">:find</span> ?e <span class="keyword">.</span>
+         <span class="symbol">:in</span> $ ?id
+         <span class="symbol">:where</span> [?e <span class="symbol">:user/id</span> ?id]]
+        (d/db conn) id))
+
+(<span class="keyword">def</span> <span class="function">alice-ent-id</span> (find-user <span class="string"><span class="delimiter">&quot;</span><span class="content">alice</span><span class="delimiter">&quot;</span></span>))
+
+alice-ent-id <span class="comment">; =&gt; 17592186045418</span>
+
+(d/pull (d/db conn) '[<span class="keyword">*</span>] alice-ent-id)
+<span class="comment">; =&gt; {:db/id 17592186045418,</span>
+<span class="comment">;     :user/id &quot;alice&quot;,</span>
+<span class="comment">;     :user/name &quot;Alice Parker&quot;,</span>
+<span class="comment">;     :user/e-mail &quot;alice@gmail.com&quot;}</span>
+
+
+<span class="comment">;;;</span>
+<span class="comment">;;; field name :user/alias 추가</span>
+<span class="comment">;;;</span>
+(<span class="keyword">def</span> <span class="function">schema-2</span>
+  [{<span class="symbol">:db/ident</span> <span class="symbol">:user/alias</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}])
+
+@(d/transact conn schema-2)
+
+
+<span class="comment">;; &quot;alice&quot;의 :user/alias 필드값 추가</span>
+@(d/transact conn [[<span class="symbol">:db/add</span> alice-ent-id <span class="symbol">:user/alias</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">wonderland</span><span class="delimiter">&quot;</span></span>]])
+
+<span class="comment">;; 추가된 :user/alias 필드값 확인</span>
+(d/pull (d/db conn) '[<span class="keyword">*</span>] alice-ent-id)
+<span class="comment">; =&gt; {:db/id 17592186045418,</span>
+<span class="comment">;     :user/id &quot;alice&quot;,</span>
+<span class="comment">;     :user/name &quot;Alice Parker&quot;,</span>
+<span class="comment">;     :user/e-mail &quot;alice@gmail.com&quot;,</span>
+<span class="comment">;     :user/alias &quot;wonderland&quot;}</span>
+
+
+<span class="comment">;;;</span>
+<span class="comment">;;; field name :user/alias --&gt; :user/nickname 으로 변경</span>
+<span class="comment">;;;</span>
+(<span class="keyword">def</span> <span class="function">alias-ent-id</span> (d/entid (d/db conn) <span class="symbol">:user/alias</span>))
+
+@(d/transact conn [[<span class="symbol">:db/add</span> alias-ent-id <span class="symbol">:db/ident</span> <span class="symbol">:user/nickname</span>]])
+
+(d/pull (d/db conn) '[<span class="keyword">*</span>] alice-end-id)
+<span class="comment">; =&gt; {:db/id 17592186045418,</span>
+<span class="comment">;     :user/id &quot;alice&quot;,</span>
+<span class="comment">;     :user/name &quot;Alice Parker&quot;,</span>
+<span class="comment">;     :user/e-mail &quot;alice@gmail.com&quot;,</span>
+<span class="comment">;     :user/nickname &quot;wonderland&quot;}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_schema도_datom이다">9.4. schema도 datom이다</h3>
+<div class="listingblock">
+<div class="content">
+<pre>[&lt;e-id&gt;   &lt;attribute&gt;       &lt;value&gt;              &lt;tx-id&gt;   &lt;added?&gt;]
+...
+[   <mark>33</mark>    :db/ident         <mark>:user/alias</mark>          102       true    ]
+[   <mark>33</mark>    :db/type          :db.type/string      102       true    ]
+[   <mark>33</mark>    :db/cardinality   :db.cardinality/one  102       true    ]
+
+[   42    :user/id          "alice"              95        true    ]
+[   42    :user/name        "Alice Parker"       95        true    ]
+[   42    :user/e-mail      "<a href="mailto:alice@gmail.com">alice@gmail.com</a>"    95        true    ]
+
+[   42    <mark>:user/alias</mark>       "wonderland"         205       true    ]
+          (실제값은 <mark>33</mark>)
+...</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_query">10. Query</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_query_language">10.1. Query language</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Datomic은 datalog라는 query language를 사용한다. 즉, SQL query 문과 다르다.</p>
+</li>
+<li>
+<p>Datalog = Data + Prolog(Logic programming)</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-center valign-top">SQL</th>
+<th class="tableblock halign-center valign-top">Datomc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">query</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SQL query (문자열 --> 조작이 쉽지 않다)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Datalog query (Clojure 자료형  --> 조작이 쉽다)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">join 방식</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">명시적</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">묵시적</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_query_examples">10.2. Query examples</h3>
+<div class="listingblock">
+<div class="title">schema 요약</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure"><span class="symbol">:movie/title</span>       <span class="symbol">:db.type/string</span>   <span class="symbol">:db.cardinality/one</span>
+<span class="symbol">:movie/year</span>        <span class="symbol">:db.type/long</span>     <span class="symbol">:db.cardinality/one</span>
+<span class="symbol">:movie/cast</span>        <span class="symbol">:db.type/ref</span>      <span class="symbol">:db.cardinality/many</span>
+
+<span class="symbol">:person/name</span>       <span class="symbol">:db.type/string</span>   <span class="symbol">:db.cardinality/one</span>
+<span class="symbol">:person/born</span>       <span class="symbol">:db.type/instan</span>   <span class="symbol">:db.cardinality/one</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">query 예제</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">;; SQL query
+;;
+;; SELECT m.title
+;; FROM movies m
+;; WHERE m.year = 1987;
+
+(d/q '[:find ?title
+       :where [?e :movie/year 1987]
+              [?e :movie/title ?title]]
+     (d/db conn))
+; => #{["RoboCop"] ["Lethal Weapon"] ["Predator"]}
+
+
+;; query문에서 parameter의 사용
+(d/q '[:find ?title
+       :in <mark>$ ?year</mark>
+       :where [?e :movie/year ?year]
+              [?e :movie/title ?title]]
+     <mark>(d/db conn) 1987</mark>)
+; => #{["RoboCop"] ["Lethal Weapon"] ["Predator"]}
+
+
+;; query문에서 함수의 사용
+(d/q '[:find ?title ?year
+       :where [?m :movie/title ?title]
+              [?m :movie/year ?year]
+              [<mark>(< ?year 1984)</mark>]]
+     (d/db conn))
+; => #{["Alien" 1979] ["Mad Max" 1979] ["First Blood" 1982] ["Mad Max 2" 1981]}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_join_example">10.3. Join example</h3>
+<div class="sect3">
+<h4 id="_sql_explicit_join">10.3.1. SQL explicit join</h4>
+<div class="listingblock">
+<div class="content">
+<pre>SELECT a.account_id, c.gender, e.fname, e.lname
+FROM account a INNER JOIN customer c
+       ON a.cust_id = c.cust_id
+     INNER JOIN employee e
+       ON a.emp_id = e.emp_id
+WHERE c.cust_type = 'B';</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>c (customer)
+|-- <mark>cust_id</mark>     (PK)  <--
+|-- cust_type           |
+`-- <strong>gender</strong>              |
+                        |
+a (account)             |
+|-- <strong>account_id</strong>  (PK)    |
+|-- <mark>cust_id</mark>     (FK)  <--
+`-- <mark>emp_id</mark>      (FK)      <--
+                            |
+e (employee)                |
+|-- <mark>emp_id</mark>      (PK)      <--
+|-- <strong>fname</strong>
+`-- <strong>lname</strong></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_datomic_implicit_join">10.3.2. Datomic implicit join</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(d/q '[:find ?account-id ?gender ?fname ?lname
+       :where [?cust-id     :cust/type        "B"]
+              [<mark>?cust-id</mark>     :cust/gender      <strong>?gender</strong>]
+              [<strong>?account-id</strong>  :account/cust-id  <mark>?cust-id</mark>]
+              [?account-id  :account/emp-id   <mark>?emp-id</mark>]
+              [<mark>?emp-id</mark>      :emp/fname        <strong>?fname</strong>]
+              [?emp-id      :emp/lname        <strong>?lname</strong>]])</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query시_주의할_점">10.3.3. query시 주의할 점</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>query문의 <code>:where</code>절 순서가 중요하다.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">다음 두 개의 쿼리 중 어느 쪽이 더 효율적일까?</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(d/q '[<span class="symbol">:find</span> ?cust-id
+       <span class="symbol">:where</span> [?cust-id <span class="symbol">:cust/gender</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">female</span><span class="delimiter">&quot;</span></span>]
+              [?cust-id <span class="symbol">:cust/type</span>   <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>]])
+
+(d/q '[<span class="symbol">:find</span> ?cust-id
+       <span class="symbol">:where</span> [?cust-id <span class="symbol">:cust/type</span>   <span class="string"><span class="delimiter">&quot;</span><span class="content">B</span><span class="delimiter">&quot;</span></span>]
+              [?cust-id <span class="symbol">:cust/gender</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">female</span><span class="delimiter">&quot;</span></span>]])</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 75%;">
+<colgroup>
+<col style="width: 66.6666%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">처리량</th>
+<th class="tableblock halign-center valign-middle">메모리 사용량</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\[ \hbox{100만명의 고객} \times \frac{1}{2} \times \frac{1}{10} = \hbox{5만명의 고객} \]</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">50만명 + 5만명 = 55만명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\[ \hbox{100만명의 고객} \times \frac{1}{10} \times \frac{1}{2} = \hbox{5만명의 고객} \]</p></td>
+<td class="tableblock halign-center valign-middle"><p class="tableblock">10만명 + 5만명 = 15만명</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_db_as_a_value_history">11. DB as a Value &amp; History</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_atom_data_type_in_clojure">11.1. Atom data type in Clojure</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top">Code</th>
+<th class="tableblock halign-center valign-top">Diagram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">def</span> <span class="function">a</span> (<span class="keyword">atom</span> <span class="integer">10</span>))
+
+a   <span class="comment">;=&gt; #atom[10 0x274b9960]</span>
+@a  <span class="comment">; =&gt; 10</span>
+
+(<span class="keyword">def</span> <span class="function">b</span> @a)
+
+b   <span class="comment">; =&gt; 10</span></code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre> var          atom            value
+=============================================
+a --&gt;  #atom[10 0x274b9960] --&gt; 10 (100 번지)
+                                 ^
+                                 |
+b --------------------------------</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">reset!</span> a <span class="integer">20</span>)
+
+@a   <span class="comment">; =&gt; 20</span>
+b    <span class="comment">; =&gt; 10</span></code></pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre> var          atom            value
+============================================
+a --&gt;  #atom[20 0x274b9960] --&gt; 20 (200 번지)
+
+b ----------------------------&gt; 10 (100 번지)</pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_db_as_a_value">11.2. DB as A Value</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">ns</span> <span class="namespace">datomic-guide.time-travel</span>
+  (<span class="symbol">:require</span> [datomic.api <span class="symbol">:as</span> d]))
+
+<span class="comment">;;; db connection</span>
+(<span class="keyword">def</span> <span class="function">db-uri</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">datomic:mem://time-travel</span><span class="delimiter">&quot;</span></span>)
+(d/create-database db-uri)
+(<span class="keyword">def</span> <span class="function">conn</span> (d/connect db-uri))
+
+
+(<span class="keyword">def</span> <span class="function">db-1</span>(d/db conn))
+
+db-1   <span class="comment">; =&gt; datomic.db.Db@29475cf8</span>
+
+
+<span class="comment">;; schema install</span>
+(<span class="keyword">def</span> <span class="function">schema</span>
+  [{<span class="symbol">:db/ident</span> <span class="symbol">:user/id</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/unique</span> <span class="symbol">:db.unique/value</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/name</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}
+
+   {<span class="symbol">:db/ident</span> <span class="symbol">:user/e-mail</span>
+    <span class="symbol">:db/valueType</span> <span class="symbol">:db.type/string</span>
+    <span class="symbol">:db/unique</span> <span class="symbol">:db.unique/identity</span>
+    <span class="symbol">:db/cardinality</span> <span class="symbol">:db.cardinality/one</span>}])
+
+@(d/transact conn schema)
+<span class="comment">; =&gt; {:db-before datomic.db.Db@29475cf8,</span>
+<span class="comment">;     :db-after datomic.db.Db@5ba75b5c,</span>
+<span class="comment">;     :tx-data [#datom[13194139534312 50 #inst &quot;2017-11-09T06:03:29.648-00:00&quot; 13194139534312 true]</span>
+<span class="comment">;               #datom[63 10 :user/id 13194139534312 true]</span>
+<span class="comment">;               #datom[63 40 23 13194139534312 true]</span>
+<span class="comment">;               #datom[63 42 37 13194139534312 true]</span>
+<span class="comment">;               #datom[63 41 35 13194139534312 true]</span>
+<span class="comment">;               #datom[64 10 :user/name 13194139534312 true]</span>
+<span class="comment">;               #datom[64 40 23 13194139534312 true]</span>
+<span class="comment">;               #datom[64 41 35 13194139534312 true]</span>
+<span class="comment">;               #datom[65 10 :user/e-mail 13194139534312 true]</span>
+<span class="comment">;               #datom[65 40 23 13194139534312 true]</span>
+<span class="comment">;               #datom[65 42 38 13194139534312 true]</span>
+<span class="comment">;               #datom[65 41 35 13194139534312 true]</span>
+<span class="comment">;               #datom[0 13 65 13194139534312 true]</span>
+<span class="comment">;               #datom[0 13 64 13194139534312 true]</span>
+<span class="comment">;               #datom[0 13 63 13194139534312 true]],</span>
+<span class="comment">;     :tempids {-9223301668109598143 63, -9223301668109598142 64, -9223301668109598141 65}}</span>
+
+(<span class="keyword">def</span> <span class="function">db-2</span> (d/db conn))
+
+db-2   <span class="comment">; =&gt; datomic.db.Db@5ba75b5c</span>
+
+
+<span class="comment">;; data install</span>
+(<span class="keyword">def</span> <span class="function">user-data</span>
+  [{<span class="symbol">:db/id</span> <span class="error">#</span>db/id[<span class="symbol">:db.part/user</span>]
+    <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Alice Parker</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/e-mail</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice@gmail.com</span><span class="delimiter">&quot;</span></span>}
+
+   {<span class="symbol">:db/id</span> <span class="error">#</span>db/id[<span class="symbol">:db.part/user</span>]
+    <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">jack</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/name</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">Jack Hinton</span><span class="delimiter">&quot;</span></span>
+    <span class="symbol">:user/e-mail</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">jack@gmail.com</span><span class="delimiter">&quot;</span></span>}])
+
+@(d/transact conn user-data)
+
+(<span class="keyword">def</span> <span class="function">db-3</span> (d/db conn))
+
+db-3   <span class="comment">; =&gt; datomic.db.Db@d34f836c</span>
+
+
+(<span class="keyword">def</span> <span class="function">alice-ent-id</span>
+  (d/q '[<span class="symbol">:find</span> ?e <span class="keyword">.</span>
+         <span class="symbol">:where</span> [?e <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice</span><span class="delimiter">&quot;</span></span>]]
+       db-3))
+
+(d/pull db-3 '[<span class="keyword">*</span>] alice-ent-id)
+<span class="comment">; =&gt; {:db/id 17592186045418,</span>
+<span class="comment">;     :user/id &quot;alice&quot;,</span>
+<span class="comment">;     :user/name &quot;Alice Parker&quot;,</span>
+<span class="comment">;     :user/e-mail &quot;alice@gmail.com&quot;}</span>
+
+
+
+@(d/transact conn [[<span class="symbol">:db/add</span> alice-ent-id <span class="symbol">:user/e-mail</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice@facebook.com</span><span class="delimiter">&quot;</span></span>]])
+
+(<span class="keyword">def</span> <span class="function">db-4</span> (d/db conn))
+
+(d/pull db-4 '[<span class="keyword">*</span>] alice-ent-id)
+<span class="comment">; =&gt; {:db/id 17592186045418,</span>
+<span class="comment">;     :user/id &quot;alice&quot;,</span>
+<span class="comment">;     :user/name &quot;Alice Parker&quot;,</span>
+<span class="comment">;     :user/e-mail &quot;alice@facebook.com&quot;}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_history_db">11.3. History DB</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="clojure">(<span class="keyword">def</span> <span class="function">hist-db</span> (d/history db-4))
+
+(d/q '[<span class="symbol">:find</span> ?e ?e-mail ?tx
+       <span class="symbol">:in</span> $hist
+       <span class="symbol">:where</span> [$hist ?e <span class="symbol">:user/id</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">alice</span><span class="delimiter">&quot;</span></span>]
+              [$hist ?e <span class="symbol">:user/e-mail</span> ?e-mail]]
+     hist-db)
+<span class="comment">; =&gt; #{[17592186045418 &quot;alice@gmail.com&quot;]</span>
+<span class="comment">;      [17592186045418 &quot;alice@facebook.com&quot;]}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_한계">12. 한계</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>not open-source, free-as-free-beer.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2017-11-10 15:20:47 KST
+</div>
+</div>
+</body>
+</html>
