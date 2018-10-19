@@ -53,5 +53,5 @@
 하는 생각도 들기 때문이다. 기존에 이에 대한 제대로 된 설명이 없었는데, 그 이유는 다음의 두
 문장이 등가이기 때문이다.
 
-* I cry, only if I'm sad. (나는 슬플 때에만 운다.)
-* If I cry, then I'm sad. (내가 울면 나는 슬프다.)
+* I cry, only if I'm sad. (나는 슬플 때에만 운다.) \(\quad P\) only if \(Q)\)
+* If I cry, then I'm sad. (내가 울면 나는 슬프다.) \( \quad P \to Q \)
