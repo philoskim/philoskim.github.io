@@ -10,10 +10,10 @@
 
 == if and only if
 
-수학 책을 읽다 보면, _iff_ 라는 표현을 자주 접하게 되는데, 이 말은 __if and only if__ 라는
+수학 책을 읽다 보면 _iff_ 라는 표현을 자주 접하게 되는데, 이 말은 __if and only if__ 라는
 말을 짧게 줄여서 쓴 표현이다.
 
-그리고 다음의 세 표현은 같은 표현으로 흔히 설명되어 있다.
+그리고 다음의 세 개의 표현은 같은 표현으로 흔히 설명되어 있다.
 
 [cols="2*", options="header", width="70%"]]
 |===
@@ -27,7 +27,7 @@
 | if \(P\) then \(Q\) and if \(Q\) then \(P\)
 | \( (P \to Q) \ \land \ (Q \to P) \)
 
-| \(P\) equals to \(Q\)
+| \(P\) is equal to \(Q\)
 | \( P = Q \)
 
 |===
