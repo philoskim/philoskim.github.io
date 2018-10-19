@@ -1,0 +1,55 @@
+# Math memo
+:sectnums:
+:stem: latexmath
+:toc:
+:linkcss:
+
+\( \def\b#1{\mathbf{#1}} \)
+\( \def\ds{\displaystyle} \)
+\( \def\txt#1{\ \; \textrm{#1} \ \;} \)
+
+== if and only if
+
+수학 책을 읽다 보면, _iff_ 라는 표현을 자주 접하게 되는데, 이 말은 __if and only if__ 라는
+말을 짧게 줄여서 쓴 표현이다.
+
+그리고 다음의 세 표현은 같은 표현으로 흔히 설명되어 있다.
+
+[cols="2*", options="header", width="70%"]]
+|===
+
+^| 영어
+^| 수식
+
+| \(P\) if and only if \(Q\)
+| \( P \txt{iff} Q \)
+
+| if \(P\) then \(Q\) and if \(Q\) then \(P\)
+| \( (P \to Q) \ \land \ (Q \to P) \)
+
+| \(P\) equals to \(Q\)
+| \( P = Q \)
+
+|===
+
+위의 \(P\) if and only if \(Q\) 를 두 부분으로 나누어 분석해 보면 다음과 같이 된다.
+
+[cols="2*", options="header", width="70%"]
+|===
+
+^| 영어
+^| 수식
+
+| if \(Q\) then \(P\)   \( \quad (\leftarrow \)   \(P\) if \(Q)\)
+| \( Q \to P \)
+
+| only if \(Q\) then \(P\)   \( \quad (\leftarrow \)   \(P\) only if \(Q)\)
+| \( P \to Q \)
+
+|===
+
+그런데 'only if \(Q\) then \(P\)' 부분이 어떻게 '\( P \to Q \)'로 된다는 걸까? 기존에 이에
+대한 제대로 된 설명이 없었다. 그 이유는 다음의 두 문장이 등가이기 떄문이다.
+
+* I cry, only if I'm sad. (나는 슬플 때에만 운다.)
+* If I cry, then I'm sad. (내가 울면 나는 슬프다.)
