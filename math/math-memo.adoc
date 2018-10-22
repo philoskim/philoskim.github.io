@@ -42,8 +42,8 @@ P = Q \) 가 된다.
 
 === if and only if 의 의미
 
-\( Q \txt{iff} P \) 는 \(Q\) if and only if \(P\) 와 같은 표현이라고 이미 앞에서 이야기
-했는데, 궁극적으로는 \( (P \to Q) \ \land \ (Q \to P) \) 를 의미한다. 어떻게 같게 되는지를
+\( Q \txt{iff} P \) 는 \(Q\) if and only if \(P\) 와 같다고 이미 앞에서 이야기 했는데, 이
+말은 결국 \( (P \to Q) \ \land \ (Q \to P) \) 와도 같은 표현이다. 어떻게 같게 되는지를
 살펴 보자.
 
 
