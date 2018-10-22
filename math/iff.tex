@@ -1,0 +1,53 @@
+\usemodule[tikz]
+\usetikzlibrary[arrows.meta]
+
+\setcounter[userpage][0]
+
+\starttext
+
+\startTEXpage % 1
+\incrementcounter[userpage]
+\starttikzpicture[very thick]
+  \draw[even odd rule, fill=blue!20]
+    (0, 0) circle (1.5cm)
+    (0, 0) ellipse [x radius=6cm, y radius=3cm];
+  \node[scale=2] at (0, 0) {P};
+  \node[scale=2] at (0, 3.5) {Q};
+  \node[scale=2] at (3.4, 0) {R};
+  \node[scale=2] at (0, -4) {$P \subset Q$};
+\stoptikzpicture
+\stopTEXpage
+
+
+\startTEXpage % 2
+\incrementcounter[userpage]
+\starttikzpicture[very thick]
+  \fill[even odd rule, blue!20]
+    (0, 0) circle (1.5cm)
+    (0, 0) ellipse [dashed, x radius=6cm, y radius=3cm];
+
+  \draw (0, 0) circle (1.5cm);
+  \draw[dashed] (0, 0) ellipse [x radius=6cm, y radius=3cm];
+
+  \node[scale=2] at (0, 0) {P};
+  \node[scale=2] at (0, 3.5) {Q};
+  \node[scale=2] at (3.4, 0) {R};
+
+  \draw[-{Latex[length=4mm]}, red, very thick] (0, 3) -- (0, 1.5);
+  \draw[-{Latex[length=4mm]}, red, very thick] (0, -3) -- (0, -1.5);
+  \draw[-{Latex[length=4mm]}, red, very thick] (-6, 0) -- (-1.5, 0);
+  \draw[-{Latex[length=4mm]}, red, very thick] (6, 0) -- (1.5, 0);
+\stoptikzpicture
+\stopTEXpage
+
+
+\startTEXpage % 3
+\incrementcounter[userpage]
+\starttikzpicture[very thick]
+  \draw[dashed] (0, 0) ellipse [x radius=6cm, y radius=3cm];
+  \draw (0, 0) circle (1.5cm);
+  \node[scale=2] at (0, 0) {$P = Q$};
+\stoptikzpicture
+\stopTEXpage
+
+\stoptext
