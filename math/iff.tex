@@ -5,9 +5,11 @@
 
 \starttext
 
+\tikzset{very thick}
+
 \startTEXpage % 1
 \incrementcounter[userpage]
-\starttikzpicture[very thick]
+\starttikzpicture
   \draw[even odd rule, fill=blue!20]
     (0, 0) circle (1.5cm)
     (0, 0) ellipse [x radius=6cm, y radius=3cm];
@@ -21,7 +23,7 @@
 
 \startTEXpage % 2
 \incrementcounter[userpage]
-\starttikzpicture[very thick]
+\starttikzpicture
   \fill[even odd rule, blue!20]
     (0, 0) circle (1.5cm)
     (0, 0) ellipse [dashed, x radius=6cm, y radius=3cm];
@@ -43,7 +45,7 @@
 
 \startTEXpage % 3
 \incrementcounter[userpage]
-\starttikzpicture[very thick]
+\starttikzpicture
   \draw[dashed] (0, 0) ellipse [x radius=6cm, y radius=3cm];
   \draw (0, 0) circle (1.5cm);
   \node[scale=2] at (0, 0) {$P = Q$};
