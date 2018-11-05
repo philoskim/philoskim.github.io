@@ -1,14 +1,13 @@
 \usemodule[tikz]
 \usetikzlibrary[arrows.meta]
 
-\setcounter[userpage][0]
+\setupTEXpage[pagestate=start]
 
 \starttext
 
 \tikzset{very thick}
 
 \startTEXpage % 1
-\incrementcounter[userpage]
 \starttikzpicture
   \draw[even odd rule, fill=blue!20]
     (0, 0) circle (1.5cm)
@@ -22,7 +21,6 @@
 
 
 \startTEXpage % 2
-\incrementcounter[userpage]
 \starttikzpicture
   \fill[even odd rule, blue!20]
     (0, 0) circle (1.5cm)
@@ -44,7 +42,6 @@
 
 
 \startTEXpage % 3
-\incrementcounter[userpage]
 \starttikzpicture
   \draw[dashed] (0, 0) ellipse [x radius=6cm, y radius=3cm];
   \draw (0, 0) circle (1.5cm);
