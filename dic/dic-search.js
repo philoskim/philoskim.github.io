@@ -64,17 +64,16 @@ $(document).ready(function() {
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
 
     cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
-    webster    : ["http://www.merriam-webster.com/dictionary/{0}", "space", true],
+    collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "space", false],
     vocabulary : ["http://www.vocabulary.com/dictionary/{0}", "space", true],
-    yourdic    : ["http://www.yourdictionary.com/{0}", "minus", true],
-
     etymology  : ["http://www.etymonline.com/index.php?allowed_in_frame=0"
                   + "&search={0}&searchmode=none", "plus", false],
+    webster    : ["http://www.merriam-webster.com/dictionary/{0}", "space", true],
+    yourdic    : ["http://www.yourdictionary.com/{0}", "minus", true],
     wiktionary : ["http://en.wiktionary.org/wiki/{0}", "space", true],
     dictionary : ["http://dictionary.reference.com/browse/{0}", "plus", true],
     free       : ["http://www.thefreedictionary.com/{0}", "plus", true],
     thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
-    collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "space", false],
     onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true],
     math       : ["http://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true],
     naver2     : ["http://dic.naver.com/search.nhn?dicQuery={0}&x=0&y=0&query={0}&target=dic&ie=utf8", "space", false]
