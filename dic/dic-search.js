@@ -63,8 +63,8 @@ $(document).ready(function() {
 
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
 
+    collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "minus", false],
     cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
-    collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "space", false],
     vocabulary : ["http://www.vocabulary.com/dictionary/{0}", "space", true],
     etymology  : ["http://www.etymonline.com/index.php?allowed_in_frame=0"
                   + "&search={0}&searchmode=none", "plus", false],
