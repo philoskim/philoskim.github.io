@@ -50,6 +50,8 @@ var buttonInfos =
 
 
     google     : ["https://www.google.co.kr/#hl=ko&q={0}", false, false],
+    gas     : ["https://www.google.co.kr/#hl=ko&q={0}+site:https://developers.google.com/apps-script/reference", false, false]
+
  };
 
 var oldInput = "";
