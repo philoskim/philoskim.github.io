@@ -1,0 +1,25 @@
+/* the prefix mc- means MathCafe */
+
+div.mc-question
+{
+  text-indent: -2em;
+  margin-left: 2em;
+}  
+
+span.mc-no
+{
+   margin: 0.5em 2em;
+}
+
+div.mc-img
+{
+   margin-left: 3em;
+   width: 500px;
+}
+
+span.mc-point
+{
+   margin-left: 2em;
+}
+
+
