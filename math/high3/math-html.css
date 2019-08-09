@@ -17,6 +17,11 @@ div.mc-img
    width: 90vw;
 }
 
+div.mc-ing img
+{
+    max-width: 100%;
+}
+
 span.mc-point
 {
    margin-left: 2em;
