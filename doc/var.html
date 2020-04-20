@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><title>4&nbsp;Vars</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="manual-style.css" title="default"/><link rel="stylesheet" type="text/css" href="manual-racket.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="manual-racket.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;"><a href="javascript:void(0);" title="Expand/Collapse" class="tocviewtoggle" onclick="TocviewToggle(this,&quot;tocview_0&quot;);">&#9660;</a></td><td></td><td><a href="index.html" class="tocviewlink" data-pltdoc="x">Clojure Memo</a></td></tr></table></div><div class="tocviewsublisttop" style="display: block;" id="tocview_0"><table cellspacing="0" cellpadding="0"><tr><td align="right">1&nbsp;</td><td><a href="why-clojure.html" class="tocviewlink" data-pltdoc="x">Why Clojure?</a></td></tr><tr><td align="right">2&nbsp;</td><td><a href="recursions.html" class="tocviewlink" data-pltdoc="x">Recursions</a></td></tr><tr><td align="right">3&nbsp;</td><td><a href="functional-patterns.html" class="tocviewlink" data-pltdoc="x">Functional Patterns</a></td></tr><tr><td align="right">4&nbsp;</td><td><a href="" class="tocviewselflink" data-pltdoc="x">Vars</a></td></tr><tr><td align="right">5&nbsp;</td><td><a href="testing.html" class="tocviewlink" data-pltdoc="x">Testing</a></td></tr><tr><td align="right">6&nbsp;</td><td><a href="tips.html" class="tocviewlink" data-pltdoc="x">Tips</a></td></tr><tr><td align="right">7&nbsp;</td><td><a href="core-async.html" class="tocviewlink" data-pltdoc="x">core.async</a></td></tr><tr><td align="right">8&nbsp;</td><td><a href="clojurescript.html" class="tocviewlink" data-pltdoc="x">Clojure<span class="mywbr"> &nbsp;</span>Script &#49548;&#44060;</a></td></tr><tr><td align="right"></td><td><a href="doc-index.html" class="tocviewlink" data-pltdoc="x">Index</a></td></tr></table></div></div><div class="tocviewlist"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;"><a href="javascript:void(0);" title="Expand/Collapse" class="tocviewtoggle" onclick="TocviewToggle(this,&quot;tocview_1&quot;);">&#9658;</a></td><td>4&nbsp;</td><td><a href="" class="tocviewselflink" data-pltdoc="x">Vars</a></td></tr></table><div class="tocviewsublistbottom" style="display: none;" id="tocview_1"><table cellspacing="0" cellpadding="0"><tr><td align="right">4.1&nbsp;</td><td><a href="#%28part._.Var__.Binding%29" class="tocviewlink" data-pltdoc="x">Var&#50752; Binding</a></td></tr><tr><td align="right">4.2&nbsp;</td><td><a href="#%28part._.Symbol______.Var____%29" class="tocviewlink" data-pltdoc="x">Symbol&#51032; &#54217;&#44032;&#50752; Var&#51032; &#54217;&#44032;</a></td></tr></table></div></div></div><div class="tocsub"><div class="tocsubtitle">On this page:</div><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber">4.1<tt>&nbsp;</tt></span><a href="#%28part._.Var__.Binding%29" class="tocsubseclink" data-pltdoc="x">Var&#50752; Binding</a></td></tr><tr><td><span class="tocsublinknumber">4.2<tt>&nbsp;</tt></span><a href="#%28part._.Symbol______.Var____%29" class="tocsubseclink" data-pltdoc="x">Symbol&#51032; &#54217;&#44032;&#50752; Var&#51032; &#54217;&#44032;</a></td></tr><tr><td><span class="tocsublinknumber">4.2.1<tt>&nbsp;</tt></span><a href="#%28part._var___________________%29" class="tocsubseclink" data-pltdoc="x">var&#44032; &#44032;&#47532;&#53412;&#45716; &#44050;&#51060; &#54632;&#49688;&#44032; &#50500;&#45772; &#44221;&#50864;</a></td></tr><tr><td><span class="tocsublinknumber">4.2.2<tt>&nbsp;</tt></span><a href="#%28part._var________________%29" class="tocsubseclink" data-pltdoc="x">var&#44032; &#44032;&#47532;&#53412;&#45716; &#44050;&#51060; &#54632;&#49688;&#51064; &#44221;&#50864;</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><div class="navsettop"><span class="navleft"><div class="nosearchform"></div>&nbsp;&nbsp;</span><span class="navright">&nbsp;&nbsp;<a href="functional-patterns.html" title="backward to &quot;3 Functional Patterns&quot;" data-pltdoc="x">&larr; prev</a>&nbsp;&nbsp;<a href="index.html" title="up to &quot;Clojure Memo&quot;" data-pltdoc="x">up</a>&nbsp;&nbsp;<a href="testing.html" title="forward to &quot;5 Testing&quot;" data-pltdoc="x">next &rarr;</a></span>&nbsp;</div><h3>4<tt>&nbsp;</tt><a name="(part._var)"></a>Vars</h3><h4>4.1<tt>&nbsp;</tt><a name="(part._.Var__.Binding)"></a>Var&#50752; Binding</h4><p>&#45796;&#51020;&#51008; var&#51032; binding&#50640; &#45824;&#54620; &#49444;&#47749;&#51060;&#45796;.</p><p>Clojure&#50640;&#49436; def&#47196; &#49440;&#50616;&#46108; &#48320;&#49688;&#47749;&#51060;&#45208; defn&#51004;&#47196; &#49440;&#50616;&#46108; &#54632;&#49688;&#47749;&#51008; &#54644;&#45817; namespace&#51032; &#49900;&#48380;
-&#53580;&#51060;&#48660;&#50640; symbol&#51060; var&#47484; &#44032;&#47532;&#53412;&#45716; &#54805;&#53468;(symbol --&gt; var)&#47196; &#46321;&#47197;&#46104;&#44256; &#44288;&#47532;&#46108;&#45796;. &#44536;&#47532;&#44256; &#54532;&#47196;&#44536;&#47016;
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><meta name="viewport" content="width=device-width, initial-scale=0.8"/><title>4&nbsp;Vars</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="manual-style.css" title="default"/><link rel="stylesheet" type="text/css" href="manual-racket.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="manual-racket.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;"><a href="javascript:void(0);" title="Expand/Collapse" class="tocviewtoggle" onclick="TocviewToggle(this,&quot;tocview_0&quot;);">&#9660;</a></td><td></td><td><a href="index.html" class="tocviewlink" data-pltdoc="x">Clojure Memo</a></td></tr></table></div><div class="tocviewsublisttop" style="display: block;" id="tocview_0"><table cellspacing="0" cellpadding="0"><tr><td align="right">1&nbsp;</td><td><a href="why-clojure.html" class="tocviewlink" data-pltdoc="x">Why Clojure?</a></td></tr><tr><td align="right">2&nbsp;</td><td><a href="recursions.html" class="tocviewlink" data-pltdoc="x">Recursions</a></td></tr><tr><td align="right">3&nbsp;</td><td><a href="functional-patterns.html" class="tocviewlink" data-pltdoc="x">Functional Patterns</a></td></tr><tr><td align="right">4&nbsp;</td><td><a href="" class="tocviewselflink" data-pltdoc="x">Vars</a></td></tr><tr><td align="right">5&nbsp;</td><td><a href="testing.html" class="tocviewlink" data-pltdoc="x">Testing</a></td></tr><tr><td align="right">6&nbsp;</td><td><a href="tips.html" class="tocviewlink" data-pltdoc="x">Tips</a></td></tr><tr><td align="right">7&nbsp;</td><td><a href="core-async.html" class="tocviewlink" data-pltdoc="x">core.async</a></td></tr><tr><td align="right">8&nbsp;</td><td><a href="clojurescript.html" class="tocviewlink" data-pltdoc="x">Clojure<span class="mywbr"> &nbsp;</span>Script &#49548;&#44060;</a></td></tr><tr><td align="right"></td><td><a href="doc-index.html" class="tocviewlink" data-pltdoc="x">Index</a></td></tr></table></div></div><div class="tocviewlist"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;"><a href="javascript:void(0);" title="Expand/Collapse" class="tocviewtoggle" onclick="TocviewToggle(this,&quot;tocview_1&quot;);">&#9658;</a></td><td>4&nbsp;</td><td><a href="" class="tocviewselflink" data-pltdoc="x">Vars</a></td></tr></table><div class="tocviewsublistbottom" style="display: none;" id="tocview_1"><table cellspacing="0" cellpadding="0"><tr><td align="right">4.1&nbsp;</td><td><a href="#%28part._.Var__.Binding%29" class="tocviewlink" data-pltdoc="x">Var&#50752; Binding</a></td></tr><tr><td align="right">4.2&nbsp;</td><td><a href="#%28part._.Symbol______.Var____%29" class="tocviewlink" data-pltdoc="x">Symbol&#51032; &#54217;&#44032;&#50752; Var&#51032; &#54217;&#44032;</a></td></tr></table></div></div></div><div class="tocsub"><div class="tocsubtitle">On this page:</div><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber">4.1<tt>&nbsp;</tt></span><a href="#%28part._.Var__.Binding%29" class="tocsubseclink" data-pltdoc="x">Var&#50752; Binding</a></td></tr><tr><td><span class="tocsublinknumber">4.2<tt>&nbsp;</tt></span><a href="#%28part._.Symbol______.Var____%29" class="tocsubseclink" data-pltdoc="x">Symbol&#51032; &#54217;&#44032;&#50752; Var&#51032; &#54217;&#44032;</a></td></tr><tr><td><span class="tocsublinknumber">4.2.1<tt>&nbsp;</tt></span><a href="#%28part._var___________________%29" class="tocsubseclink" data-pltdoc="x">var&#44032; &#44032;&#47532;&#53412;&#45716; &#44050;&#51060; &#54632;&#49688;&#44032; &#50500;&#45772; &#44221;&#50864;</a></td></tr><tr><td><span class="tocsublinknumber">4.2.2<tt>&nbsp;</tt></span><a href="#%28part._var________________%29" class="tocsubseclink" data-pltdoc="x">var&#44032; &#44032;&#47532;&#53412;&#45716; &#44050;&#51060; &#54632;&#49688;&#51064; &#44221;&#50864;</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><div class="navsettop"><span class="navleft"><div class="nosearchform"></div>&nbsp;&nbsp;</span><span class="navright">&nbsp;&nbsp;<a href="functional-patterns.html" title="backward to &quot;3 Functional Patterns&quot;" data-pltdoc="x">&larr; prev</a>&nbsp;&nbsp;<a href="index.html" title="up to &quot;Clojure Memo&quot;" data-pltdoc="x">up</a>&nbsp;&nbsp;<a href="testing.html" title="forward to &quot;5 Testing&quot;" data-pltdoc="x">next &rarr;</a></span>&nbsp;</div><h3>4<tt>&nbsp;</tt><a name="(part._var)"></a>Vars</h3><h4>4.1<tt>&nbsp;</tt><a name="(part._.Var__.Binding)"></a>Var&#50752; Binding</h4><p>&#45796;&#51020;&#51008; var&#51032; binding&#50640; &#45824;&#54620; &#49444;&#47749;&#51060;&#45796;.</p><p>Clojure&#50640;&#49436; def&#47196; &#49440;&#50616;&#46108; &#48320;&#49688;&#47749;&#51060;&#45208; defn&#51004;&#47196; &#49440;&#50616;&#46108; &#54632;&#49688;&#47749;&#51008; &#54644;&#45817; namespace&#51032; &#49900;&#48380;
+&#53580;&#51060;&#48660;&#50640; symbol&#51060; var&#47484; &#44032;&#47532;&#53412;&#45716; &#54805;&#53468;(symbol &ndash;&gt; var)&#47196; &#46321;&#47197;&#46104;&#44256; &#44288;&#47532;&#46108;&#45796;. &#44536;&#47532;&#44256; &#54532;&#47196;&#44536;&#47016;
 &#49892;&#54665; &#51473;&#50640; &#51060;&#50752; &#44288;&#47144;&#46108; &#51221;&#48372;&#47484; &#52280;&#51312;&#54624; &#49688;&#46020; &#51080;&#45796;.</p><p>&#44536;&#47088;&#45936; var&#51032; binding&#50640;&#45716; &#53356;&#44172; &#46160; &#51333;&#47448;&#44032; &#51080;&#45796;. &#48148;&#47196; root binding&#44284; thread-local
 binding&#51060; &#44536;&#44163;&#51060;&#45796;.</p><p>root binding&#51008; &#47784;&#46304; &#50416;&#47112;&#46300;&#50640;&#49436; &#51217;&#44540; &#44032;&#45733;&#54620; binding&#51064; &#48152;&#47732;&#50640;, thread-local binding&#51008;
-&#51060;&#47492;&#50640;&#49436; &#51664;&#51089;&#54624; &#49688; &#51080;&#46319;&#51060; &#54644;&#45817; &#50416;&#47112;&#46300;&#50640;&#49436;&#47564; &#51217;&#44540; &#44032;&#45733;&#54633;&#45768;&#45796;.</p><p>&#45796;&#51020;&#51032; &#50696;&#45716; root binding&#51032; &#50696;&#51060;&#45796;.</p><p><pre class="codeblock">(def a 10)
+&#51060;&#47492;&#50640;&#49436; &#51664;&#51089;&#54624; &#49688; &#51080;&#46319;&#51060; &#54644;&#45817; &#50416;&#47112;&#46300;&#50640;&#49436;&#47564; &#51217;&#44540; &#44032;&#45733;&#54616;&#45796;.</p><p>&#45796;&#51020;&#51032; &#50696;&#45716; root binding&#51032; &#50696;&#51060;&#45796;.</p><p><pre class="codeblock">(def a 10)
 (def b 20)
 
 ;; &#51060; &#54632;&#49688;&#44032; &#49892;&#54665;&#46104;&#44256; &#51080;&#45716; main thread&#50640;&#49436;&#46020; &#51217;&#44540; &#44032;&#45733;
@@ -13,7 +13,7 @@ binding&#51060; &#44536;&#44163;&#51060;&#45796;.</p><p>root binding&#51008; &#4
 ;; future&#50640; &#51032;&#54644; &#49892;&#54665;&#46104;&#45716; &#48324;&#46020;&#51032; &#50416;&#47112;&#46300;&#50640;&#49436;&#46020; &#51217;&#44540; &#44032;&#45733;
 @(future (+ a b))
 ; =&gt; 30</pre></p><p>&#51060;&#50640; &#48152;&#54644; thread-local binding&#51012; &#51060;&#50857;&#54616;&#47140;&#47732;, &#45796;&#51020; &#46160; &#44032;&#51648; &#51312;&#44148;&#51012; &#47784;&#46160; &#52649;&#51313;&#49884;&#53020;
-&#51452;&#50612;&#50556; &#54620;&#45796;.</p><ol><li><p>def &#49440;&#50616;&#49884; ^:dynamic&#51012; &#48152;&#46300;&#49884; &#54252;&#54632;&#54644; &#51452;&#50612;&#50556; &#54620;&#45796;.</p></li><li><p>'binding &#47588;&#53356;&#47196; &#50504;'&#50640;&#49436;&#47564; dynamic var&#47484; &#52280;&#51312;&#54644;&#50556; &#54620;&#45796;.</p></li></ol><p><pre class="codeblock">(def ^:dynamic c 10)
+&#51452;&#50612;&#50556; &#54620;&#45796;.</p><ol><li><p>def &#49440;&#50616;&#49884; ^:dynamic&#51012; &#48152;&#46300;&#49884; &#54252;&#54632;&#54644; &#51452;&#50612;&#50556; &#54620;&#45796;.</p></li><li><p>&rsquo;binding &#47588;&#53356;&#47196; &#50504;&rsquo;&#50640;&#49436;&#47564; dynamic var&#47484; &#52280;&#51312;&#54644;&#50556; &#54620;&#45796;.</p></li></ol><p><pre class="codeblock">(def ^:dynamic c 10)
 (def ^:dynamic d 20)
 
 ;; &#51060; &#46412;&#45716; dynamic&#51004;&#47196; &#49440;&#50616;&#46104;&#50612; &#51080;&#50612;&#46020; binding &#47588;&#53356;&#47196; &#50504;&#50640;&#49436;
@@ -48,7 +48,7 @@ binding&#51060; &#44536;&#44163;&#51060;&#45796;.</p><p>root binding&#51008; &#4
 (+ c d)
 ; =&gt; 30</pre></p><h4>4.2<tt>&nbsp;</tt><a name="(part._.Symbol______.Var____)"></a>Symbol&#51032; &#54217;&#44032;&#50752; Var&#51032; &#54217;&#44032;</h4><p>Clojure&#50640;&#49436;&#45716; top-level symbol(&#51593;, def&#47196; &#51221;&#51032;&#46104;&#45716; &#49900;&#48380;)&#51060;, Common Lisp&#50640;&#49436;&#50752;&#45716; &#45804;&#47532;,
 &#44050;(value)&#51012; &#51649;&#51217; &#44032;&#47532;&#53412;&#51648; &#50506;&#44256;, var&#47484; &#44221;&#50976;&#54644; &#44032;&#47532;&#53429;&#45768;&#45796;. &#51060; &#44544;&#50640;&#49436;&#45716; &#44536; &#51089;&#46041; &#47700;&#52852;&#45768;&#51608;&#51012;
-&#51228;&#44032; &#51060;&#54644;&#54620; &#45824;&#47196; &#49444;&#47749;&#54644; &#48372;&#44192;&#49845;&#45768;&#45796;.</p><p><pre class="descblock">symbol --&gt; var --&gt; value</pre></p><p>&#51064;&#53552;&#45367;&#51012; &#44160;&#49353;&#54644; &#48400;&#46020; symbol&#51032; &#54217;&#44032;&#50752; var&#51032; &#54217;&#44032;&#50640; &#45824;&#54644; &#44536; &#52264;&#51060;&#47484; &#47749;&#53132;&#54616;&#44172; &#49444;&#47749;&#54620; &#44544;&#51012; &#52286;&#44592;
+&#51228;&#44032; &#51060;&#54644;&#54620; &#45824;&#47196; &#49444;&#47749;&#54644; &#48372;&#44192;&#49845;&#45768;&#45796;.</p><p><pre class="descblock">symbol &ndash;&gt; var &ndash;&gt; value</pre></p><p>&#51064;&#53552;&#45367;&#51012; &#44160;&#49353;&#54644; &#48400;&#46020; symbol&#51032; &#54217;&#44032;&#50752; var&#51032; &#54217;&#44032;&#50640; &#45824;&#54644; &#44536; &#52264;&#51060;&#47484; &#47749;&#53132;&#54616;&#44172; &#49444;&#47749;&#54620; &#44544;&#51012; &#52286;&#44592;
 &#50612;&#47140;&#50892;, &#51228;&#44032; &#51649;&#51217; &#53580;&#49828;&#53944;&#54620; &#44208;&#44284;&#47484; &#48148;&#53461;&#51004;&#47196; &#51228; &#45208;&#47492;&#45824;&#47196; &#48516;&#49437;&#54620; &#45236;&#50857;&#51077;&#45768;&#45796;. &#51228;&#44032; &#51060;&#54644;&#54620; &#48148;&#44032;
 &#49892;&#51228;&#50752; &#45796;&#47484; &#49688;&#46020; &#51080;&#51020;&#51012; &#52280;&#44256;&#54616;&#49884;&#44256;, &#51096;&#47803;&#46108; &#51060;&#54644;&#46972;&#44256; &#54032;&#45800;&#46104;&#45716; &#48512;&#48516;&#51060; &#51080;&#51004;&#47732; &#51648;&#51201;&#54644; &#51452;&#49884;&#44592;
 &#48148;&#46989;&#45768;&#45796;. &#50500;&#50872;&#47084; &#51060; &#44544;&#51008; Clojure&#51032; symbol&#51060;&#45208; var&#50640; &#45824;&#54620; &#44592;&#48376;&#51201;&#51064; &#51060;&#54644;&#44032; &#49440;&#54665;&#46104;&#50612;&#50556; &#51228;&#45824;&#47196;
@@ -62,13 +62,13 @@ nil
 ; ns-a &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a&#47484; &#51221;&#51032;&#54620;&#45796;.
 ;
 ;  &#49900;&#48380;   var          value
-; ---------------------------
-;  a --&gt;  #'ns-a/a --&gt; 10
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>
+;  a &ndash;&gt;  #&rsquo;ns-a/a &ndash;&gt; 10
 ns-a&gt; (def a 10)
-#'ns-a/a
+#&rsquo;ns-a/a
 
 ; top-level &#49900;&#48380; a&#47484; &#54217;&#44032;&#54616;&#47732;, &#49900;&#48380; a&#44032; &#44032;&#47532;&#53412;&#44256; &#51080;&#45716; var&#51064;
-; #'ns-a/a&#47484; &#44144;&#52432; value&#47484; &#44032;&#51256;&#50724;&#44172; &#46108;&#45796;.
+; #&rsquo;ns-a/a&#47484; &#44144;&#52432; value&#47484; &#44032;&#51256;&#50724;&#44172; &#46108;&#45796;.
 ns-a&gt; a
 10
 
@@ -80,28 +80,28 @@ nil
 ; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a1&#51012;, ns-a/a&#47196; &#51221;&#51032;&#54620;&#45796;.
 ;
 ; &#49900;&#48380;    var           value
-; ----------------------------
-;  a1 --&gt; #'ns-b/a1 --&gt; 10
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  a1 &ndash;&gt; #&rsquo;ns-b/a1 &ndash;&gt; 10
 ns-b&gt; (def a1 ns-a/a)
-#'ns-b/a1
+#&rsquo;ns-b/a1
 
 ; a1&#51012; &#54217;&#44032;&#54616;&#47732; &#50696;&#49345;&#54620; &#44208;&#44284;&#44050;&#51060; &#45208;&#50728;&#45796;.
 ; top-level &#49900;&#48380; a1&#47484; &#54217;&#44032;&#54616;&#47732;, &#49900;&#48380; a1&#51060; &#44032;&#47532;&#53412;&#44256; &#51080;&#45716; var&#51064;
-; #'ns-b/a1&#47484; &#44144;&#52432; value 10&#51012; &#44032;&#51256;&#50724;&#44172; &#46108;&#45796;.
+; #&rsquo;ns-b/a1&#47484; &#44144;&#52432; value 10&#51012; &#44032;&#51256;&#50724;&#44172; &#46108;&#45796;.
 ns-b&gt; a1
 10
 
-; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a2&#47484; #'ns-a/a&#47196; &#51221;&#51032;&#54620;&#45796; (#'&#44032; &#48537;&#50612;&#51080;&#51020;&#50640; &#51452;&#51032;).
+; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a2&#47484; #&rsquo;ns-a/a&#47196; &#51221;&#51032;&#54620;&#45796; (#&rsquo;&#44032; &#48537;&#50612;&#51080;&#51020;&#50640; &#51452;&#51032;).
 ;
 ; &#49900;&#48380;    var           var          value
-; ------------------------------------------
-;  a2 --&gt; #'ns-b/a2 --&gt; #'ns-a/a --&gt; 10
-ns-b&gt; (def a2 #'ns-a/a)
-#'ns-b/a2
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>
+;  a2 &ndash;&gt; #&rsquo;ns-b/a2 &ndash;&gt; #&rsquo;ns-a/a &ndash;&gt; 10
+ns-b&gt; (def a2 #&rsquo;ns-a/a)
+#&rsquo;ns-b/a2
 
-; a2&#47484; &#54217;&#44032;&#54616;&#47732; #'ns-a/a&#44032; &#45208;&#50728;&#45852;.
+; a2&#47484; &#54217;&#44032;&#54616;&#47732; #&rsquo;ns-a/a&#44032; &#45208;&#50728;&#45852;.
 ns-b&gt; a2
-#'ns-a/a
+#&rsquo;ns-a/a
 
 ; @a2&#47484; &#54217;&#44032;&#54616;&#47732; 10&#51060; &#45208;&#50728;&#45852;.
 ns-b&gt; @a2
@@ -111,13 +111,13 @@ ns-b&gt; @a2
 ns-b&gt; (ns ns-a)
 nil
 
-; ns-a &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a&#47484; '&#51116;&#51221;&#51032;'&#54620;&#45796;.
+; ns-a &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; a&#47484; &rsquo;&#51116;&#51221;&#51032;&rsquo;&#54620;&#45796;.
 ;
 ;  &#49900;&#48380;   var          value
-; ---------------------------
-;  a --&gt;  #'ns-a/a --&gt; 100
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>
+;  a &ndash;&gt;  #&rsquo;ns-a/a &ndash;&gt; 100
 ns-a&gt; (def a 100)
-#'ns-a/a
+#&rsquo;ns-a/a
 
 ; ns-b &#51060;&#47492;&#44277;&#44036;&#51004;&#47196; &#46104;&#46028;&#50500;&#44036;&#45796;.
 ns-a&gt; (ns ns-b)
@@ -126,18 +126,18 @@ nil
 ; a1&#51012; &#54217;&#44032;&#54616;&#47732;, &#50696;&#51204;&#50640; &#51221;&#51032;&#54620; &#44050; 10&#51060; &#48152;&#54872;&#46108;&#45796;.
 ;
 ; &#49900;&#48380;    var           value
-; ----------------------------
-;  a1 --&gt; #'ns-b/a1 --&gt; 10
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  a1 &ndash;&gt; #&rsquo;ns-b/a1 &ndash;&gt; 10
 ns-b&gt; a1
 10
 
-; a2&#47484; &#54217;&#44032;&#54616;&#47732;, #'ns-a/a&#44032; &#48152;&#54872;&#46108;&#45796;.
+; a2&#47484; &#54217;&#44032;&#54616;&#47732;, #&rsquo;ns-a/a&#44032; &#48152;&#54872;&#46108;&#45796;.
 ;
 ; &#49900;&#48380;       var        var          value
-; ------------------------------------------
-;  a2 --&gt; #'ns-b/a2 --&gt; #'ns-a/a --&gt; 100
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>
+;  a2 &ndash;&gt; #&rsquo;ns-b/a2 &ndash;&gt; #&rsquo;ns-a/a &ndash;&gt; 100
 ns-b&gt; a2
-#'ns-a/a
+#&rsquo;ns-a/a
 
 ; @a2&#47484; &#54217;&#44032;&#54616;&#47732;, &#49352;&#47196; &#51221;&#51032;&#54620; &#44050; 100&#51060; &#48152;&#54872;&#46108;&#45796;.
 ns-b&gt; @a2
@@ -149,10 +149,10 @@ nil
 ; ns-a &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; &#49900;&#48380; f&#47484; &#54632;&#49688;&#47196; &#51221;&#51032;&#54620;&#45796;.
 ;
 ;  &#49900;&#48380;   var          value
-; -------------------------------------
-;  f --&gt;  #'ns-a/f --&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  f &ndash;&gt;  #&rsquo;ns-a/f &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
 ns-a&gt; (defn f [a b] (+ a b))
-#'ns-a/f
+#&rsquo;ns-a/f
 
 ; &#51060;&#47492;&#44277;&#44036;&#51012; ns-b&#47196; &#48320;&#44221;&#54620;&#45796;.
 ns-a&gt; (ns ns-b)
@@ -162,23 +162,23 @@ nil
 ; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; f1&#51012; ns-a/f&#47196; &#51221;&#51032;&#54620;&#45796;.
 ;
 ; &#49900;&#48380;    var           value
-; -------------------------------------
-;  f1 --&gt; #'ns-b/f1 --&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  f1 &ndash;&gt; #&rsquo;ns-b/f1 &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
 ns-b&gt; (def f1 ns-a/f)
-#'ns-b/f1
+#&rsquo;ns-b/f1
 
 ; f1&#51012; &#54632;&#49688;&#47196; &#49892;&#54665;&#54616;&#47732; &#50696;&#49345;&#54620; &#44208;&#44284;&#44050;&#51060; &#45208;&#50728;&#45796;.
 ns-b&gt; (f1 10 20)
 30
 
 
-; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; f2&#47484; #'ns-a/f&#47196; &#51221;&#51032;&#54620;&#45796;.
+; ns-b &#51060;&#47492;&#44277;&#44036;&#50640;&#49436; f2&#47484; #&rsquo;ns-a/f&#47196; &#51221;&#51032;&#54620;&#45796;.
 ;
 ; &#49900;&#48380;    var           var          value
-; -----------------------------------------------------
-;  f2 --&gt; #'ns-b/f2 --&gt; #'ns-a/f --&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
-ns-b&gt; (def f2 #'ns-a/f)
-#'ns-b/f2
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&ndash;
+;  f2 &ndash;&gt; #&rsquo;ns-b/f2 &ndash;&gt; #&rsquo;ns-a/f &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
+ns-b&gt; (def f2 #&rsquo;ns-a/f)
+#&rsquo;ns-b/f2
 
 ; f2&#51012; &#54632;&#49688;&#47196; &#49892;&#54665;&#54616;&#47732; &#50696;&#49345;&#54620; &#44208;&#44284;&#44050;&#51060; &#45208;&#50728;&#45796;.
 ; &#52280;&#44256;&#47196;, Clojure&#50640;&#49436;&#45716; var&#46020; IFn &#51064;&#53552;&#54168;&#51060;&#49828;&#44032; &#44396;&#54788;&#46104;&#50612; &#51080;&#50612;,
@@ -195,13 +195,13 @@ ns-b&gt; (@f2 10 20)
 ns-b&gt; (ns ns-a)
 nil
 
-; ns-a &#51060;&#47492;&#44277;&#44036;&#51032; &#54632;&#49688; f&#47484; '&#51116;&#51221;&#51032;'&#54620;&#45796;.
+; ns-a &#51060;&#47492;&#44277;&#44036;&#51032; &#54632;&#49688; f&#47484; &rsquo;&#51116;&#51221;&#51032;&rsquo;&#54620;&#45796;.
 ;
 ;  &#49900;&#48380;   var          value
-; -------------------------------------
-;  f --&gt;  #'ns-a/f --&gt; &#54632;&#49688; &#44061;&#52404;: (* a b)
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  f &ndash;&gt;  #&rsquo;ns-a/f &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (* a b)
 ns-a&gt; (defn f [a b] (* a b))
-#'ns-a/f
+#&rsquo;ns-a/f
 
 
 ; ns-b &#51060;&#47492;&#44277;&#44036;&#51004;&#47196; &#46104;&#46028;&#50500;&#44036;&#45796;.
@@ -211,15 +211,15 @@ nil
 ; f1&#51012; &#54632;&#49688;&#47196; &#49892;&#54665;&#54616;&#47732;, &#50696;&#51204;&#50640; &#51221;&#51032;&#54620; &#54632;&#49688; &#44061;&#52404; (+ a b)&#44032; &#49892;&#54665;&#46108;&#45796;.
 ;
 ; &#49900;&#48380;    var           value
-; -------------------------------------
-;  f1 --&gt; #'ns-b/f1 --&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>-
+;  f1 &ndash;&gt; #&rsquo;ns-b/f1 &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (+ a b)
 ns-b&gt; (f1 10 20)
 30
 
 ; f2&#47484; &#54217;&#44032;&#54616;&#47732;, &#49352;&#47196; &#51221;&#51032;&#54620; &#54632;&#49688; &#44061;&#52404; (* a b)&#44032; &#49892;&#54665;&#46108;&#45796;.
 ;
 ; &#49900;&#48380;       var        var          value
-; -----------------------------------------------------
-;  f2 --&gt; #'ns-b/f2 --&gt; #'ns-a/f --&gt; &#54632;&#49688; &#44061;&#52404;: (* a b)
+; &#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&#8212;<wbr></wbr>&ndash;
+;  f2 &ndash;&gt; #&rsquo;ns-b/f2 &ndash;&gt; #&rsquo;ns-a/f &ndash;&gt; &#54632;&#49688; &#44061;&#52404;: (* a b)
 ns-b&gt; (f2 10 20)
 200</pre></p><div class="navsetbottom"><span class="navleft"><div class="nosearchform"></div>&nbsp;&nbsp;</span><span class="navright">&nbsp;&nbsp;<a href="functional-patterns.html" title="backward to &quot;3 Functional Patterns&quot;" data-pltdoc="x">&larr; prev</a>&nbsp;&nbsp;<a href="index.html" title="up to &quot;Clojure Memo&quot;" data-pltdoc="x">up</a>&nbsp;&nbsp;<a href="testing.html" title="forward to &quot;5 Testing&quot;" data-pltdoc="x">next &rarr;</a></span>&nbsp;</div></div></div><div id="contextindicator">&nbsp;</div></body></html>

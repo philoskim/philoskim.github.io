@@ -51,10 +51,10 @@
 
 @; ------------------------------------------------------------------------
 @include-section["why-clojure.scrbl"]
-@include-section["../clojure/recursions.scrbl"]
-@include-section["../clojure/functional-patterns.scrbl"]
+@include-section["../_scrbl/clojure/recursions.scrbl"]
+@include-section["../_scrbl/clojure/functional-patterns.scrbl"]
 @include-section["vars.scrbl"]
-@include-section["../clojure/testing.scrbl"]
+@include-section["../_scrbl/clojure/testing.scrbl"]
 @include-section["tips.scrbl"]
 @include-section["core-async.scrbl"]
 @include-section["clojurescript.scrbl"]
