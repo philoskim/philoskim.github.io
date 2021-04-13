@@ -50,8 +50,8 @@ $(document).ready(function() {
     impact     : ["http://dic.impact.pe.kr/ecmaster-cgi/search.cgi?bool=and&word=yes&kwd={0}",
                   "plus", true],
 
-    idiom      : ["https://www.google.co.kr/#hl=ko&q={0}+~meaning+OR+~definition", "plus", false],
-    origin     : ["https://www.google.co.kr/#hl=ko&q={0}+origin+OR+root+OR+etymology",
+    idiom      : ["https://www.google.co.kr/search?&q={0}+~meaning+OR+~definition", "plus", false],
+    origin     : ["https://www.google.co.kr/search?&q={0}+origin+OR+root+OR+etymology",
                   "plus", false],
     colloc     : ["http://www.ozdic.com/collocation-dictionary/{0}", "space", true],
     slang      : ["http://www.urbandictionary.com/define.php?term={0}", "plus", false],
@@ -61,7 +61,7 @@ $(document).ready(function() {
     name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
     corpus     : ["http://www.wordandphrase.info/frequencyList.asp", "space", true],
 
-    google     : ["https://www.google.co.kr/#hl=ko&q={0}", "plus", false],
+    google     : ["https://www.google.co.kr/search?&q={0}", "plus", false],
 
     collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "minus", false],
     cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
