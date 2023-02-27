@@ -16,7 +16,6 @@ var buttonInfos =
   // id : [url, isSpacedInput, isIframed]
    {clojure   : ["http://clojuredocs.org/search?q={0}", false, true],
     cljs      : ["http://cljs.github.io/api/cljs.core/", false, true],
-    clhs      : ["http://www.lispworks.com/cgi-bin/search.cgi?q={0}", false, true],
 
     numpy     : ["https://numpy.org/doc/stable/search.html?q={0}", false, true],
     pandas    : ["https://pandas.pydata.org/docs/search.html?q={0}", false, true],
