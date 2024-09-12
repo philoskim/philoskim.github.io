@@ -63,6 +63,7 @@ $(document).ready(function() {
     google     : ["https://www.google.co.kr/search?&q={0}", "plus", false],
 
     collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "minus", false],
+    longman    : ["https://www.ldoceonline.com/dictionary/{0}", "minus", false],
     cambridge  : ["https://dictionary.cambridge.org/dictionary/english/{0}", "plus", false],
     vocabulary : ["https://www.vocabulary.com/dictionary/{0}", "space", false],
     webster    : ["https://www.merriam-webster.com/dictionary/{0}", "space", true],
