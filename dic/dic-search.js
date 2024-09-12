@@ -40,9 +40,9 @@ $(document).ready(function() {
   { guide      : ["guide.html", "space", true],
     home       : ["http://www.english4u.kr/", "space", false],
 
+    daum       : ["http://dic.daum.net/search.do?q={0}", "space", true],
     naver      : ["http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query={0}",
                   "space", false],
-    daum       : ["http://dic.daum.net/search.do?q={0}", "space", true],
     sisa       : ["http://www.ybmallinall.com/stylev2/dicview.asp?kwdseq=0" +
                   "&kwdseq2=0&DictCategory=DictAll&DictNum=0&ById=0&PageSize=5&StartNum=0" +
                   "&GroupMode=0&cmd=0&kwd={0}&x=0&y=0", "plus", true],
@@ -53,31 +53,29 @@ $(document).ready(function() {
     idiom      : ["https://www.google.co.kr/search?&q={0}+~meaning+OR+~definition", "plus", false],
     origin     : ["https://www.google.co.kr/search?&q={0}+origin+OR+root+OR+etymology",
                   "plus", false],
-    colloc     : ["http://www.ozdic.com/collocation-dictionary/{0}", "space", true],
+    colloc     : ["https://ozdic.com/collocation/{0}", "space", true],
     slang      : ["http://www.urbandictionary.com/define.php?term={0}", "plus", false],
     ngram      : ["http://books.google.com/ngrams/graph?content={0}&year_start=1500"
                   + "&year_end=2000&corpus=0&smoothing=0", "plus", true],
     regex      : ["http://www.visca.com/regexdict/", "plus", true],
     name       : ["https://www.howtopronounce.com/search/{0}/?f", "space", false],
     corpus     : ["http://www.wordandphrase.info/frequencyList.asp", "space", true],
-
     google     : ["https://www.google.co.kr/search?&q={0}", "plus", false],
 
     collins    : ["https://www.collinsdictionary.com/dictionary/english/{0}", "minus", false],
-    cambridge  : ["http://dictionary.cambridge.org/search/british/?q={0}", "plus", true],
-    vocabulary : ["http://www.vocabulary.com/dictionary/{0}", "space", true],
-    etymology  : ["http://www.etymonline.com/index.php?allowed_in_frame=0"
+    cambridge  : ["https://dictionary.cambridge.org/dictionary/english/{0}", "plus", false],
+    vocabulary : ["https://www.vocabulary.com/dictionary/{0}", "space", false],
+    webster    : ["https://www.merriam-webster.com/dictionary/{0}", "space", true],
+    etymology  : ["https://www.etymonline.com/index.php?allowed_in_frame=0"
                   + "&search={0}&searchmode=none", "plus", false],
-    webster    : ["http://www.merriam-webster.com/dictionary/{0}", "space", true],
-    yourdic    : ["http://www.yourdictionary.com/{0}", "minus", true],
-    wiktionary : ["http://en.wiktionary.org/wiki/{0}", "space", true],
-    dictionary : ["http://dictionary.reference.com/browse/{0}", "plus", true],
-    free       : ["http://www.thefreedictionary.com/{0}", "plus", true],
-    thesaurus  : ["http://thesaurus.com/browse/{0}?s=t", "plus", true],
-    onelook    : ["http://www.onelook.com/?w={0}&ls=a", "plus", true],
-    math       : ["http://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true],
-    naver2     : ["http://dic.naver.com/search.nhn?dicQuery={0}&x=0&y=0&query={0}&target=dic&ie=utf8", "space", false]
-
+    yourdic    : ["https://www.yourdictionary.com/{0}", "minus", true],
+    wiktionary : ["https://en.wiktionary.org/wiki/{0}", "space", true],
+    dictionary : ["https://dictionary.reference.com/browse/{0}", "plus", true],
+    free       : ["https://www.thefreedictionary.com/{0}", "plus", true],
+    thesaurus  : ["https://thesaurus.com/browse/{0}?s=t", "plus", true],
+    onelook    : ["https://www.onelook.com/?w={0}&ls=a", "plus", true],
+    math       : ["https://www.kms.or.kr/mathdict/list.html?key=ename&keyword={0}", "plus", true],
+    naver2     : ["https://dict.naver.com/dict.search?query={0}", "space", false]
    };
 
   function handleButtonClick(e)
@@ -118,7 +116,7 @@ $(document).ready(function() {
   {
     if (e.keyCode == 13)   // 13 == Enter Key
     {
-      $("#naver").click();
+      $("#daum").click();
     }
     else if (e.keyCode == 38)  // 38 == UpArrow Key
     {
@@ -132,7 +130,9 @@ $(document).ready(function() {
 
   function handleLoad(e)
   {
+    // console.log("handleLoad called.");
     $("#words").focus();
+    // console.log(getCookie('search-words'));
     $("#words").val( getCookie('search-words') );
   }
 
