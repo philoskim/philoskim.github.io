@@ -21,9 +21,9 @@ var buttonInfos =
     pandas    : ["https://pandas.pydata.org/docs/search.html?q={0}", false, true],
     mpl       : ["https://matplotlib.org/stable/search.html?q={0}", false, true],
 
-    java       : ["https://www.google.co.kr/#hl=ko&q={0}+site:docs.oracle.com/javase/7/docs/api/",
+    java       : ["https://docs.oracle.com/search/?q={0}&pg=1&size=10&product=en%2Fjava%2Fjavase%2F22&category=en%2Fjava&showfirstpage=true&lang=en",
                   false, false],
-    javaex     : ["https://www.google.co.kr/#hl=ko&q={0}+site:www.java2s.com/Code/JavaAPI/",
+    javaex     : ["https://cse.google.com/cse?cx=partner-pub-1130008796007602%3Airi8be-v211&ie=ISO-8859-1&q={0}&sa=Search&siteurl=www.java2s.com%2FCode%2FJavaAPI%2F&ref=&ss=1360j372026j6",
                   false, false],
     antlr      : ["https://www.google.co.kr/#hl=ko&q={0}+site:antlr.org",
                   false, false],
