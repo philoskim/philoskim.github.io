@@ -40,7 +40,7 @@ $(document).ready(function() {
   { guide      : ["guide.html", "space", true],
     home       : ["http://www.english4u.kr/", "space", false],
 
-    daum       : ["http://dic.daum.net/search.do?q={0}", "space", true],
+    daum       : ["https://dic.daum.net/search.do?q={0}", "space", false],
     naver      : ["http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query={0}",
                   "space", false],
     sisa       : ["http://www.ybmallinall.com/stylev2/dicview.asp?kwdseq=0" +
